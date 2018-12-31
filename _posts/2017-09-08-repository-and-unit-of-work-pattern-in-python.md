@@ -1,3 +1,13 @@
+---
+layout: post
+author: Bob
+categories:
+  - ports & adapters
+tags:
+  - python
+  - architecture
+---
+
 In the previous part [https://io.made.com/blog/introducing-command-handler/]  of
 this series we built a toy system that could add a new Issue to an IssueLog, but
 had no real behaviour of its own, and would lose its data every time the

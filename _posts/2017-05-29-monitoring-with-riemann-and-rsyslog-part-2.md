@@ -1,3 +1,12 @@
+---
+layout: post
+author: Bob
+tags:
+  - riemann
+  - monitoring
+  - elk
+---
+
 It's been a little longer than I expected, but I'm finally back and working on
 Rsyslog. Last time
 [http://io.made.com/blog/monitoring-with-riemann-and-rsyslog-part-1/], we looked

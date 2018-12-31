@@ -1,3 +1,10 @@
+---
+layout: post
+author: Bob
+tags:
+  - architecture
+---
+
 My problem with the Microservices movement is that people are applying the
 lessons of micro-services without having first learned the lessons of
 service-oriented architecture. This leads to confusion and accidental

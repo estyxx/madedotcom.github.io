@@ -1,3 +1,13 @@
+---
+layout: post
+author: Bob
+categories:
+  - ports & adapters
+tags:
+  - python
+  - architecture
+---
+
 Nota bene: this instalment in the Ports and Adapters with Command Handlers
 series is code-heavy, and isn't going to make much sense unless you've read the
 previous parts:

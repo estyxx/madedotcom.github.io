@@ -1,3 +1,12 @@
+---
+layout: post
+author: Bob
+tags:
+  - riemann
+  - monitoring
+  - elk
+---
+
 Back in December I said I was interested in replacing Logstash with Rsyslog
 [https://io.made.com/blog/rek-it/], but that we needed a Riemann module to cover
 some of our existing functionality. Specifically we send metrics to Riemann from

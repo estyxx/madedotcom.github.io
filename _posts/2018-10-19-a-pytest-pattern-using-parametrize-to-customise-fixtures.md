@@ -1,3 +1,12 @@
+---
+layout: post
+author: Harry
+tags:
+  - python
+  - testing
+  - open-source
+---
+
 The problem: customisable fixtures in pytest
 Let's say you're running along merrily with some fixtures that create database
 objects for you:

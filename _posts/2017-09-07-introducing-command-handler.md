@@ -1,3 +1,13 @@
+---
+layout: post
+author: Bob
+categories:
+  - ports & adapters
+tags:
+  - python
+  - architecture
+---
+
 The term DDD comes from the book by Eric Evans: "Domain-Driven Design: Tackling
 Complexity in the Heart of Software
 [https://www.amazon.co.uk/Domain-driven-Design-Tackling-Complexity-Software/dp/0321125215]

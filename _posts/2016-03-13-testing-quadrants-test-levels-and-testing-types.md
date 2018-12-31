@@ -1,3 +1,9 @@
+---
+layout: post
+author: Guru
+tags:
+  - testing
+---
 WHAT ARE TESTING QUADRANTS ?
 
 Testing quadrants, defined by Brian Marick [http://exampler.com/about.html],

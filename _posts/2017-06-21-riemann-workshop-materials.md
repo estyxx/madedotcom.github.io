@@ -1,3 +1,11 @@
+---
+layout: post
+author: Bob
+tags:
+  - riemann
+  - talks
+---
+
 Last year we held a Riemann workshop for our developers. The materials for the
 workshop [https://github.com/madedotcom/riemann_workshop]  were open-sourced but
 I never actually got around to promoting them in any way so they've just

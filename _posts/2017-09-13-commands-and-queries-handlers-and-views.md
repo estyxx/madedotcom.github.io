@@ -1,3 +1,13 @@
+---
+layout: post
+author: Bob
+categories:
+  - ports & adapters
+tags:
+  - python
+  - architecture
+---
+
 In the first and second parts of this series I introduced the Command-Handler
 [https://io.made.com/blog/introducing-command-handler/]  and Unit of Work and
 Repository

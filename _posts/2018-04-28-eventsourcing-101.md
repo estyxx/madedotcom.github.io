@@ -1,3 +1,12 @@
+---
+layout: post
+author: Bob
+tags:
+  - architecture
+  - talks
+---
+
+
 Last month I travelled to Romania to give a talk about event sourcing
 [https://martinfowler.com/eaaDev/EventSourcing.html]  at CodeCamp
 [https://iasi.codecamp.ro/]  in Iasi. The talk was a quick 101 on what

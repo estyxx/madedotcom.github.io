@@ -1,3 +1,12 @@
+---
+layout: post
+author: Bob
+tags:
+  - riemann
+  - monitoring
+  - elk
+---
+
 In a previous post [https://io.made.com/blog/rek-it/]  I said I was interested
 in replacing Logstash with Rsyslog in our ELK stack. I've been working on one of
 the outstanding items from that project - the ability to send metrics to
