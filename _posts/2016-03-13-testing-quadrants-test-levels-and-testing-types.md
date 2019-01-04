@@ -3,6 +3,7 @@ layout: post
 author: Guru
 tags:
   - testing
+redirect_from: "/testing-quadrants-test-levels-and-testing-types/"
 ---
 
 **WHAT ARE TESTING QUADRANTS ?**
