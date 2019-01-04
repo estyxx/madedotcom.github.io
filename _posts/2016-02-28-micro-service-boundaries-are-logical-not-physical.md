@@ -3,6 +3,7 @@ layout: post
 author: Bob
 tags:
   - architecture
+redirect_from: "/micro-service-boundaries-are-logical-not-physical/"
 ---
 
 My problem with the Microservices movement is that people are applying the
@@ -10,31 +11,27 @@ lessons of micro-services without having first learned the lessons of
 service-oriented architecture. This leads to confusion and accidental
 complexity.
 
-A redditor asks
-[https://www.reddit.com/r/devops/comments/47c2jv/suggestion_regarding_microservice_architecture/]
-:
+[A redditor asks](https://www.reddit.com/r/devops/comments/47c2jv/suggestion_regarding_microservice_architecture/):
 
-two micro service depend[ing] on the same data storage ... is a "No No" as it
-can introduce lots of other complexity.
+> two micro service depend[ing] on the same data storage ... is a "No No" as it
+> can introduce lots of other complexity.
+> But what happens if one of the micro-service is only read only?
 
-But what happens if one of the micro-service is only read only?
+> So here is the situation, one micro service will be an internal tool which is
+> doing some heavy lifting and then persisting the data in the data base. And
+> another micro-service will be a REST interface which will just read the data. Is
+> it fine if some one use same database for both of the service?
 
-So here is the situation, one micro service will be an internal tool which is
-doing some heavy lifting and then persisting the data in the data base. And
-another micro-service will be a REST interface which will just read the data. Is
-it fine if some one use same database for both of the service?
-
-Pro-tip: if you answered "No", you're wrong. The kicker: If you answered "yes",
+Pro-tip: if you answered "No", you're doing it wrong. The kicker: If you answered "yes",
 you're also wrong.
 
 To understand why, we first need to go back to basics and ask a very simple
-question: What is a service? Mulesoft pithily summarise
-[https://www.mulesoft.com/resources/esb/services-in-soa]:
+question: What is a service? Mulesoft [pithily summarise](https://www.mulesoft.com/resources/esb/services-in-soa):
 
-A service is a self-contained unit of software that performs a specific task...
-Because the interface of a service is separate from its implementation, a
-service provider can execute a request without the service consumer knowing how
-it does so.
+> A service is a self-contained unit of software that performs a specific task...
+> Because the interface of a service is separate from its implementation, a
+> service provider can execute a request without the service consumer knowing how
+> it does so.
 
 This is true, but it skips over the most important thing about services, which
 is that Services are business concerns, not a technical detail. The first key
@@ -54,7 +51,8 @@ microservice should be small enough that you can rewrite it in a sprint!!)
 rather than on small contracts (a microservice should be small enough that you
 can describe it in one sentence, without using the words 'but' or 'then').
 
-wut?
+## wut?
+
 Let's pretend that our redditor is building a system for modelling an industrial
 process. He works for a large enterprise who have an energy-intensive process
 for making widgets. In order to optimise their costs, the company bids for
@@ -63,7 +61,7 @@ low, but costs them more when electrical demand is high. It takes three units of
 electricity to make one widget, which means that the profit margin on any given
 widget depends on the cost of electricity when that widget was produced.
 
-![Widgets to cash]
+![Widgets to cash](/images/2016/02/microservice-context.png)
 
 The CEO of Acme Widgets inc. wants to see realtime information on electricity
 expenditure.
@@ -91,12 +89,12 @@ to determine what we paid and save the result into a Postgres database.
 The CEO can access that data through a web-browser at any time. Because he's
 only accessing the results  of the calculation, we can serve data really
 quickly, and he can send it to all the board members whenever he likes. This is
-the basic idea behind CQRS [http://martinfowler.com/bliki/CQRS.html].
+the basic idea behind [CQRS](http://martinfowler.com/bliki/CQRS.html).
 
-Note that we have three separate applications, though: a celery consumer that
+Note that we have three separate deployable applications, though: a celery consumer that
 reads production data, a go app that reads pricing info, and a Flask application
 that serves our data to the CEO. Since all of these applications are fulfilling
-the same contract, they are part of the same service, and because they are part
+the same contract, they are part of the *same* service, and because they are part
 of the same service they can talk to the same database.
 
 If we take away any one of these components, we can no longer fulfil our
