@@ -3,3 +3,4 @@ theme: jekyll-theme-minimal
 permalink: /blog/:year-:month-:day-:title.html
 plugins:
   - jekyll-redirect-from
+  - jekyll-sitemap
