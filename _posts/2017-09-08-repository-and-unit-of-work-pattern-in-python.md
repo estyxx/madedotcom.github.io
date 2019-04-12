@@ -93,7 +93,7 @@ class Light(self):
 
 Considered in isolation, this is just an example of good OO practice: we are
 extending our system through composition. What makes this a ports-and-adapters
-architecture is the the idea that there is an internal world consisting of the
+architecture is the idea that there is an internal world consisting of the
 domain model (our ThresholdDetectionCircuit), and an external world that drives
 the domain model through well-defined ports. How does all of this relate to
 databases?
@@ -242,7 +242,7 @@ class ReportIssueHandler:
         self.uowm = uowm
         
     def handle(self, cmd):
-        with uowm.start() as unit_of_work:
+        with self.uowm.start() as unit_of_work:
             reporter = IssueReporter(cmd.reporter_name, cmd.reporter_email)
             issue = Issue(reporter, cmd.problem_description)
             unit_of_work.issues.add(issue)
