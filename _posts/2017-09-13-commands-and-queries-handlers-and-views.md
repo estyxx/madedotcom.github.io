@@ -104,7 +104,7 @@ def delete_issue(issue_id):
        issue = uow.issues[issue_id]
          
        if issue is None:
-           logging.warn("Issue not found
+           logging.warn("Issue not found")
            flask.abort(404)
        if issue.status != 'deleted':
           issue.delete()
@@ -172,8 +172,8 @@ goa: I guess I'll just come back and change that one line of SQL. My acceptance
 tests will fail if I forget, so I can't get the code through CI.
 
 sfy: But why don't we use the Issue model we wrote? It seems weird to just
-ignore it and return this dict... and you said "avoid taking a dependency
-directly on frameworks. Work against an abstraction so that if you dependency
+ignore it and return this dict... and you said "Avoid taking a dependency
+directly on frameworks. Work against an abstraction so that if your dependency
 changes, that doesn't force change to ripple through your domain". You know we
 can't unit test this, right?
 
@@ -244,7 +244,7 @@ Model - what we normally think of as the domain model - and the Read Model - a
 lightweight, simple model for showing on the UI, or answering questions about
 the domain state.
 
-When I'm serving a write request (a command), my job is protect the invariants
+When I'm serving a write request (a command), my job is to protect the invariants
 of the system, and model the business process as it appears in the minds of our
 domain experts. I take the collective understanding of our business analysts,
 and turn it into a state machine that makes useful work happen. When I'm serving

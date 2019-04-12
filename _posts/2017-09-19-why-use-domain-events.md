@@ -58,9 +58,9 @@ we'll email them, or call them. Most things are first-come, first-served, but
 occasionally someone needs a fix before they can go to a meeting or something.
 
 So you email the user to get more information, or you call them up, and then you
-use that information to assess the priority of the issue - sorry triage  the
-issue, and work what category it should go in... what do the categories achieve?
-Why categorise?
+use that information to assess the priority of the issue - sorry triage the
+issue, and work out what category it should go in... what do the categories 
+achieve? Why categorise?
 
 Partly for reporting, so we can see what stuff is taking up the most time, or if
 there are clusters of similar problems on a particular batch of laptops for
@@ -115,7 +115,7 @@ class TriageIssueHandler:
     def __init__(self, uowm: UnitOfWorkManager):
         self.uowm = uowm
 
-    def handle (self, cmd):
+    def handle(self, cmd):
         with self.uowm.start() as uow:
             issue = uow.issues.get(cmd.issue_id)
             issue.triage(cmd.priority, cmd.category)
@@ -134,7 +134,7 @@ class PickIssueHandler:
     def __init__(self, uowm: UnitOfWorkManager):
         self.uowm = uowm
 
-    def handle (self, cmd):
+    def handle(self, cmd):
         with self.uowm.start() as uow:
             issue = uow.issues.get(cmd.issue_id)
             issue.assign_to(cmd.picked_by)
@@ -170,7 +170,7 @@ class AssignIssueHandler:
         self.email_builder = email_builder
         self.email_sender = email_sender
 
-    def handle (self, cmd):
+    def handle(self, cmd):
         # Assign Issue
         with self.uowm.start() as uow:
             issue = uow.issues.get(cmd.issue_id)
@@ -227,7 +227,7 @@ class AssignIssueHandler:
     def __init__(self, uowm: UnitOfWorkManager):
         self.uowm = uowm
 
-    def handle (self, cmd):
+    def handle(self, cmd):
         with self.uowm.start() as uow:
             issue = uow.issues.get(cmd.issue_id)
             issue.assign_to(
@@ -246,7 +246,7 @@ class SendAssignmentEmailHandler
         self.email_builder = email_builder
         self.email_sender = email_sender
 
-    def handle (self, cmd):
+    def handle(self, cmd):
         with self.uowm.start() as uow:
             issue = uow.issues.get(cmd.issue_id)
 
@@ -269,7 +269,7 @@ persistent changes to the Issue state, so what if we use a view builder instead?
         self.email_builder = email_builder
         self.email_sender = email_sender
 
-    def handle (self, cmd):
+    def handle(self, cmd):
         issue = self.view.fetch(cmd.issue_id)
 
         email = self.email_builder.build(
