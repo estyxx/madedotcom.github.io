@@ -235,7 +235,7 @@ def ReportIssue(issue_log, cmd):
         cmd.reporter_name,
         cmd.reporter_email)
     issue = Issue(reported_by, cmd.problem_description)
-    self.issue_log.add(issue)
+    issue_log.add(issue)
 
 
 If magic methods make you feel queasy, you can define a handler to be a class
