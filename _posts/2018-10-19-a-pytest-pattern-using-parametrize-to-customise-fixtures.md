@@ -11,6 +11,7 @@ The problem: customisable fixtures in pytest
 Let's say you're running along merrily with some fixtures that create database
 objects for you:
 
+```python
 @pytest.fixture
 def supplier(db):
     s = Supplier(
@@ -35,18 +36,19 @@ def product(db, supplier):
     db.add(p)
     yield p
     db.remove(p)
-
+```
 
 And now you're writing a new test and you suddenly realise you need to customise
 your default "supplier" fixture:
 
+```python
 def test_US_supplier_has_total_price_equal_net_price(product):
     assert product.total_price == product.net_price
 
 def test_EU_supplier_has_total_price_including_VAT(supplier, product):
     supplier.country = "FR" # oh, this doesn't work
     assert product.total_price == product.net_price * 1.2
-
+```
 
 For whatever reason, maybe because you need to set the supplier.country  before
 you add things to the DB, or before you instantiate product objects, you need to
@@ -56,6 +58,7 @@ Option 1: more fixtures
 We can just create more fixtures, and try do do a bit of DRY by extracting out
 common logic:
 
+```python
 def _default_supplier():
     return Supplier(
         ref=random_ref(),
@@ -77,6 +80,7 @@ def eu_supplier(db):
     db.add(s)
     yield s
     db.remove(s)
+```
 
 
 That's just one way you could do it, maybe you can figure out ways to reduce the
@@ -90,6 +94,7 @@ Option 2: factory fixtures
 Instead of a fixture returning an object directly, it can return a function that
 creates an object, and that function can take arguments:
 
+```
 @pytest.fixture
 def make_supplier(db):
     s = Supplier(
@@ -104,19 +109,21 @@ def make_supplier(db):
 
     yield _make_supplier
     db.remove(s)
-
+```
 
 The problem with this is that, once you start, you tend to have to go all the
 way, and make all  of your fixture hierarchy into factory functions:
 
+```python
 def test_EU_supplier_has_total_price_including_VAT(make_supplier, product):
     supplier = make_supplier(country="FR")
     product.supplier = supplier # OH, now this doesn't work, because it's too late again
     assert product.total_price == product.net_price * 1.2
-
+```
 
 And so...
 
+```python
 @pytest.fixture
 def make_product(db):
     p = Product(
@@ -137,6 +144,7 @@ def test_EU_supplier_has_total_price_including_VAT(make_supplier, make_product):
     supplier = make_supplier(country="FR")
     product = make_product(supplier=supplier)
     assert product.total_price == product.net_price * 1.2
+```
 
 
 That works, but firstly now everything is a factory-fixture, which makes them
@@ -149,14 +157,17 @@ This is a pretty cool feature of Pytest. You probably already know that you can
 parametrize tests, injecting different values for arguments to your test and
 then running the same test multiple times, once for each value:
 
+```python
 @pytest.mark.parametrize('n', [1, 2, 3])
 def test_doubling(n):
     assert n * 2 < 6 # will pass twice and fail once
+```
 
 
 A slightly less well-known feature is that you can parametrize fixtures as well.
 You need to use the special request  fixture to access your parameters:
 
+```python
 @pytest.fixture(params=['US', 'FR'])
 def supplier(db, request):
     s = Supplier(
@@ -167,6 +178,7 @@ def supplier(db, request):
     db.add(s)
     yield s
     db.remove(s)
+```
 
 
 Now any test that depends on supplier, directly or indirectly, will be run
@@ -176,12 +188,14 @@ That's really cool for checking that a given piece of logic works in a variety
 of different cases, but it's not really ideal in our case. We have to build a
 bunch of if  logic into our tests:
 
+```python
 def test_US_supplier_has_no_VAT_but_EU_supplier_has_total_price_including_VAT(product):
     # this test is magically run twice, but:
     if product.supplier.country == 'US':
         assert product.total_price == product.net_price
     if product.supplier.country == 'FR':
         assert product.total_price == product.net_price * 1.2
+```
 
 
 So that's ugly, and on top of that, now every single  test that depends
@@ -191,6 +205,7 @@ be totally irrelevant to what the country is.
 Presenting: using test parmetrization to override nested default-value fixtures
 We introduce an extra fixture that holds a default value for the country  field:
 
+```python
 @pytest.fixture()
 def country():
     return "US"
@@ -206,11 +221,13 @@ def supplier(db, country):
     db.add(s)
     yield s
     db.remove(s)
+```
 
 
 And then in the tests that need to change it, we can use parametrize, even
 though the country fixture isn't explicitly named in that test:
 
+```python
 @pytest.mark.parametrize('country', ["US"])
 def test_US_supplier_has_total_price_equal_net_price(product):
     assert product.total_price == product.net_price
@@ -218,6 +235,7 @@ def test_US_supplier_has_total_price_equal_net_price(product):
 @pytest.mark.parametrize('country', ["EU"])
 def test_EU_supplier_has_total_price_including_VAT(product):
     assert product.total_price == product.net_price * 1.2
+```
 
 
 Amazing huh? The only problem is that you're now likely to build a teetering
