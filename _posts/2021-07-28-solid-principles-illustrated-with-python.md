@@ -8,101 +8,60 @@ five fundamental principles that help engineers write maintainable code.
 
 "A module, class, function should have one and only one reason to change."
 
-Traditionally, the principles have been illustrated with classes. But they
-also apply to modules and functions.
+We say that they have "high cohesion" so that we can reuse them later on
+without side effect.
 
-At a higher level, we can also say that each service that we maintain at Made
-tends to obey this principle. For example, a Product represented
-in each service by a class will have its own responsibility per service.
-Thus, in a **purchase management service**, the product class will care on
-who is going to supply the product, how it is going to be supplied, when.
-But the **inventory management** service will not care about how it is supplied,
-it will focus more on how to store the product. 
+For example, let us say we are dealing with an inventory management system
+that is going to track the stock per product.
 
-The Product class will have one responsibility per service. And it will be
-different per service, according to its Context (in DDD term).
-
-Example of a Product class in the Context of the purchase management service 
-(purchase_service.py).
-
-```python
-#purchase_service.py
+```
 class Product:
-     def __init__(self, sku: str):
-         self.sku = sku
-         self.supplier: str
+    def __init__(self, sku, stock):
+        self.sku = sku
+        self.stock = stock
+
+p = Product("Table", 100)
 ```
-It focuses on who is going to supply the product.
-The reason that this class would change would be to adapt to a change in the
-way we purchase the products.
 
-Example of a Product class in the context of the inventory management service
-(inventory_service.py).
+Here, we can say that our class has one too many reponsibility:
+- describing the product
+- describing the stock level
 
-```python
-#inventory_service.py
+We could split the stock management in a separate class whose responsibility
+will be only to represent the stock level.
+
+So we will have 2 classes with each their own responsibility:
+- Product, representing the product and managing it
+- ProductStock, representing the stock of the product and managing it
+
+```
+# our original Product class becomes lighter
 class Product:
-     def __init__(self, sku: str):
-         self.sku = sku
-         self.stock_available: int = []
-```
-It focuses on how much stock we have for the product.
-The reason that this class would change would be to adapt to a change in the
-way we stock the products.
+    def __init__(self, sku):
+        self.sku = sku
 
-It is interesting to note that even if the class have the same name, they
-have a different meaning and responsibility according to their context, 
-according to the service they are in.
-Defining the responsibility of a class really depends on who is
-going to use it and for what.
+# new class
+class ProductStock:
+    def __init__(self, sku, stock):
+        self.sku = sku
+        self.stock = stock
 
-For example we could decide to enforce a minimum of quantity ordered to
-answer a cost problem (economy of scale). 
-This would be to do with how we decide to purchase products. So the class in
-the `purchase_service.py` would change but not the one in `inventory.py` 
-because it doesn't affect how we store the product.
+    def add_stock(self, quantity):
+        self.stock += quantity
 
-```python
-#purchase_service.py
-class Product:
-     def __init__(self, sku: str):
-         self.sku = sku
-         self.supplier: str = []
-         self.minimum_quantity_to_order: int = 10  # new code
+    def remove_stock(self, quantity):
+        self.stock -= quantity
+
+# same information will be:
+p = Product("Table")
+stock = ProductStock(p.sku, 100)
 ```
 
-If more rules are added for our purchase management system, we could consider
-having a class dedicated to the purchase order validation that will validate
-the constraints that we could have.  Else, the Product class would have more
-than one responsibility: describing the product and describing the purchase
-order rules per product. Also, the `minimum_quantity_to_order` could vary per
-supplier as well.
-So, we would extract this information in the `ProductPurchaseValidator`:
-
-```python
-#purchase_service.py
-class ProductPurchaseValidator:
-     def __init__(self, sku, minimum_quantity):
-         self.sku = sku
-         self.minimum_quantity = minimum_quantity
-
-    def check_constraint(self, item):
-        if item.quantity < self.minimum_quantity:
-            raise("Quantity is too low, minimum is:"\ 
-                  f"{self.minimum_quantity_ordered}")
-```
-Notice that we are passing `purchase_order` as a parameter of
- `check_constraint`, this is because it would be called from the purchase
-  order such as:
-
-```
-MINIMAL_QUANTITY =10
-purchase_order = Purchase(order_items=[Item("sku", 10)])
-for item in purchase_order.order_items:
-    validator = ProductPurchaseValidator(item.sku, minimum_quantity=MINIMAL_QUANTITY)
-    validator.check_constraint(item)
-```
-
+Notice that if we extrapolate, the classes are used for different business
+purposes as well. One will ultimately be to manage the product catalog, that
+could be used by the people focusing on the feature of the products
+(designers for example). One will target the business user dealing with the
+stock management such as the warehouse people.  
 
 ## O: Open Closed Principle
 
