@@ -4,7 +4,7 @@
 SOLID is an acronym created by Bob Martin and Michael Feathers that refers to 
 five fundamental principles that help engineers write maintainable code.
 
-## S: Single Responsibility principle
+## S: Single Responsibility principle SRP
 
 "A module, class, function should have one and only one reason to change."
 
@@ -67,7 +67,7 @@ could be used by the people focusing on the feature of the products
 (designers for example). One will target the business user dealing with the
 stock management such as the warehouse people.  
 
-## O: Open Closed Principle
+## O: Open Closed Principle OCP
 
 Objects or entities should be open for extension but closed for modification.
 
@@ -129,9 +129,9 @@ class ProductStockAbstract(metaclass=ABCMeta):
         pass
 
 
-class ProductStock(ProductStockAbstract):
+class WarehouseStock(ProductStockAbstract):
     def __init__(self, sku, stock):
-        super().__init__(self, sku, stock)
+        super().__init__(sku, stock)
         self._stock = stock
 
     def add_stock(self, quantity):
@@ -147,14 +147,14 @@ class ProductStock(ProductStockAbstract):
 
 class MTOStock(ProductStockAbstract):
     def __init__(self, sku):
-        super().__init__(self, sku)
+        super().__init__(sku)
 
     @property
     def stock(self):
         return Infinity
 
 
-normal_product = ProductStock("Chair-SKU-BLA", 10)
+normal_product = WarehouseStock("Chair-SKU-BLA", 10)
 print('normal_product', normal_product.stock)
 
 mto_product = MTOStock("Cushion-SKU-BLA")
@@ -162,84 +162,96 @@ print('mto_product', mto_product.stock)
 ```
 
 
-## L: Liskov Substitution Principle
+## L: Liskov Substitution Principle LSP
 
-Let q(x) be a property provable about object of x of type T. Then q(y) should
-be provable objects y of type S where S is a subtype of T.
+Every subclass class should be substitutable for their parent class.
 
-All this is stating that every subclass/derived class should be substitutable
-for their base/parent class.
-
-Still making use of our AreaCalculator class. Say we have a VolumeCalculator
-class that extends the AreaCalculator class:
-
-```python
-class VolumeCalculator(AreaCalculator):
-    def __init__(self, shapes):
-        self.shapes = shapes
-
-    def sum(self):
-        result = 0
-        # logic to compute the sum of the volume of the shapes
-        return result
-```
-
-In the SumCaclulatorOutputter class we would have:
-
-```python
-import json
+Here we are obeying the LSP but if the method `add_stock` and `remove_stock` 
+were in the parent class, then we would be violating the principle since it
+wouldn't make sense to have such methods for the `MTOStock` which has infinite
+stock.
 
 
-class SumCalculatorOutputter:
-
-    def __init__(self, calculator):
-        self.calculator = calculator
-
-    def json_output(self):
-        return json.dumps(self.calculator.sum())
-
-    def html_ouput(self):
-        return '<p>{self.calculator.sum()}</p>'
-```
-
-
-TODO!!!!!!!!!!!
-
-
-## I: Interface Segregation Principle
+## I: Interface Segregation Principle ISP
 
 A client should never be forced to implement a method that they do not use, or
 clients shouldn't be forced to depend on methods they do not use.
 
-A client should depend on the smallest set of interface features: the fewest
-methods and attributes.
-
-If a class has too many methods, the client is then bound to too many methods
-it doesn't need.
-
-Keeping focus on the needs of a collaborative class will tend to drive the unit
-test cases.
-
-If the features do not support the collaborative class they are more problem
-than solution.
-
-The Interface Segregation Principle is about business logic to client
-communication.
-
 Interfaces are just plain function name definitions. There is no implementation
 of any kind of logic in them.
 
-Correct abstraction is the key to ISP. To find correct abstraction, you should
-explore your domain, probably build some semantic nets, come up with a set of
-user stories, draw interaction diagrams... and all of that doesn't necessary
-lead to good abstraction. Wrong abstraction are worst than no abstractions at
-all. 
+Let us imagine that we need to upload the stock level that we have computed
+in our system to a shared files repository that external warehouse
+systems can use to compare their own data to check discrepancies.
 
-NB: an example of library for dependency injection we can use in python is `inject`
-See:
+Where would we have that capability?
+
+We are not going to extend the `WarehouseStock` class, that would be
+violating the SRP and OCP principle. 
+
+Adding it to the `ProductStockAbstract` would break the `LSP` because the 
+`MTOStock` doesnt need to implement it.
+
+A good way to do that in python is to use Composition so that we would pass
+the service that implement sending these report as an attribute to the 
+`WarehouseStock` class.
+
+```python
+from abc import ABCMeta, abstractmethod
+
+Infinity = float("inf")
 
 
-## D: Dependency Inversion Principle
+class ProductStockAbstract(metaclass=ABCMeta):
+    def __init__(self, sku, *args, **kwargs):
+        self.sku = sku
+
+    @abstractmethod
+    def stock(self):
+        pass
+
+
+class StockReportSender:
+    def __init__(self):
+        self.collections = {}
+
+    def send(self):
+        print("Sending")
+        for sku, stock in self.collections.items():
+            print(sku, stock)
+
+
+class WarehouseStock(ProductStockAbstract):
+    def __init__(self, sku, stock, sender=None):
+        super().__init__(sku, stock)
+        self._sender = sender
+        self.stock = stock
+
+    def add_stock(self, quantity):
+        self._stock += quantity
+
+    def remove_stock(self, quantity):
+        self._stock -= quantity
+
+    @property
+    def stock(self):
+        return self._stock
+
+    @stock.setter
+    def stock(self, stock):
+        self._stock = stock
+        if self._sender is not None:
+            sender.collections[self.sku] = self._stock
+
+
+sender = StockReportSender()
+for product, qty in [("Chair-SKU-BLA", 10), ("Lamp-BLA", 10)]:
+    WarehouseStock(product, qty, sender)
+sender.send()
+
+```
+
+## D: Dependency Inversion Principle DIP
 
 Entities must depend on abstractions, not on concretions. It states that the
 high level module must not depend on the low level module, but they should
@@ -273,7 +285,5 @@ https://adevait.com/software/solid-design-principles-the-guide-to-becoming-bette
 https://www.youtube.com/watch?v=3BIRXTtFHoo
 https://itnext.io/solid-principles-explanation-and-examples-715b975dcad4
 https://www.planetgeek.ch/wp-content/uploads/2013/06/Clean-Code-V2.1.pdf
-
-# It looks like these patterns are influencing towards functional programing
-
+https://www.youtube.com/watch?v=pTB30aXS77U
 
