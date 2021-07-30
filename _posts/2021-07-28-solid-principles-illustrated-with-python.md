@@ -14,7 +14,7 @@ without side effect.
 For example, let us say we are dealing with an inventory management system
 that is going to track the stock per product.
 
-```
+```python
 class Product:
     def __init__(self, sku, stock):
         self.sku = sku
@@ -34,7 +34,7 @@ So we will have 2 classes with each their own responsibility:
 - Product, representing the product and managing it
 - ProductStock, representing the stock of the product and managing it
 
-```
+```python
 # our original Product class becomes lighter
 class Product:
     def __init__(self, sku):
@@ -44,13 +44,17 @@ class Product:
 class ProductStock:
     def __init__(self, sku, stock):
         self.sku = sku
-        self.stock = stock
+        self._stock = stock
 
     def add_stock(self, quantity):
-        self.stock += quantity
+        self._stock += quantity
 
     def remove_stock(self, quantity):
-        self.stock -= quantity
+        self._stock -= quantity
+
+    @property
+    def stock(self):
+        return self._stock
 
 # same information will be:
 p = Product("Table")
@@ -68,102 +72,93 @@ stock management such as the warehouse people.
 Objects or entities should be open for extension but closed for modification.
 
 This simply means that a class should be easily extensible without modifying the
-class itself. Let's look at the AreaCalculator, especially its sum method.
+class itself.
 
+In the context of our inventory management system above, it is possible to
+have products with "infinite" stock. These are for example the make to order
+products (*MTO*) that we order only from our supplier when enough quantity
+have been sold.  
+
+How would we represent that without following the Open Closed Principle?
 
 ```python
-from math import pi
+Infinity = float("inf")  # new code
+class ProductStock:
+    def __init__(self, sku, stock, type):
+        self.sku = sku
+        self._stock = stock
+        self.type = type  # new code
 
+    def add_stock(self, quantity):
+        self._stock += quantity
 
-class AreaCalculator:
-    def __init__(self, shapes):
-        self.shapes = shapes
+    def remove_stock(self, quantity):
+        self._stock -= quantity
 
-    def sum(self):
-        areas = []
-        for shape in self.shapes:
-            if isinstance(shape, Circle):
-                areas.append(pi * shape.radius ** 2)
-            elif isinstance(shape, Square):
-                areas.append(2 * shape.length)
-        return areas
-
+    @property
+    def stock(self):
+        if self.type == 'MTO':   # new code
+            return Infinity  # new code
+        else:  # new code
+            return self._stock  # new code
 ```
+So here you can see that our class gets modified but it shouldn't be open for
+modification. We should only extend it.
 
-If we wanted the sum method to handle the computation of more shape's area, we
-will need to modify the sum method here with more if/else blocks, and that
-goes against the Open/Closed principle.
+To do that, I would rewrite the code with a base Abstract class.
 
+And I will have 2 concrete classes for:
+- the warehouse stock
+- the MTO stock
 
-A way we can make that better is to remove the logic that compute the area of
-each shape within each shape class.
-
-For example for the Square class:
-
-
-```python
-class Square:
-    # [...]
-    def area(self):
-        return self.length * 2
-```
-
-And the same for the Circle class:
+But this also opens the possibility to have different types of stock if we have
+different way of counting the stock for example.
 
 ```python
-from math import pi
+from abc import ABCMeta, abstractmethod
 
-class Circle:
-    def area(self):
-        return pi * self.radius ** 2
-
-```
-
-Now to calculate the total sum of each shape, we would do, in the
-AreaCalculator:
-
-```python
-class AreaCalculator:
-    def sum(self):
-        area = 0
-        for shape in self.shapes:
-            area += shape.area()
-```
+Infinity = float("inf")
 
 
-Now we can create an other shape class and pass it when calculating the sum
-without breaking the code.
+class ProductStockAbstract(metaclass=ABCMeta):
+    def __init__(self, sku, *args, **kwargs):
+        self.sku = sku
 
-However, now an other problem arises, how do we know if the object passed in
-the AreaCalculatot is actually a shape and has a area method?
-
-Coding to an interface is an integral part of S.O.L.I.D., a quick example is
-when we create an interface that every shape implements.
-
-
-```python
-
-class ShapeInterface:
-    def area(self):
-        raise NotImplemented
+    @abstractmethod
+    def stock(self):
+        pass
 
 
-class Circle(ShapeInterface):
-    def area(self):
-        return pi * self.radius * 2
-```
+class ProductStock(ProductStockAbstract):
+    def __init__(self, sku, stock):
+        super().__init__(self, sku, stock)
+        self._stock = stock
 
-In our AreaCalculator, we can check that the objects passed are actually shape
-instances.
+    def add_stock(self, quantity):
+        self._stock += quantity
 
-```python
-class AreaCalculator:
-    def sum(self):
-        area = 0
-        for shape in self.shapes:
-            if isinstance(shape, ShapeInterface):
-                area += shape.area()
-        return area
+    def remove_stock(self, quantity):
+        self._stock -= quantity
+
+    @property
+    def stock(self):
+        return self._stock
+
+
+class MTOStock(ProductStockAbstract):
+    def __init__(self, sku):
+        super().__init__(self, sku)
+
+    @property
+    def stock(self):
+        return Infinity
+
+
+normal_product = ProductStock("Chair-SKU-BLA", 10)
+print('normal_product', normal_product.stock)
+
+mto_product = MTOStock("Cushion-SKU-BLA")
+print('mto_product', mto_product.stock)
 ```
 
 
