@@ -18,7 +18,11 @@ that is going to track the stock per product.
 class Product:
     def __init__(self, sku, stock):
         self.sku = sku
-        self.stock = stock
+        self.price = price
+        self.colour = colour
+        self.current_stock = stock
+        self.minimum_stock = ...
+        self.maxium_stock = ...
 
 p = Product("Table", 100)
 ```
@@ -286,4 +290,3 @@ https://www.youtube.com/watch?v=3BIRXTtFHoo
 https://itnext.io/solid-principles-explanation-and-examples-715b975dcad4
 https://www.planetgeek.ch/wp-content/uploads/2013/06/Clean-Code-V2.1.pdf
 https://www.youtube.com/watch?v=pTB30aXS77U
-
