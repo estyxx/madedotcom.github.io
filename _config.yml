@@ -31,10 +31,12 @@ url: "https://io.made.com" # the base hostname & protocol for your site, e.g. ht
 github_username:  madedotcom
 
 # Build settings
-theme: minima
+# theme: minima  # using regular theming rather than gem-based
 plugins:
   - jekyll-redirect-from
   - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-seo-tag
 
 # Exclude from processing.
 # The following items will not be processed, by default.
