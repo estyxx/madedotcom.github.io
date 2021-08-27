@@ -8,9 +8,8 @@ tags:
   - architecture
 ---
 
-The term DDD comes from the book by Eric Evans: "Domain-Driven Design: Tackling
-Complexity in the Heart of Software
-[https://www.amazon.co.uk/Domain-driven-Design-Tackling-Complexity-Software/dp/0321125215]
+The term DDD comes from the book by Eric Evans: "[Domain-Driven Design: Tackling
+Complexity in the Heart of Software](https://www.amazon.co.uk/Domain-driven-Design-Tackling-Complexity-Software/dp/0321125215)
 ". In his book he describes a set of practices that aim to help us build
 maintainable, rich, software systems that solve customer's problems. The book is
 560 pages of dense insight, so you'll pardon me if my summary elides some
@@ -37,17 +36,17 @@ they are caused by a lack of organisation in the codebase. In fact, the tools to
 solve these problems take up half of the DDD book, but it can be be difficult to
 understand how to use them together in the context of a complete system.
 
-I want to use this series to introduce an architectural style called Ports and
-Adapters [http://wiki.c2.com/?PortsAndAdaptersArchitecture], and a design
-pattern named Command Handler
-[https://matthiasnoback.nl/2015/01/responsibilities-of-the-command-bus/]. I'll
-be explaining the patterns in Python because that's the language that I use
+I want to use this series to introduce an architectural style called [Ports and
+Adapters](http://wiki.c2.com/?PortsAndAdaptersArchitecture), and a design
+pattern named 
+[Command Handler](https://matthiasnoback.nl/2015/01/responsibilities-of-the-command-bus/). 
+I'll be explaining the patterns in Python because that's the language that I use
 day-to-day, but the concepts are applicable to any OO language, and can be
 massaged to work perfectly in a functional context. There might be a lot more
 layering and abstraction than you're used to, especially if you're coming from a
 Django background or similar, but please bear with me. In exchange for a more
-complex system at the outset, we can avoid much of our accidental complexity
-[http://wiki.c2.com/?AccidentalComplexity]  later.
+complex system at the outset, we can avoid much of our 
+[accidental complexity](http://wiki.c2.com/?AccidentalComplexity) later.
 
 The system we're going to build is an issue management system, for use by a
 helpdesk. We're going to be replacing an existing system, which consists of an
@@ -84,20 +83,20 @@ issue.
 Okay, before we get to the code, let's talk about architecture. The architecture
 of a software system is the overall structure - the choice of language,
 technology, and design patterns that organise the code and satisfy our 
-constraints [https://en.wikipedia.org/wiki/Non-functional_requirement]. For our
-architecture, we're going to try and stick with three principles:
+[constraints](https://en.wikipedia.org/wiki/Non-functional_requirement). For
+ our architecture, we're going to try and stick with three principles:
 
  1. We will always define where our use-cases begin and end. We won't have
     business processes that are strewn all over the codebase.
- 2. We will depend on abstractions
-    [https://en.wikipedia.org/wiki/Dependency_inversion_principle], and not on
-    concrete implementations.
+ 2. We will 
+[depend on abstractions](https://en.wikipedia.org/wiki/Dependency_inversion_principle)
+, and not on concrete implementations.
  3. We will treat glue code as distinct from business logic, and put it in an
     appropriate place.
 
-Firstly we start with the domain model. The domain model encapsulates our shared
-understanding of the problem, and uses the terms we agreed with the domain
-experts. In keeping with principle #2 we will define abstractions for any
+Firstly we start with the **domain model**. The domain model encapsulates our
+shared understanding of the problem, and uses the terms we agreed with the
+domain experts. In keeping with principle #2 we will define abstractions for any
 infrastructural or technical concerns and use those in our model. For example,
 if we need to send an email, or save an entity to a database, we will do so
 through an abstraction that captures our intent. In this series we'll create a
@@ -108,13 +107,13 @@ aren't tangled up with messy details of databases and http calls.
 
 
 
-Around the outside of our domain model we place services. These are stateless
-objects that do stuff to the domain. In particular, for this system, our command
-handlers are part of the service layer.
+Around the outside of our domain model we place **services**. These are
+stateless objects that do stuff to the domain. In particular, for this system, 
+our command handlers are part of the service layer.
 
 
 
-Finally, we have our adapter layer. This layer contains code that drives the
+Finally, we have our **adapter** layer. This layer contains code that drives the
 service layer, or provides services to the domain model. For example, our domain
 model may have an abstraction for talking to the database, but the adapter layer
 provides a concrete implementation. Other adapters might include a Flask API, or
@@ -124,18 +123,19 @@ our application to the outside world.
 
 
 In keeping with our first principle, we're going to define a boundary for this
-use case and create our first Command Handler. A command handler is an object
+use case and create our first *Command Handler*. A command handler is an object
 that orchestrates a business process. It does the boring work of fetching the
 right objects, and invoking the right methods on them. It's similar to the
 concept of a Controller in an MVC architecture.
 
-First, we create a Command object.
+First, we create a *Command* object.
 
+```python
 class ReportIssueCommand(NamedTuple):
         reporter_name: str
         reporter_email: str
         problem_description: str
-
+```
 
 A command object is a small object that represents a state-changing action that
 can happen in the system. Commands have no behaviour, they're pure data
@@ -175,6 +175,7 @@ model. This has two major benefits:
 
 In order to process our new command, we'll need to create a command handler.
 
+```python
 class ReportIssueCommandHandler:
     def __init__(self, issue_log):
         self.issue_log = issue_log
@@ -185,7 +186,7 @@ class ReportIssueCommandHandler:
             cmd.reporter_email)
         issue = Issue(reported_by, cmd.problem_description)
         self.issue_log.add(issue)
-
+```
 
 
 Command handlers are stateless objects that orchestrate the behaviour of a
@@ -209,6 +210,7 @@ Since our command handlers are just glue code, we won't put any business logic
 into them - they shouldn't be making any business decisions. For example, let's
 skip ahead a little to a new command handler:
 
+```python
 class MarkIssueAsResolvedHandler:
     def __init__(self, issue_log):
         self.issue_log = issue_log
@@ -218,33 +220,35 @@ class MarkIssueAsResolvedHandler:
         # the following line encodes a business rule
         if (issue.state != IssueStatus.Resolved):
             issue.mark_as_resolved(cmd.resolution)
-
+```
 
 This handler violates our glue-code principle because it encodes a business
 rule: "If an issue is already resolved, then it can't be resolved a second
-time". This rule belongs in our domain model, probably in the mark_as_resolved 
-method of our Issue object.
+time". This rule belongs in our domain model, probably in the `mark_as_resolved` 
+method of our `Issue` object.
 I tend to use classes for my command handlers, and to invoke them with the call 
 magic method, but a function is perfectly valid as a handler, too. The major
 reason to prefer a class is that it can make dependency management a little
 easier, but the two approaches are completely equivalent. For example, we could
-rewrite our ReportIssueHandler like this:
+rewrite our `ReportIssueHandler` like this:
 
+```python
 def ReportIssue(issue_log, cmd):
     reported_by = IssueReporter(
         cmd.reporter_name,
         cmd.reporter_email)
     issue = Issue(reported_by, cmd.problem_description)
     issue_log.add(issue)
-
+```
 
 If magic methods make you feel queasy, you can define a handler to be a class
 that exposes a handle method like this:
 
+```python
 class ReportIssueHandler:
     def handle(self, cmd):
        ...
-
+```
 
 However you structure them, the important ideas of commands and handlers are:
 
@@ -257,14 +261,14 @@ However you structure them, the important ideas of commands and handlers are:
     persist state, notify other parties that state was changed.
 
 Let's take a look at the complete system, I'm concatenating all the files into a
-single code listing for each of grokking, but in the git repository
-[https://github.com/bobthemighty/blog-code-samples/tree/master/ports-and-adapters/01] 
+single code listing for each of grokking, but in the [git repository](https://github.com/bobthemighty/blog-code-samples/tree/master/ports-and-adapters/01) 
  I'm splitting the layers of the system into separate packages. In the real
 world, I would probably use a single python package for the whole app, but in
 other languages - Java, C#, C++ - I would usually have a single binary for each
 layer. Splitting the packages up this way makes it easier to understand how the
 dependencies work.
 
+```python
 from typing import NamedTuple
 from expects import expect, have_len, equal
 
@@ -353,10 +357,10 @@ class When_reporting_an_issue:
 
     def it_should_have_recorded_the_description(self):
         expect(self.issues[0].description).to(equal(desc))
-
+```
 
 There's not a lot of functionality here, and our issue log has a couple of
 problems, firstly there's no way to see the issues in the log yet, and secondly
 we'll lose all of our data every time we restart the process. We'll fix the
-second of those in the next part
-[https://io.made.com/blog/repository-and-unit-of-work-pattern-in-python/].
+second of those in the next part:
+[Repository And Unit Of Work Pattern In Python](https://io.made.com/blog/2017-09-08-repository-and-unit-of-work-pattern-in-python.html).
