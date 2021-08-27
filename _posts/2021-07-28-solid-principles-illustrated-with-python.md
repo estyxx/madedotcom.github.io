@@ -338,31 +338,3 @@ sqlalchemy that enables us to do that using the [classical mapping](https://docs
 
 Here we are actually implementing a "Repository Pattern". Read more about this 
 pattern in Harry and Bob's book: https://www.cosmicpython.com/book/chapter_02_repository.html
-
-## _References_
-
-1. https://www.infoq.com/presentations/solid-principles/
-2. https://www.infoq.com/presentations/solid-javascript/?itm_source
-3. =presentations_about_SOLID&itm_medium=link&itm_campaign=SOLID
-4. https://www.slideshare.net/Kevlin/python-advanced-building-on-the-foundation/4-IntroductionEverything_has_a_beginning
-5. https://www.youtube.com/watch?v=miGolgp9xq8 at 22:48
-6. https://code.tutsplus.com/series/the-solid-principles--cms-634
-7. https://hackernoon.com/interface-segregation-principle-bdf3f94f1d11
-8. https://github.com/zedr/clean-code-python#liskov-substitution-principle-lsp
-9. https://github.com/ryanmcdermott/clean-code-javascript#solid
-10. https://www.slideshare.net/RubyMeditation/functional-objects-in-ruby-new-horizons-valentine-ostakh
-11. https://sobolevn.me/2020/02/typed-functional-dependency-injection
-12. https://www.researchgate.net/publication/323935872_SOLID_Python_SOLID_principles_applied_to_a_dynamic_programming_language
-13. https://medium.com/@dorela/s-o-l-i-d-principles-explained-in-python-with-examples-3332520b90ff
-14. https://github.com/heykarimoff/solid.python
-15. https://programmingwithmosh.com/javascript/solid-5-principles-of-object-oriented-design-every-developer-must-learn/
-16. http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod
-17.https://adevait.com/software/solid-design-principles-the-guide-to-becoming-better-developers
-18. https://www.youtube.com/watch?v=3BIRXTtFHoo
-19. https://itnext.io/solid-principles-explanation-and-examples-715b975dcad4
-20. https://www.planetgeek.ch/wp-content/uploads/2013/06/Clean-Code-V2.1.pdf
-21. https://www.youtube.com/watch?v=pTB30aXS77U
-22. https://blog.ploeh.dk/2013/12/03/layers-onions-ports-adapters-its-all-the-same/
-23. https://en.wikipedia.org/wiki/Dependency_inversion_principle
-24. https://www.cosmicpython.com/book/chapter_02_repository.html
-25. https://docs.pytest.org/en/latest/fixture.html#fixtures-a-prime-example-of-dependency-injection
