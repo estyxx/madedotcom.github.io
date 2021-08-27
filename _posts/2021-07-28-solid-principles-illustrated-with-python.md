@@ -4,6 +4,9 @@
 SOLID is an acronym created by Bob Martin and Michael Feathers that refers to 
 five fundamental principles that help engineers write maintainable code.
 
+Here are the principles illustrated with minimal and hopefully
+straightforward examples.
+
 ## S: Single Responsibility principle SRP
 
 "A module, class, function should have one and only one reason to change."
@@ -16,35 +19,33 @@ that is going to track the stock per product.
 
 ```python
 class Product:
-    def __init__(self, sku, stock):
+    def __init__(self, sku, stock, price, colour):
         self.sku = sku
         self.price = price
         self.colour = colour
         self.current_stock = stock
-        self.minimum_stock = ...
-        self.maxium_stock = ...
 
-p = Product("Table", 100)
+p = Product("Table", 100, 99, 'red')
 ```
 
-Here, we can say that our class has one too many reponsibility:
-- describing the product
-- describing the stock level
+Here, we can say that our class has one too many responsibility:
+- describing the product (with the price and the colour)
+- describing the stock level (with the stock)
 
 We could split the stock management in a separate class whose responsibility
 will be only to represent the stock level.
 
 So we will have 2 classes with each their own responsibility:
-- Product, representing the product and managing it
+- ProductDescription, representing the product and managing it
 - ProductStock, representing the stock of the product and managing it
 
 ```python
-# our original Product class becomes lighter
-class Product:
-    def __init__(self, sku):
+class ProductDescription:
+    def __init__(self, sku, price, colour):
         self.sku = sku
+        self.price = price
+        self.colour = colour
 
-# new class
 class ProductStock:
     def __init__(self, sku, stock):
         self.sku = sku
@@ -61,8 +62,8 @@ class ProductStock:
         return self._stock
 
 # same information will be:
-p = Product("Table")
-stock = ProductStock(p.sku, 100)
+p = ProductDescription("Table", 99, 'red')
+s = ProductStock(p.sku, 100)
 ```
 
 Notice that if we extrapolate, the classes are used for different business
@@ -186,7 +187,7 @@ of any kind of logic in them.
 
 Let us imagine that we need to upload the stock level that we have computed
 in our system to a shared files repository that external warehouse
-systems can use to compare their own data to check discrepancies.
+systems can use to compare their own data in order to check discrepancies.
 
 Where would we have that capability?
 
@@ -257,36 +258,111 @@ sender.send()
 
 ## D: Dependency Inversion Principle DIP
 
+A dependency is an object that can be used (a service).
+An injection is the passing of a dependency to a
+dependent object (a client) that would use it.
+
 Entities must depend on abstractions, not on concretions. It states that the
 high level module must not depend on the low level module, but they should
 depend on abstractions.
 
-https://blog.ploeh.dk/2013/12/03/layers-onions-ports-adapters-its-all-the-same/
-https://en.wikipedia.org/wiki/Dependency_inversion_principle
-https://www.cosmicpython.com/book/chapter_02_repository.html
-https://docs.pytest.org/en/latest/fixture.html#fixtures-a-prime-example-of-dependency-injection
+A "high level module" is something close to the human or the business as
+opposed to the "low level module" that is close to the machine or the technical
+architecture of the system. 
+
+The "high level module" doesn't care about the technicality of how we store
+and retrieve the `ProductDescription` from the system.
+
+```python
+import sqlite3
+
+# our high level module, i.e. our domain model
+class ProductDescription:
+    def __init__(self, sku, price, colour):
+        self.sku = sku
+        self.price = price
+        self.colour = colour
 
 
+# our low level module 
+class ConcreteProductDescriptionRepository:
+    def __init__(self, cursor):
+        self.cur = cursor
 
-# References
+    def add(self, product_entity):
+        self.cur.execute("INSERT INTO products VALUES (?, ?, ?)",
+                         (product_entity.sku, product_entity.price, product_entity.colour))
 
-https://www.infoq.com/presentations/solid-principles/
-https://www.infoq.com/presentations/solid-javascript/?itm_source=presentations_about_SOLID&itm_medium=link&itm_campaign=SOLID
-https://www.slideshare.net/Kevlin/python-advanced-building-on-the-foundation/4-IntroductionEverything_has_a_beginning
-https://www.youtube.com/watch?v=miGolgp9xq8 at 22:48
-https://code.tutsplus.com/series/the-solid-principles--cms-634
-https://hackernoon.com/interface-segregation-principle-bdf3f94f1d11
-https://github.com/zedr/clean-code-python#liskov-substitution-principle-lsp
-https://github.com/ryanmcdermott/clean-code-javascript#solid
-https://www.slideshare.net/RubyMeditation/functional-objects-in-ruby-new-horizons-valentine-ostakh
-https://sobolevn.me/2020/02/typed-functional-dependency-injection
-https://www.researchgate.net/publication/323935872_SOLID_Python_SOLID_principles_applied_to_a_dynamic_programming_language
-https://medium.com/@dorela/s-o-l-i-d-principles-explained-in-python-with-examples-3332520b90ff
-https://github.com/heykarimoff/solid.python
-https://programmingwithmosh.com/javascript/solid-5-principles-of-object-oriented-design-every-developer-must-learn/
-http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod
-https://adevait.com/software/solid-design-principles-the-guide-to-becoming-better-developers
-https://www.youtube.com/watch?v=3BIRXTtFHoo
-https://itnext.io/solid-principles-explanation-and-examples-715b975dcad4
-https://www.planetgeek.ch/wp-content/uploads/2013/06/Clean-Code-V2.1.pdf
-https://www.youtube.com/watch?v=pTB30aXS77U
+    def get(self, sku):
+        self.cur.execute("SELECT * FROM products WHERE sku=?", (sku,))
+        return self.cur.fetchone()
+
+
+class ConcreteProductDescriptionRepositoryManager:
+    def _make_sure_tables_exist(self):
+        # the low level module depends on the high level module
+        # we could map the python class with the sql table
+        self.cur.execute('''CREATE TABLE IF NOT EXISTS products 
+                         (sku text, price real, colour text)''')
+
+    def __enter__(self):
+        self.con = sqlite3.connect('product.db')
+        self.cur = self.con.cursor()
+        self._make_sure_tables_exist()
+        return ConcreteProductDescriptionRepository(self.cur)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.con.commit()
+
+
+with ConcreteProductDescriptionRepositoryManager() as crm:
+    p = ProductDescription("Chair", 99, "red")
+    print("Add product in database")
+    crm.add(p)
+    print("Delete object")
+    del(p)
+    print("Retrieve product from database")
+    p = crm.get("Chair")
+    print(p)
+
+```
+
+Notice that our entity, the `ProductDescription`, doesn't depend on the low
+level module that implement the access and storage to the database.
+
+It is the other way around, the low level object depends on the model.
+
+We haven't introduce a python-class-to-sql-table-mapping here because it seems 
+a bit cumbersome to do it with `sqlite3`. However, in our production code, we use
+sqlalchemy that enables us to do that using the [classical mapping](https://docs.sqlalchemy.org/en/14/orm/mapping_styles.html#orm-imperative-mapping)
+
+Here we are actually implementing a "Repository Pattern". Read more about this 
+pattern in Harry and Bob's book: https://www.cosmicpython.com/book/chapter_02_repository.html
+
+## _References_
+
+1. https://www.infoq.com/presentations/solid-principles/
+2. https://www.infoq.com/presentations/solid-javascript/?itm_source
+3. =presentations_about_SOLID&itm_medium=link&itm_campaign=SOLID
+4. https://www.slideshare.net/Kevlin/python-advanced-building-on-the-foundation/4-IntroductionEverything_has_a_beginning
+5. https://www.youtube.com/watch?v=miGolgp9xq8 at 22:48
+6. https://code.tutsplus.com/series/the-solid-principles--cms-634
+7. https://hackernoon.com/interface-segregation-principle-bdf3f94f1d11
+8. https://github.com/zedr/clean-code-python#liskov-substitution-principle-lsp
+9. https://github.com/ryanmcdermott/clean-code-javascript#solid
+10. https://www.slideshare.net/RubyMeditation/functional-objects-in-ruby-new-horizons-valentine-ostakh
+11. https://sobolevn.me/2020/02/typed-functional-dependency-injection
+12. https://www.researchgate.net/publication/323935872_SOLID_Python_SOLID_principles_applied_to_a_dynamic_programming_language
+13. https://medium.com/@dorela/s-o-l-i-d-principles-explained-in-python-with-examples-3332520b90ff
+14. https://github.com/heykarimoff/solid.python
+15. https://programmingwithmosh.com/javascript/solid-5-principles-of-object-oriented-design-every-developer-must-learn/
+16. http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod
+17.https://adevait.com/software/solid-design-principles-the-guide-to-becoming-better-developers
+18. https://www.youtube.com/watch?v=3BIRXTtFHoo
+19. https://itnext.io/solid-principles-explanation-and-examples-715b975dcad4
+20. https://www.planetgeek.ch/wp-content/uploads/2013/06/Clean-Code-V2.1.pdf
+21. https://www.youtube.com/watch?v=pTB30aXS77U
+22. https://blog.ploeh.dk/2013/12/03/layers-onions-ports-adapters-its-all-the-same/
+23. https://en.wikipedia.org/wiki/Dependency_inversion_principle
+24. https://www.cosmicpython.com/book/chapter_02_repository.html
+25. https://docs.pytest.org/en/latest/fixture.html#fixtures-a-prime-example-of-dependency-injection
