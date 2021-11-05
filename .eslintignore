@@ -1,0 +1,10 @@
+.github
+.next
+.vscode
+.vercel
+public
+styles
+*.snap
+coverage
+node_modules
+.eslintrc.js
