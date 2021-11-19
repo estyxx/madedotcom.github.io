@@ -1,10 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-
-import { MDXProvider } from "@mdx-js/react";
-import Image from "next/image";
-import { Heading, Text, Pre, Code, Table } from "../components";
 import { getPostsMetaData } from "../lib/api";
 
 export async function getStaticProps() {

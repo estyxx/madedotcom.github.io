@@ -52,11 +52,8 @@ export const getPostData = (slug: string) => {
   const fullPath = path.join(postsDirectory, slug + fileExtension);
 
   // get MDX metadata and content
-  const fileContents = fs.readFileSync(fullPath, "utf8");
-  // get metadata, content
-  const { data, content } = matter(fileContents);
+  const page = fs.readFileSync(fullPath, "utf8");
+  console.log(page);
 
-  const metadata = { slug: slug, ...data };
-
-  return { metadata, content };
+  return { slug: slug, page };
 };
