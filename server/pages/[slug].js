@@ -33,19 +33,32 @@ var react_ = __webpack_require__(930);
 
 
 const Code = ({ children  })=>{
+    return(/*#__PURE__*/ jsx_runtime_.jsx(react_.Wrap, {
+        bg: "orange.50",
+        borderRadius: 10,
+        mb: 10,
+        fontSize: "sm",
+        boxShadow: "lg",
+        children: /*#__PURE__*/ jsx_runtime_.jsx(react_.Box, {
+            p: 5,
+            children: children
+        })
+    }));
+};
+const PostLink = ({ children , href  })=>{
+    return(/*#__PURE__*/ jsx_runtime_.jsx(react_.Link, {
+        color: "made.blue",
+        href: href,
+        children: children
+    }));
+};
+const CodeInline = ({ children  })=>{
     return(/*#__PURE__*/ jsx_runtime_.jsx("code", {
-        className: "p-1",
         children: children
     }));
 };
 const Paragraph = ({ children  })=>/*#__PURE__*/ jsx_runtime_.jsx(react_.Text, {
-        className: "mb-4",
-        children: children
-    })
-;
-const H1 = ({ children  })=>/*#__PURE__*/ _jsx(Heading, {
-        as: "h1",
-        size: "4xl",
+        mb: 4,
         children: children
     })
 ;
@@ -74,8 +87,10 @@ const theme = {
     h4: heading(4),
     h5: heading(5),
     h6: heading(6),
+    a: PostLink,
     p: Paragraph,
-    inlineCode: Code
+    inlineCode: CodeInline,
+    code: Code
 };
 /* harmony default export */ const mdx = (theme);
 
@@ -84,7 +99,9 @@ const theme = {
 
 
 
-const PostPage = ({ title , source , ...props })=>{
+
+const PostPage = ({ title , author , date , source , ...props })=>{
+    const publishDate = new Date(date);
     console.log("PostPage props:", props);
     return(/*#__PURE__*/ (0,jsx_runtime_.jsxs)(jsx_runtime_.Fragment, {
         children: [
@@ -93,11 +110,33 @@ const PostPage = ({ title , source , ...props })=>{
                     children: title
                 })
             }),
-            /*#__PURE__*/ jsx_runtime_.jsx("div", {
-                children: /*#__PURE__*/ jsx_runtime_.jsx(external_next_mdx_remote_namespaceObject.MDXRemote, {
-                    ...source,
-                    components: mdx
-                })
+            /*#__PURE__*/ (0,jsx_runtime_.jsxs)(react_.Container, {
+                maxW: "2xl",
+                children: [
+                    /*#__PURE__*/ jsx_runtime_.jsx(react_.Heading, {
+                        as: "h1",
+                        size: "3xl",
+                        mb: 6,
+                        children: title
+                    }),
+                    /*#__PURE__*/ (0,jsx_runtime_.jsxs)(react_.Text, {
+                        mb: 2,
+                        fontWeight: "bold",
+                        children: [
+                            "by ",
+                            author
+                        ]
+                    }),
+                    /*#__PURE__*/ jsx_runtime_.jsx(react_.Text, {
+                        mb: 4,
+                        color: "made.50",
+                        children: publishDate.toDateString()
+                    }),
+                    /*#__PURE__*/ jsx_runtime_.jsx(external_next_mdx_remote_namespaceObject.MDXRemote, {
+                        ...source,
+                        components: mdx
+                    })
+                ]
             })
         ]
     }));
@@ -134,6 +173,7 @@ const getStaticProps = async (context)=>{
     return {
         props: {
             source: source,
+            date: doc.date,
             ...data
         }
     };
