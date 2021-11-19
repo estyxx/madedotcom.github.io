@@ -56,12 +56,12 @@ export const getPostsMetaData = () => {
 };
 
 export const getPostData = (slug: string) => {
-  console.log("getPostData", slug);
   const fullPath = path.join(postsDirectory, slug + fileExtension);
 
   // get MDX metadata and content
   const page = fs.readFileSync(fullPath, "utf8");
-  console.log(page);
 
-  return { slug: slug, page };
+  const match = /([0-9]{4})-([0-9]{2})-([0-9]{2})/.exec(slug);
+
+  return { slug: slug, date: match && match[0], page };
 };

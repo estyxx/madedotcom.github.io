@@ -20,6 +20,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
       source: source,
+      date: doc.date,
       ...data,
     },
   };

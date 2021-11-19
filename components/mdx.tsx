@@ -1,18 +1,28 @@
 import { ReactNode } from "react";
-import { Heading, Text } from "@chakra-ui/react";
+import { Heading, Text, Wrap, Box, Link } from "@chakra-ui/react";
 
 const Code = ({ children }: { children: ReactNode }) => {
-  return <code className="p-1">{children}</code>;
+  return (
+    <Wrap bg="orange.50" borderRadius={10} mb={10} fontSize="sm" boxShadow="lg">
+      <Box p={5}>{children}</Box>
+    </Wrap>
+  );
+};
+
+const PostLink = ({ children, href }: { href?: string; children: ReactNode }) => {
+  return (
+    <Link color="made.blue" href={href}>
+      {children}
+    </Link>
+  );
+};
+
+const CodeInline = ({ children }: { children: ReactNode }) => {
+  return <code>{children}</code>;
 };
 
 const Paragraph = ({ children }: { children: ReactNode }) => (
-  <Text className="mb-4">{children}</Text>
-);
-
-const H1 = ({ children }: { children: ReactNode }) => (
-  <Heading as="h1" size="4xl">
-    {children}
-  </Heading>
+  <Text mb={4}>{children}</Text>
 );
 
 const heading = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
@@ -42,8 +52,10 @@ const theme = {
   h4: heading(4),
   h5: heading(5),
   h6: heading(6),
+  a: PostLink,
   p: Paragraph,
-  inlineCode: Code,
+  inlineCode: CodeInline,
+  code: Code,
 };
 
 export default theme;

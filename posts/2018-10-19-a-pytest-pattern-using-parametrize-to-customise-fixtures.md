@@ -24,7 +24,6 @@ def supplier(db):
     db.remove(s)
 
 
-
 @pytest.fixture()
 def product(db, supplier):
     p = Product(
@@ -50,7 +49,7 @@ def test_EU_supplier_has_total_price_including_VAT(supplier, product):
     assert product.total_price == product.net_price * 1.2
 ```
 
-For whatever reason, maybe because you need to set the supplier.country before you add
+For whatever reason, maybe because you need to set the `supplier.country` before you add
 things to the DB, or before you instantiate product objects, you need to be able to
 adjust the country field on your supplier feature.
 
@@ -64,6 +63,7 @@ def _default_supplier():
         name=random_name(),
     )
 
+
 @pytest.fixture
 def us_supplier(db):
     s = _default_supplier()
@@ -71,6 +71,7 @@ def us_supplier(db):
     db.add(s)
     yield s
     db.remove(s)
+
 
 @pytest.fixture
 def eu_supplier(db):
@@ -82,15 +83,15 @@ def eu_supplier(db):
 ```
 
 That's just one way you could do it, maybe you can figure out ways to reduce the
-duplication of the db.add() stuff as well, but you are going to have to have a
-different, named fixture for each customisation of Supplier, and eventually you may
+duplication of the `db.add()` stuff as well, but you are going to have to have a
+different, named fixture for each customisation of `Supplier`, and eventually you may
 decide that doesn't scale. us_supplier, eu_supplier, asia_supplier, ch_supplier, etc
 etc, too many fixtures! I'd like just one, customisable fixture please.
 
 Option 2: factory fixtures Instead of a fixture returning an object directly, it can
 return a function that creates an object, and that function can take arguments:
 
-```
+```python
 @pytest.fixture
 def make_supplier(db):
     s = Supplier(
@@ -113,7 +114,8 @@ make all of your fixture hierarchy into factory functions:
 ```python
 def test_EU_supplier_has_total_price_including_VAT(make_supplier, product):
     supplier = make_supplier(country="FR")
-    product.supplier = supplier # OH, now this doesn't work, because it's too late again
+    # OH, now this doesn't work, because it's too late again
+    product.supplier = supplier
     assert product.total_price == product.net_price * 1.2
 ```
 
@@ -237,13 +239,12 @@ Reactions and alternative suggestions on a postcard please :)
 
 ---
 
-Cross-posted from obeythetestinggoat.com
-[http://www.obeythetestinggoat.com/a-pytest-pattern-using-parametrize-to-customise-nested-fixtures.html]
+[Cross-posted from obeythetestinggoat.com](http://www.obeythetestinggoat.com/a-pytest-pattern-using-parametrize-to-customise-nested-fixtures.html)
 
-This blog post inspired by a pattern I first explored at PythonAnywhere
-[https://www.pythonanywhere.com/], which came up again recently; I found myself writing
-two successive answers to this SO post
-[https://stackoverflow.com/questions/42228895/how-to-parametrize-a-pytest-fixture]
+This blog post was inspired by a pattern I first explored at
+[PythonAnywhere](https://www.pythonanywhere.com/), which came up again recently; I found
+myself writing two successive answers to this
+[StackOverflow post](https://stackoverflow.com/questions/42228895/how-to-parametrize-a-pytest-fixture)
 
-Code samples can be found here
-[https://github.com/hjwp/www.obeythetestinggoat.com/tree/master/example-code/pytest_overriding_nested_fixtures_pattern]
+Code samples can be found
+[here](https://github.com/hjwp/www.obeythetestinggoat.com/tree/master/example-code/pytest_overriding_nested_fixtures_pattern)
