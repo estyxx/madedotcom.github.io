@@ -6,21 +6,29 @@ const matter = require("gray-matter");
 const postsDirectory = path.join(process.cwd(), "posts");
 const fileExtension = ".md";
 
-const getAllFilesInDirectory = () => {
+type Path = {
+  root: string;
+  dir: string;
+  base: string;
+  ext: string;
+  name: string;
+};
+
+const getAllFilesInDirectory = (): Path[] => {
   const fileNames = fs.readdirSync(postsDirectory);
-  return fileNames.map((fileName) => {
+  return fileNames.map((fileName: string) => {
     return path.parse(fileName);
   });
 };
 
-const getFiles = () => {
+const getFiles = (): Path[] => {
   const allFiles = getAllFilesInDirectory();
   return allFiles.filter((file) => file.ext == fileExtension);
 };
 
 export const getAllPostsPath = () => {
   const files = getFiles();
-  return files.map((file) => {
+  return files.map((file: Path) => {
     return {
       params: {
         slug: file.name,

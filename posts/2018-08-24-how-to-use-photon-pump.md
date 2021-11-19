@@ -40,20 +40,28 @@ Event( stream="adventure", type="player_created", data=json.dumps({"name": "Gil"
 So how would we add this event into Event Store using Photon-pump in a single python
 script?
 
-writer.py
+```python
+# writer.py
 
 import asyncio
 
 import photonpump
 
-async def write_event(conn): await conn.publish_event( 'adventure', 'player_created',
-body={'name': 'Gil'} )
+async def write_event(conn):
+    await conn.publish_event(
+        'adventure',
+        'player_created',
+        body={'name': 'Gil'}
+    )
 
-async def run(): async with photonpump.connect('localhost') as conn: await
-write_event(conn)
+async def run():
+    async with photonpump.connect('localhost') as conn:
+        await write_event(conn)
 
-if **name** == '**main**': event_loop = asyncio.get_event_loop()
-event_loop.run_until_complete(run())
+if **name** == '**main**':
+    event_loop = asyncio.get_event_loop()
+    event_loop.run_until_complete(run())
+```
 
 So, line by line, we have an async function called write_event which will as the name
 states, write the event into Event Store, using a Photon-pump connection passed in the
@@ -78,20 +86,25 @@ stream in a separate script.
 
 Here is all the code we need:
 
-reader.py
+```python
+#reader.py
 
 import asyncio
-
 import photonpump
 
-async def read_an_event(conn): for event_record in await conn.get('adventure'):
-print(event_record.event.type, event_record.event.json())
+async def read_an_event(conn):
+    for event_record in await conn.get('adventure'):
+        print(event_record.event.type, event_record.event.json())
 
-async def run(): async with photonpump.connect('localhost') as conn: await
-read_an_event(conn)
+async def run():
+    async with photonpump.connect('localhost') as conn:
+        await read_an_event(conn)
 
-if **name** == '**main**': event_loop = asyncio.get_event_loop()
-event_loop.run_until_complete(run())
+if **name** == '**main**':
+    event_loop = asyncio.get_event_loop()
+    event_loop.run_until_complete(run())
+
+```
 
 Ignoring run and if \_\_name... the read_an_event function uses the method get from
 Photon-pump to collect all the events using it like an iterator and printing each of the

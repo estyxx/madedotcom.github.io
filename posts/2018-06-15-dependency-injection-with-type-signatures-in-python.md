@@ -27,6 +27,7 @@ Our handler is orchestration code that plugs together two collaborators: a View 
 that fetches data, and an Email Sender that knows how to send an email to the mail
 server.
 
+```python
 class IssueAssignedHandler:
 
     def __init__(self, sender: EmailSender, view: IssueViewBuilder):
@@ -36,6 +37,7 @@ class IssueAssignedHandler:
     def handle(self, msg):
         data = self.view.fetch(cmd.issue_id)
         sender.send_email(emails.IssueAssigned, data)
+```
 
 This is dependency injection. We're injecting the dependencies (the sender and view) by
 making them parameters of the constructor. That's it. Passing our parameters this way
@@ -50,6 +52,7 @@ Dependency injection is really just a way of performing partial application
 [https://www.pydanny.com/python-partials-are-fun.html] on a method call. Earlier in this
 series, I said that I often create handlers by abusing the **call** magic method.
 
+```python
 class IssueAssignedHandler:
 
     def __init__(self, sender, view):
@@ -61,10 +64,12 @@ class IssueAssignedHandler:
         sender.send_email(emails.IssueAssigned, data)
 
 handler = IssueAssignedHandler(sender, view) handler(cmd)
+```
 
 Calling the constructor of IssueAssignedHandler returns a callable. Compare that with
 the following examples of partial application:
 
+```
 def explicit_closure_handler(self, sender, view):
 
     def h(self, cmd):
@@ -72,12 +77,14 @@ def explicit_closure_handler(self, sender, view):
         ...
     return h
 
+
 handler_a = explicit_closure_handler(sender, view) handler_a(cmd)
 
 from functools import partial def send_assignment_email(sender, view, cmd): data =
 view.fetch(cmd.issue_id) ...
 
 handler_b = partial(send_assignment_email, sender, view) handler_b(cmd)
+```
 
 The callables handler, handler_a, and handler_b all take a single argument (the command)
 and run the same code on it, so we can see that they are functionally equivalent.
@@ -110,6 +117,7 @@ can still perform dependency injection with no frameworks at all. For example, i
 code sample for the previous part in this series, I extracted all my wiring into a
 single module with boring code that looks like this:
 
+```python
 db = SqlAlchemy('sqlite:///issues.db') db.configure_mappings() db.create_schema()
 
 bus = MessageBus() db.associate_message_bus(bus)
@@ -124,6 +132,7 @@ bus.subscribe_to(msg.ReportIssueCommand, report_issue)
 bus.subscribe_to(msg.TriageIssueCommand, triage_issue)
 bus.subscribe_to(msg.IssueAssignedToEngineer, issue_assigned)
 bus.subscribe_to(msg.AssignIssueCommand, assign_issue)
+```
 
 This code is just a straight-line script that configures the database, creates all of
 our message handlers, and then registers them with the message bus. This component is
@@ -142,10 +151,13 @@ the partial application trick I demonstrated above. Inject is my favourite of th
 DI libraries because it's so simple to use, but I have a dislike for its use of
 decorators to declare dependencies.
 
+```python
 import inject
+```
 
 # client code
 
+```python
 class IssueAssignedHandler:
 
     @inject(sender='email_sender', view='issue_view_builder')
@@ -155,15 +167,17 @@ class IssueAssignedHandler:
     def handle(self, cmd):
         pass
 
+
 # configuration
 
-def configure_binder(binder): db = SqlAlchemy('sqlite://') binder.bind('email_sender',
-SmtpEmailSender(host=..., port=..., username=...)) binder.bind('issue_view_builder',
-IssueViewBuilder)
+def configure_binder(binder): db = SqlAlchemy('sqlite://')
+    binder.bind('email_sender', SmtpEmailSender(host=..., port=..., username=...))
+    binder.bind('issue_view_builder', IssueViewBuilder)
 
-inject.configure(configure_binder)
+    inject.configure(configure_binder)
 
-handler = IssueAssignedHandler()
+    handler = IssueAssignedHandler()
+```
 
 The configure_binder function takes the place of my bootstrap script in wiring up and
 configuring my dependencies. When I call IssueAssignedHandler the inject library knows
@@ -177,13 +191,16 @@ that avoids this problem by using Python 3.6's optional type hinting
 [https://docs.python.org/3/library/typing.html], and I'd like to show you some use
 cases.
 
+```python
 import punq
+
 
 # client code
 
 class IssueAssignedHandler: # We use type hints to declare what dependencies we need def
-**init**(self, sender: EmailSender, view: IssueViewBuilder): self.sender = sender
-self.view = view
+    def __init__(self, sender: EmailSender, view: IssueViewBuilder):
+        self.sender = sender
+    self.view = view
 
     def handle(self, cmd):
         pass
@@ -205,6 +222,7 @@ container.register(UnitOfWorkManager, SqlAlchemyUnitOfWorkManager)
 container.register(IssueViewBuilder)
 
 handler = container.resolve(IssueAssignedHandler)
+```
 
 So far, so underwhelming. Simple registrations don't really save us anything over the
 bootstrap script from earlier. Using a container for this kind of work really only cuts
@@ -219,6 +237,7 @@ For example, maybe we're writing a program that needs to run a bunch of processi
 over some text. We decide to treat each processing rule as a function and use our
 container to fetch them all at runtime.
 
+```python
 # string_processing_rule is just an alias
 
 # for a function of str -> str
@@ -235,9 +254,11 @@ class StringProcessor:
             input = rule(input)
         return input
 
-def upper_case(input: str) -> str: return str.upper()
+def upper_case(input: str) -> str:
+    return str.upper()
 
-def reverse(input: str) -> str: return reversed(str)
+def reverse(input: str) -> str:
+    return reversed(str)
 
 container = punq.container() container.register(string_processing_rule, upper_case)
 container.register(string_processing_rule, reverse)
@@ -247,6 +268,7 @@ processor = container.resolve(StringProcessor)
 # prints ("DLORW OLLEH")
 
 print(processor.process("hello world"))
+```
 
 One of the advantages of using types over using other keys is that they're composable. I
 can ask for a List[T] and get all registered instances of some T. This is handy when
@@ -255,28 +277,46 @@ including rules engines and message buses. Having generics in our type system ca
 it easier to manage all of our dependencies in other ways, too. For example, I can use
 generics to automatically wire up all my message handlers.
 
+```python
 class IssueAssignedHandler (Handles[IssueAssignedEvent]): pass
+```
 
 Here we're stating that our IssueAssignedHandler is an subtype of the Handles class, and
 it has a type parameter for the handled event. Given a module full of these, I can
 enumerate the module's types and perform automatic registration.
 
-def register*all(module): """ Read through all the types in a module and register them
-if they are handlers""" for *, type in inspect.getmembers(module,
-predicate=inspect.isclass): register(type)
+```python
+def register_all(module):
+    """ Read through all the types in a module and register them
+    if they are handlers"""
 
-def register(type): """ If this type is a handler type then register it in the container
-""" handler_service_type = get_message_type(type) if handler_service_type is None:
-return container.register(handler_service_type, type)
+    for _, type in inspect.getmembers(module, predicate=inspect.isclass):
+        register(type)
 
-def get_message_type(type): """ If this type subclasses the Handles[TMsg] class, return
-the parameterised type. eg. for our IssueAssignedHandler, this would return
-Handles[IssueAssignedEvent] """ try: for base in type.**orig_bases**: if base.**origin**
-== services.Handles: return base except: pass
+def register(type):
+    """ If this type is a handler type then register it in the container"""
+    handler_service_type = get_message_type(type)
+    if handler_service_type is None:
+        return container.register(handler_service_type, type)
 
-def resolve_handler(event_type): container.resolve(Handles[event_type])
+def get_message_type(type):
+    """ If this type subclasses the Handles[TMsg] class, return
+    the parameterised type. eg. for our IssueAssignedHandler, this would return
+    Handles[IssueAssignedEvent] """
 
-class MessageHandler: def handle(self, next:MessageHandler): pass
+    try:
+        for base in type.__orig_bases__:
+            if base.__origin__ == services.Handles:
+              return base
+    except Exception:
+        pass
+
+def resolve_handler(event_type):
+    container.resolve(Handles[event_type])
+
+class MessageHandler:
+    def handle(self, next:MessageHandler):
+        pass
 
 class LoggingHandler:
 
@@ -297,8 +337,8 @@ class DefaultHandler:
         handler = container.resolve(Handles[type(msg)])
         handler.handle(msg)
 
-container.register(MessageHandler, DefaultHandler) container.register(MessageHandler,
-LoggingHandler)
+container.register(MessageHandler, DefaultHandler)
+container.register(MessageHandler, LoggingHandler)
 
 container.register(Handles[IssueAssigned], IssueAssignedHandler)
 
@@ -307,6 +347,7 @@ bus = container.resolve(MessageBus)
 # calls logging handler, and then DefaultHandler
 
 bus.handle(msg)
+```
 
 Because each MessageHandler depends on another MessageHandler, punq treats them as a
 chain, and injects them into each other like a stack of Russian dolls. I can hear the
@@ -318,6 +359,7 @@ handler pipeline so we can monitor our application, and a de-duplicating handler
 prevents us from handling the same message twice. Both of these require complex
 dependencies of their own, so we can delegate their creation to the container.
 
+```python
 class MetricsGatheringHandler(MessageHandler):
 
     def __init__(self, metrics: MetricsCollector, next: MessageHandler):
@@ -348,6 +390,7 @@ ontainer.register(MetricsCollector, StatsdMetricsCollector)
 container.register(MessageFilter, InMemoryMessageFilter)
 container.register(MessageHandler, MetricsGatheringHandler)
 container.register(MessageHandler, DedeuplicatingHandler)
+```
 
 # Deduplicates, records metrics, writes a log file, and invokes our Command Handler
 
