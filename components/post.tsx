@@ -27,7 +27,7 @@ const PostPage: NextPage<PostPageProps> = ({
       <Head>
         <title>{title}</title>
       </Head>
-      <Container maxW="2xl">
+      <Container maxW="4xl">
         <Heading as="h1" size="3xl" mb={6}>
           {title}
         </Heading>
