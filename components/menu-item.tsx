@@ -1,16 +1,25 @@
-import { Link, Text } from "@chakra-ui/react";
-import { FC } from "react";
+import { Link, Text, HStack } from "@chakra-ui/react";
+import { FC, ReactNode } from "react";
 
 type MenuItemProps = {
   to: string;
+  target?: string;
+  icon?: ReactNode;
 };
 
-export const MenuItem: FC<MenuItemProps> = ({ children, to = "/", ...rest }) => {
+export const MenuItem: FC<MenuItemProps> = ({
+  children,
+  to = "/",
+  target = "",
+  icon,
+  ...props
+}) => {
   return (
-    <Link href={to}>
-      <Text display="block" {...rest}>
-        {children}
-      </Text>
+    <Link href={to} target={target}>
+      <HStack w="100%">
+        <Text {...props}>{children}</Text>
+        {icon}
+      </HStack>
     </Link>
   );
 };

@@ -1,5 +1,6 @@
 import { Box, Stack } from "@chakra-ui/react";
 import { MenuItem } from "components/menu-item";
+import { FiExternalLink } from "react-icons/fi";
 
 export const MenuLinks = ({ isOpen }: { isOpen: boolean }) => {
   return (
@@ -16,7 +17,13 @@ export const MenuLinks = ({ isOpen }: { isOpen: boolean }) => {
         pt={[4, 4, 0, 0]}
       >
         <MenuItem to="/">Home</MenuItem>
-        <MenuItem to="https://www.made.com/careers">Careers</MenuItem>
+        <MenuItem
+          to="https://www.made.com/careers"
+          target="_blank"
+          icon={<FiExternalLink />}
+        >
+          Careers
+        </MenuItem>
       </Stack>
     </Box>
   );
