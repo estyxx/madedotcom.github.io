@@ -49,6 +49,7 @@ const PostLink = ({ children , href  })=>{
     return(/*#__PURE__*/ jsx_runtime_.jsx(react_.Link, {
         color: "made.blue",
         href: href,
+        target: "_blank",
         children: children
     }));
 };
@@ -80,7 +81,25 @@ const heading = (level)=>{
     };
     return wrapper;
 };
+const BlockQuote = ({ children  })=>{
+    console.log(children);
+    return(/*#__PURE__*/ jsx_runtime_.jsx(react_.Box, {
+        as: "blockquote",
+        borderLeft: "2px",
+        borderLeftColor: "made.blue",
+        pt: 3,
+        px: 3,
+        mb: 4,
+        overflow: "auto",
+        opacity: "80%",
+        children: /*#__PURE__*/ jsx_runtime_.jsx(react_.Text, {
+            as: "i",
+            children: children
+        })
+    }));
+};
 const theme = {
+    blockquote: BlockQuote,
     h1: heading(1),
     h2: heading(2),
     h3: heading(3),
