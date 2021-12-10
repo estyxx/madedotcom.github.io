@@ -11,7 +11,7 @@ const Code = ({ children }: { children: ReactNode }) => {
 
 const PostLink = ({ children, href }: { href?: string; children: ReactNode }) => {
   return (
-    <Link color="made.blue" href={href}>
+    <Link color="made.blue" href={href} target="_blank">
       {children}
     </Link>
   );
