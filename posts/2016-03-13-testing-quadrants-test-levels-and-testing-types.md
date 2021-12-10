@@ -7,7 +7,7 @@ tags:
 redirect_from: "/testing-quadrants-test-levels-and-testing-types/"
 ---
 
-**WHAT ARE TESTING QUADRANTS ?**
+## WHAT ARE TESTING QUADRANTS ?\*\*
 
 _Testing quadrants_, defined by [Brian Marick](http://exampler.com/about.html), align
 the [test levels](http://istqbexamcertification.com/what-are-software-testing-levels/)
@@ -32,7 +32,7 @@ The quadrants are not in any specific order. Also there are no hard and fast rul
 what goes in what quadrant. Teams think through them as they do the release and
 iteration planning, so the whole team starts out by thinking about testing.
 
-**WHAT DOES EACH QUADRANT MEAN**
+## WHAT DOES EACH QUADRANT MEAN
 
 The quadrants largely help the agile team to plan their testing for a project and make
 sure they have all the resources they need to accomplish it successfully .

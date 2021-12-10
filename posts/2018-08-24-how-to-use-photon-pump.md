@@ -11,9 +11,9 @@ tags:
 Hello, in this article, I'll try to explain what Photon-pump is, and write an easy
 example so you can start using it for your own projects.
 
-Photon-pump [https://github.com/madedotcom/photon-pump] is a client for Event Store
-[https://eventstore.org/] we developed at made.com [https://made.com], it's the little
-brother to atomic puppy [https://github.com/madedotcom/atomicpuppy] (which is another
+[Photon-pump](https://github.com/madedotcom/photon-pump) is a client for [Event Store
+[https://eventstore.org/] we developed at [made.com](https://made.com), it's the little
+brother to [atomic puppy](https://github.com/madedotcom/atomicpuppy) (which is another
 eventstore client), it's async first, works using TCP so it's also faster (atomicpuppy
 uses HTTP).
 
@@ -26,7 +26,9 @@ will later, create an event and place it in the appropriate stream of Event Stor
 
 This is the example of the "player created" event, it's a json blob:
 
-{"name": "Gil"}
+```json
+{ "name": "Gil" }
+```
 
 Now, we also need to pick a stream which is just a string representing the "bucket"
 where the event will be put, we'll use "adventure" which is the name of our imaginary
@@ -35,7 +37,9 @@ game, not very creative, but it's better than "game".
 An event will also have a type, which is like a sub category inside the stream. This is
 how the event is looking like:
 
+```python
 Event( stream="adventure", type="player_created", data=json.dumps({"name": "Gil"}) )
+```
 
 So how would we add this event into Event Store using Photon-pump in a single python
 script?
@@ -58,7 +62,7 @@ async def run():
     async with photonpump.connect('localhost') as conn:
         await write_event(conn)
 
-if **name** == '**main**':
+if __name__ == '__main__':
     event_loop = asyncio.get_event_loop()
     event_loop.run_until_complete(run())
 ```
@@ -70,11 +74,11 @@ argument.
 Next, we have the run function which will simply create the connection and pass it to
 write_event.
 
-finally, the ugly if \_\_name... to both create the event_loop, and run it
+finally, the ugly if `__name__ ...` to both create the `event_loop`, and run it
 synchronously.
 
 Now if you have your Event Store running locally (if you don't change it in the script),
-go to this url: http://localhost:2113/web/index.html#/streams/adventure and you should
+go to this url: `http://localhost:2113/web/index.html#/streams/adventure` and you should
 see the new event there.
 
 Now that we have an event there, let's move on to the second part: reading the events
@@ -100,13 +104,13 @@ async def run():
     async with photonpump.connect('localhost') as conn:
         await read_an_event(conn)
 
-if **name** == '**main**':
+if __name__ == '__main__':
     event_loop = asyncio.get_event_loop()
     event_loop.run_until_complete(run())
 
 ```
 
-Ignoring run and if \_\_name... the read_an_event function uses the method get from
+Ignoring run and if `__name__...` the `read_an_event` function uses the method get from
 Photon-pump to collect all the events using it like an iterator and printing each of the
 events. We get event_records, and each contains the event, so we can print out the type
 and the data.
@@ -118,7 +122,7 @@ Photon-pump to store and read the events.
 Stay tuned for the next part where we will talk about subscriptions.
 
 BONUS: If you want to replicate this code, you will need python 3.6+ (Remember to
-install Photon-pump pip install photon-pump) and docker or Event Store installed on your
-machine. Simply start Event Store in docker (docker run -p 1113:1113 -p 2113:2113
-eventstore/eventstore) and run those python scripts ( writer.py and reader.py) in
-sequence to see it work.
+install Photon-pump `pip install photon-pump`) and docker or Event Store installed on
+your machine. Simply start Event Store in docker
+(`docker run -p 1113:1113 -p 2113:2113 eventstore/eventstore`) and run those python
+scripts ( writer.py and reader.py) in sequence to see it work.

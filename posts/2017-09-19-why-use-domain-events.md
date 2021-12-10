@@ -12,11 +12,9 @@ tags:
 Nota bene: this instalment in the Ports and Adapters with Command Handlers series is
 code-heavy, and isn't going to make much sense unless you've read the previous parts:
 
-- Introducing Command Handler [https://io.made.com/blog/introducing-command-handler/]
-- Repositories and Units of Work
-  [https://io.made.com/blog/repository-and-unit-of-work-pattern-in-python/]
-- Commands and Queries, Handlers and Views
-  [https://io.made.com/blog/commands-and-queries-handlers-and-views/]
+- [Introducing Command Handler](https://io.made.com/blog/introducing-command-handler/)
+- [Repositories and Units of Work](https://io.made.com/blog/repository-and-unit-of-work-pattern-in-python/)
+- [Commands and Queries, Handlers and Views](https://io.made.com/blog/commands-and-queries-handlers-and-views/)
 
 Okay, so we have a basic skeleton for an application and we can add new issues into the
 database, then fetch them from a Flask API. So far, though, we don't have any domain
@@ -82,6 +80,7 @@ that separately.
 Let's quickly flesh out the triage use cases. We'll start by updating the existing unit
 test for reporting an issue:
 
+```python
 class When_reporting_an_issue:
 
     def given_an_empty_unit_of_work(self):
@@ -98,11 +97,13 @@ class When_reporting_an_issue:
 
     def it_should_be_awaiting_triage(self):
         expect(self.issue.state).to(equal(IssueState.AwaitingTriage))
+```
 
 We're introducing a new concept - Issues now have a state, and a newly reported issue
 begins in the AwaitingTriage state. We can quickly add a command and handler that allows
 us to triage an issue.
 
+```python
 class TriageIssueHandler:
 
     def __init__(self, uowm: UnitOfWorkManager):
@@ -113,6 +114,7 @@ class TriageIssueHandler:
             issue = uow.issues.get(cmd.issue_id)
             issue.triage(cmd.priority, cmd.category)
             uow.commit()
+```
 
 Triaging an issue, for now, is a matter of selecting a category and priority. We'll use
 a free string for category, and an enumeration for Priority. Once an issue is triaged,
@@ -120,6 +122,7 @@ it enters the AwaitingAssignment state. At some point we'll need to add some vie
 builders to list issues that are waiting for triage or assignment, but for now let's
 quickly add a handler so that an engineer can Pick an issue from the queue.
 
+```python
 class PickIssueHandler:
 
     def __init__(self, uowm: UnitOfWorkManager):
@@ -130,11 +133,12 @@ class PickIssueHandler:
             issue = uow.issues.get(cmd.issue_id)
             issue.assign_to(cmd.picked_by)
             uow.commit()
+```
 
-At this point, the handlers are becoming a little boring. As I said way back in the
-first part [https://io.made.com/blog/introducing-command-handler/], commands handlers
-are supposed to be boring glue-code, and every command handler has the same basic
-structure:
+At this point, the handlers are becoming a little boring. As I said way back
+[in the first part](https://io.made.com/blog/introducing-command-handler/), commands
+handlers are supposed to be boring glue-code, and every command handler has the same
+basic structure:
 
 1.  Fetch current state.
 2.  Mutate the state by calling a method on our domain model.
@@ -148,6 +152,7 @@ When an issue is assigned to an engineer, can we send them an email to let them 
 A brief discourse on SRP Let's try and implement this new requirement. Here's a first
 attempt:
 
+```python
 class AssignIssueHandler:
 
     def __init__(self,
@@ -174,6 +179,7 @@ class AssignIssueHandler:
                 cmd.assigned_by,
                 issue.problem_description)
         self.email_sender.send(email)
+```
 
 Something here feels wrong, right? Our command-handler now has two very distinct
 responsibilities. Back at the beginning of this series we said we would stick with three
@@ -209,6 +215,7 @@ error - let the sysadmins clear it up later.
 
 What if we split out the notification to another class?
 
+```python
 class AssignIssueHandler:
 
     def __init__(self, uowm: UnitOfWorkManager):
@@ -223,9 +230,15 @@ class AssignIssueHandler:
             )
             uow.commit()
 
-class SendAssignmentEmailHandler def **init**(self, uowm: UnitOfWorkManager,
-email_builder: EmailBuilder, email_sender: EmailSender): self.uowm = uowm
-self.email_builder = email_builder self.email_sender = email_sender
+class SendAssignmentEmailHandler:
+    def __init__(self,
+        uowm: UnitOfWorkManager,
+        email_builder: EmailBuilder,
+        email_sender: EmailSender
+    ):
+        self.uowm = uowm
+        self.email_builder = email_builder
+        self.email_sender = email_sender
 
     def handle(self, cmd):
         with self.uowm.start() as uow:
@@ -234,15 +247,24 @@ self.email_builder = email_builder self.email_sender = email_sender
             email = self.email_builder.build(
                 cmd.assignee_address,
                 cmd.assigner_address,
-                issue.problem_description)
+                issue.problem_description
+            )
             self.email_sender.send(email)
+```
 
 We don't really need a unit of work here, because we're not making any persistent
 changes to the Issue state, so what if we use a view builder instead?
 
-class SendAssignmentEmailHandler def **init**(self, view: IssueViewBuilder,
-email_builder: EmailBuilder, email_sender: EmailSender): self.view = view
-self.email_builder = email_builder self.email_sender = email_sender
+```python
+class SendAssignmentEmailHandler:
+    def __init__(self,
+        view: IssueViewBuilder,
+        email_builder: EmailBuilder,
+        email_sender: EmailSender
+    ):
+        self.view = view
+        self.email_builder = email_builder
+        self.email_sender = email_sender
 
     def handle(self, cmd):
         issue = self.view.fetch(cmd.issue_id)
@@ -250,8 +272,10 @@ self.email_builder = email_builder self.email_sender = email_sender
         email = self.email_builder.build(
             cmd.assignee_address,
             cmd.assigner_address,
-            issue['problem_description'])
+            issue['problem_description']
+        )
         self.email_sender.send(email)
+```
 
 That seems better, but how should we invoke our new handler? Building a new command and
 handler from inside our AssignIssueHandler also sounds like a violation of SRP. Worse
@@ -261,10 +285,10 @@ coupled together again - and that's definitely a violation of Principle #1.
 What we need is a way to signal between handlers - a way of saying "I did my job, can
 you go do yours?"
 
-All Aboard the Message Bus In this kind of system, we use Domain Events
-[http://verraes.net/2014/11/domain-events/] to fill that need. Events are closely
-related to Commands, in that both commands and events are types of message
-[http://www.enterpriseintegrationpatterns.com/patterns/messaging/Message.html]
+All Aboard the Message Bus In this kind of system, we use
+[Domain Events](http://verraes.net/2014/11/domain-events/) to fill that need. Events are
+closely related to Commands, in that both commands and events are
+[types of message](http://www.enterpriseintegrationpatterns.com/patterns/messaging/Message.html)
 
 - named chunks of data sent between entities. Commands and events differ only in their
   intent:
@@ -297,6 +321,7 @@ use a single message bus for both.
 How do we start off writing a message bus? Well, it needs to look up subscribers based
 on the name of an event. That sounds like a dict to me:
 
+```python
 class MessageBus:
 
     def __init__(self):
@@ -319,11 +344,15 @@ class MessageBus:
         if msg.is_cmd and len(subscribers) > 0:
            raise CommandAlreadySubscribedException(msg.__name__)
         subscribers.append(handler)
+```
 
-# Example usage
+### Example usage
 
-bus = MessageBus() bus.subscribe_to(ReportIssueCommand,
-ReportIssueHandler(db.unit_of_work_manager)) bus.handle(cmd)
+```python
+bus = MessageBus()
+bus.subscribe_to(ReportIssueCommand, ReportIssueHandler(db.unit_of_work_manager))
+bus.handle(cmd)
+```
 
 Here we have a bare-bones implementation of a message bus. It doesn't do anything fancy,
 but it will do the job for now. In a production system, the message bus is an excellent
@@ -336,15 +365,21 @@ containers.
 For now, let's look at how to hook this up. Firstly, we want to use it from our API
 handlers.
 
-@api.route('/issues', methods=['POST']) def create_issue(self): issue_id = uuid.uuid4()
-cmd = ReportIssueCommand(issue_id=issue_id, \*\*request.get_json()) bus.handle(cmd)
-return "", 201, {"Location": "/issues/" + str(issue_id) }
+```python
+@api.route('/issues', methods=['POST'])
+def create_issue(self):
+    issue_id = uuid.uuid4()
+    cmd = ReportIssueCommand(issue_id=issue_id, **request.get_json())
+    bus.handle(cmd)
+    return "", 201, {"Location": "/issues/" + str(issue_id) }
+```
 
 Not much has changed here - we're still building our command in the Flask adapter, but
 now we're passing it into a bus instead of directly constructing a handler for
 ourselves. What about when we need to raise an event? We've got several options for
 doing this. Usually I raise events from my command handlers, like this:
 
+```python
 class AssignIssueHandler:
 
     def handle(self, cmd):
@@ -358,6 +393,7 @@ class AssignIssueHandler:
             cmd.issue_id,
             cmd.assigned_to,
             cmd.assigned_by))
+```
 
 I usually think of this event-raising as a kind of glue - it's orchestration code.
 Raising events from your handlers this way makes the flow of messages explicit - you
@@ -368,19 +404,21 @@ notification about our workflow. Is this really any different to sending the ema
 directly from the handler? Another option is to send events directly from our model
 objects, and treat them as part our domain model proper.
 
+```python
 class Issue:
-
     def assign_to(self, assigned_to, assigned_by):
         self.assigned_to = assigned_to
         self.assigned_by = assigned_by
 
         # Add our new event to a list
         self.events.add(IssueAssignedToEngineer(self.id, self.assigned_to, self.assigned_by))
+```
 
 There's a couple of benefits of doing this: firstly, it keeps our command handler
 simpler, but secondly it pushes the logic for deciding when to send an event into the
 model. For example, maybe we don't always need to raise the event.
 
+```python
 class Issue:
 
     def assign_to(self, assigned_to, assigned_by):
@@ -390,12 +428,14 @@ class Issue:
         # don't raise the event if I picked the issue myself
         if self.assigned_to != self.assigned_by:
             self.events.add(IssueAssignedToEngineer(self.id, self.assigned_to, self.assigned_by))
+```
 
 Now we'll only raise our event if the issue was assigned by another engineer. Cases like
 this are more like business logic than glue code, so today I'm choosing to put them in
 my domain model. Updating our unit tests is trivial, because we're just exposing the
 events as a list on our model objects:
 
+```python
 class When_assigning_an_issue:
 
     issue_id = uuid.uuid4()
@@ -413,6 +453,7 @@ class When_assigning_an_issue:
             IssueAssignedToEngineer(self.issue_id,
                                     self.assigned_to,
                                     self.assigned_by)))
+```
 
 The have_raised function is a custom matcher I wrote that checks the events attribute of
 our object to see if we raised the correct event. It's easy to test for the presence of
@@ -421,11 +462,12 @@ events, because they're namedtuples, and have value equality.
 All that remains is to get the events off our model objects and into our message bus.
 What we need is a way to detect that we've finished one use-case and are ready to flush
 our changes. Fortunately, we have a name for this already - it's a unit of work. In this
-system I'm using SQLAlchemy's event hooks
-[http://docs.sqlalchemy.org/en/latest/orm/session_events.html] to work out which objects
-have changed, and queue up their events. When the unit of work exits, we raise the
-events.
+system I'm using
+[SQLAlchemy's event hooks](http://docs.sqlalchemy.org/en/latest/orm/session_events.html)
+to work out which objects have changed, and queue up their events. When the unit of work
+exits, we raise the events.
 
+```python
 class SqlAlchemyUnitOfWork(UnitOfWork):
 
     def __init__(self, sessionfactory, bus):
@@ -467,11 +509,12 @@ class SqlAlchemyUnitOfWork(UnitOfWork):
     def __exit__(self, type, value, traceback):
         self.session.close()
         self.publish_events()
+```
 
 Okay, we've covered a lot of ground here. We've discussed why you might want to use
 domain events, how a message bus actually works in practice, and how we can get events
-out of our domain and into our subscribers. The newest code sample
-[https://github.com/bobthemighty/blog-code-samples/tree/master/ports-and-adapters/04]
+out of our domain and into our subscribers. The newest
+[code sample](https://github.com/bobthemighty/blog-code-samples/tree/master/ports-and-adapters/04)
 demonstrates these ideas, please do check it out, run it, open pull requests, open
 Github issues etc.
 

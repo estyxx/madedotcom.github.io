@@ -48,9 +48,10 @@ loosely-coupled and flexible. It also means that I have to think about what the
 dependencies of my system ought to be, and that helps me to define meaningful
 abstractions.
 
-Dependency injection is really just a way of performing partial application
-[https://www.pydanny.com/python-partials-are-fun.html] on a method call. Earlier in this
-series, I said that I often create handlers by abusing the **call** magic method.
+Dependency injection is really just a way of performing
+[partial application](https://www.pydanny.com/python-partials-are-fun.html) on a method
+call. Earlier in this series, I said that I often create handlers by abusing the
+`__call__` magic method.
 
 ```python
 class IssueAssignedHandler:
@@ -111,11 +112,11 @@ etc.)
 You don't need to use a framework for DI Dependency injection gets a bad rap in the
 Python community for reasons that escape me. I think it's because people assume that you
 need to use a framework to perform the injection, and they're terrified of ending up in
-an xml-driven hellscape like Spring
-[https://memorynotfound.com/spring-mvc-xml-configuration-example/]. This isn't true, you
-can still perform dependency injection with no frameworks at all. For example, in the
-code sample for the previous part in this series, I extracted all my wiring into a
-single module with boring code that looks like this:
+an xml-driven hellscape like
+[Spring](https://memorynotfound.com/spring-mvc-xml-configuration-example/). This isn't
+true, you can still perform dependency injection with no frameworks at all. For example,
+in the code sample for the previous part in this series, I extracted all my wiring into
+a single module with boring code that looks like this:
 
 ```python
 db = SqlAlchemy('sqlite:///issues.db') db.configure_mappings() db.create_schema()
@@ -136,28 +137,27 @@ bus.subscribe_to(msg.AssignIssueCommand, assign_issue)
 
 This code is just a straight-line script that configures the database, creates all of
 our message handlers, and then registers them with the message bus. This component is
-what an architect would call a Composition Root
-[http://blog.ploeh.dk/2011/07/28/CompositionRoot/]. On my current teams, we tend to call
-this a bootstrap script. As systems grow, though, and requirements become more complex,
-this bootstrapper script can become more repetitive and error-prone. Dependency
-injection frameworks exist to remove some of the boiler-plate around registering and
-wiring up dependencies. In recent years the .Net-hipster crowd have started to move away
-from complex dependency injection containers in favour of simpler composition roots.
-This is variously known as poor man's DI, pure DI, or artisinal organic acorn-fed DI.
+what an architect would call a
+[Composition Root](http://blog.ploeh.dk/2011/07/28/CompositionRoot/). On my current
+teams, we tend to call this a bootstrap script. As systems grow, though, and
+requirements become more complex, this bootstrapper script can become more repetitive
+and error-prone. Dependency injection frameworks exist to remove some of the
+boiler-plate around registering and wiring up dependencies. In recent years the
+.Net-hipster crowd have started to move away from complex dependency injection
+containers in favour of simpler composition roots. This is variously known as poor man's
+DI, pure DI, or artisinal organic acorn-fed DI.
 
-Usually, on our Python projects at Made.com, we use the inject
-[https://pypi.python.org/pypi/Inject/3.1.1] library. This is a simple tool that performs
-the partial application trick I demonstrated above. Inject is my favourite of the Python
-DI libraries because it's so simple to use, but I have a dislike for its use of
-decorators to declare dependencies.
+Usually, on our Python projects at Made.com, we use the
+[inject](https://pypi.python.org/pypi/Inject/3.1.1) library. This is a simple tool that
+performs the partial application trick I demonstrated above. Inject is my favourite of
+the Python DI libraries because it's so simple to use, but I have a dislike for its use
+of decorators to declare dependencies.
 
 ```python
 import inject
-```
 
 # client code
 
-```python
 class IssueAssignedHandler:
 
     @inject(sender='email_sender', view='issue_view_builder')
@@ -186,14 +186,13 @@ should replace the view param with an IssueViewBuilder. The decorator serves to
 associate the service ("email_sender") with the parameter ("sender"), but it always
 feels inappropriate to have this kind of declaration outside of my composition root.
 
-I've been working on a prototype DI framework [https://github.com/bobthemighty/punq]
-that avoids this problem by using Python 3.6's optional type hinting
-[https://docs.python.org/3/library/typing.html], and I'd like to show you some use
-cases.
+I've been working on a [prototype DI framework](https://github.com/bobthemighty/punq)
+that avoids this problem by using
+[Python 3.6's optional type hinting](https://docs.python.org/3/library/typing.html), and
+I'd like to show you some use cases.
 
 ```python
 import punq
-
 
 # client code
 
