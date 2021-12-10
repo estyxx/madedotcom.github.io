@@ -111,7 +111,7 @@ const PostPage = ({ title , author , date , source , ...props })=>{
                 })
             }),
             /*#__PURE__*/ (0,jsx_runtime_.jsxs)(react_.Container, {
-                maxW: "2xl",
+                maxW: "4xl",
                 children: [
                     /*#__PURE__*/ jsx_runtime_.jsx(react_.Heading, {
                         as: "h1",

@@ -70,18 +70,25 @@ const MenuToggle = ({ toggle , isOpen  })=>{
 ;// CONCATENATED MODULE: ./components/menu-item.tsx
 
 
-const MenuItem = ({ children , to ="/" , ...rest })=>{
+const MenuItem = ({ children , to ="/" , target ="" , icon , ...props })=>{
     return(/*#__PURE__*/ jsx_runtime_.jsx(react_.Link, {
         href: to,
-        children: /*#__PURE__*/ jsx_runtime_.jsx(react_.Text, {
-            display: "block",
-            ...rest,
-            children: children
+        target: target,
+        children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)(react_.HStack, {
+            w: "100%",
+            children: [
+                /*#__PURE__*/ jsx_runtime_.jsx(react_.Text, {
+                    ...props,
+                    children: children
+                }),
+                icon
+            ]
         })
     }));
 };
 
 ;// CONCATENATED MODULE: ./components/menu-links.tsx
+
 
 
 
@@ -124,6 +131,9 @@ const MenuLinks = ({ isOpen  })=>{
                 }),
                 /*#__PURE__*/ jsx_runtime_.jsx(MenuItem, {
                     to: "https://www.made.com/careers",
+                    target: "_blank",
+                    icon: /*#__PURE__*/ jsx_runtime_.jsx(fi_namespaceObject.FiExternalLink, {
+                    }),
                     children: "Careers"
                 })
             ]
