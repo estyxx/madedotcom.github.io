@@ -45,7 +45,26 @@ const heading = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
   return wrapper;
 };
 
+const BlockQuote = ({ children }: { children: ReactNode }) => {
+  console.log(children);
+  return (
+    <Box
+      as="blockquote"
+      borderLeft="2px"
+      borderLeftColor="made.blue"
+      pt={3}
+      px={3}
+      mb={4}
+      overflow="auto"
+      opacity="80%"
+    >
+      <Text as="i">{children}</Text>
+    </Box>
+  );
+};
+
 const theme = {
+  blockquote: BlockQuote,
   h1: heading(1),
   h2: heading(2),
   h3: heading(3),
