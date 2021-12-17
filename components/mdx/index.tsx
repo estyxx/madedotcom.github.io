@@ -1,13 +1,6 @@
 import { ReactNode } from "react";
 import { Heading, Text, Wrap, Box, Link } from "@chakra-ui/react";
-
-const Code = ({ children }: { children: ReactNode }) => {
-  return (
-    <Wrap bg="orange.50" borderRadius={10} mb={10} fontSize="sm" boxShadow="lg">
-      <Box p={5}>{children}</Box>
-    </Wrap>
-  );
-};
+import CodeBlock from "components/mdx/codeblock";
 
 const PostLink = ({ children, href }: { href?: string; children: ReactNode }) => {
   return (
@@ -74,7 +67,7 @@ const theme = {
   a: PostLink,
   p: Paragraph,
   inlineCode: CodeInline,
-  code: Code,
+  code: CodeBlock,
 };
 
 export default theme;

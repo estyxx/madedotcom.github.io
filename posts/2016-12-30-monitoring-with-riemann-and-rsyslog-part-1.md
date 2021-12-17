@@ -25,7 +25,7 @@ We can achieve this with the rsyslog impstats module and the riemann output modu
 
 Firstly we need to configure rsyslog to record its statistics.
 
-# We'll need to load the riemann module before we can use it
+### We'll need to load the riemann module before we can use it
 
 module(load="omriemann")
 

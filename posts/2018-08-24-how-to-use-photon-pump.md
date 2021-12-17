@@ -11,11 +11,11 @@ tags:
 Hello, in this article, I'll try to explain what Photon-pump is, and write an easy
 example so you can start using it for your own projects.
 
-[Photon-pump](https://github.com/madedotcom/photon-pump) is a client for [Event Store
-[https://eventstore.org/] we developed at [made.com](https://made.com), it's the little
-brother to [atomic puppy](https://github.com/madedotcom/atomicpuppy) (which is another
-eventstore client), it's async first, works using TCP so it's also faster (atomicpuppy
-uses HTTP).
+[Photon-pump](https://github.com/madedotcom/photon-pump) is a client for
+[Event Store](https://eventstore.org/) we developed at [made.com](https://made.com),
+it's the little brother to [atomic puppy](https://github.com/madedotcom/atomicpuppy)
+(which is another eventstore client), it's async first, works using TCP so it's also
+faster (atomicpuppy uses HTTP).
 
 I won't talk about eventsourcing since it's been talked about on previous posts, so this
 will be just a very simple and silly example of event sourcing.
@@ -44,8 +44,8 @@ Event( stream="adventure", type="player_created", data=json.dumps({"name": "Gil"
 So how would we add this event into Event Store using Photon-pump in a single python
 script?
 
-```python
-# writer.py
+```python filename="writer.py"
+#
 
 import asyncio
 
