@@ -5,7 +5,7 @@ exports.id = 888;
 exports.ids = [888];
 exports.modules = {
 
-/***/ 683:
+/***/ 496:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 // ESM COMPAT FLAG
@@ -185,7 +185,31 @@ const Header = ()=>{
     }));
 };
 
+;// CONCATENATED MODULE: ./components/footer.tsx
+
+
+const Footer = ({ children  })=>{
+    return(/*#__PURE__*/ jsx_runtime_.jsx(react_.Box, {
+        as: "footer",
+        role: "contentinfo",
+        mx: "auto",
+        bg: "#F8F8F8",
+        bottom: 0,
+        left: 0,
+        width: "100%",
+        position: "fixed",
+        children: /*#__PURE__*/ jsx_runtime_.jsx(react_.Flex, {
+            maxW: "8xl",
+            w: "100%",
+            margin: "auto",
+            children: children
+        })
+    }));
+};
+/* harmony default export */ const footer = (Footer);
+
 ;// CONCATENATED MODULE: ./pages/_app.tsx
+
 
 
 
@@ -199,6 +223,8 @@ function MyApp({ Component , pageProps  }) {
                 }),
                 /*#__PURE__*/ jsx_runtime_.jsx(Component, {
                     ...pageProps
+                }),
+                /*#__PURE__*/ jsx_runtime_.jsx(footer, {
                 })
             ]
         })
@@ -328,7 +354,7 @@ module.exports = require("react/jsx-runtime");
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [730,664,706], () => (__webpack_exec__(683)));
+var __webpack_exports__ = __webpack_require__.X(0, [730,664,706], () => (__webpack_exec__(496)));
 module.exports = __webpack_exports__;
 
 })();
