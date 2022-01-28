@@ -9,6 +9,8 @@ Use [MDX](https://github.com/mdx-js/mdx) with [Next.js](https://github.com/zeit/
 First, run the development server:
 
 ```bash
+yarn install
+
 yarn dev
 ```
 
