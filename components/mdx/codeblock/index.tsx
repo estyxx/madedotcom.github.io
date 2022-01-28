@@ -9,8 +9,7 @@ type CodeBlockProps = {
   ln: string;
 };
 
-const CodeBlock = ({ children, className, viewlines, ln }: CodeBlockProps) => {
-  console.log({ className });
+const CodeBlock = ({ children, className }: CodeBlockProps) => {
   const language = className?.replace(/language-/, "");
 
   if (!language) {

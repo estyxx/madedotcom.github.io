@@ -1,6 +1,6 @@
-const fs = require("fs");
-const path = require("path");
-const matter = require("gray-matter");
+import path from "path";
+import fs from "fs";
+import matter from "gray-matter";
 
 // current 'posts' directory
 const postsDirectory = path.join(process.cwd(), "posts");

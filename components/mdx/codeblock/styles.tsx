@@ -1,5 +1,3 @@
-import React from "react";
-
 export const liveEditorStyle = {
   fontSize: 14,
   overflowX: "auto",

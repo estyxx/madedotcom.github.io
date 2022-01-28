@@ -1,7 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { serialize } from "next-mdx-remote/serialize";
 import { getAllPostsPath, getPostData } from "lib/api";
-import PostPage, { PostPageProps } from "components/post";
+import PostPage from "components/post";
 import { serializePage } from "lib/mdx";
 import { ParsedUrlQuery } from "querystring";
 
