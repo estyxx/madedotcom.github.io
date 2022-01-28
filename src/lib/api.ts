@@ -4,6 +4,7 @@ import matter from "gray-matter";
 
 // current 'posts' directory
 const postsDirectory = path.join(process.cwd(), "posts");
+console.log(postsDirectory);
 const FILE_EXTENSION = ".md";
 const DATE_REGEX = /([0-9]{4})-([0-9]{2})-([0-9]{2})/;
 

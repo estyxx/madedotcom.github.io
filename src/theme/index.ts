@@ -47,5 +47,10 @@ const fonts = {
   body: meridianRegular,
   mono: hackFont,
 };
-const theme = extendTheme({ config, colors, fonts });
+const theme = extendTheme({
+  config,
+  colors,
+  fonts,
+});
+
 export default theme;

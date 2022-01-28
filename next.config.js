@@ -5,7 +5,9 @@ const withMDX = require("@next/mdx")({
     remarkPlugins: [require("remark-prism")],
   },
 });
-module.exports = withMDX({
+const nextConfig = {
   pageExtensions: ["mdx", "md", "jsx", "js", "tsx", "ts"],
   reactStrictMode: true,
-});
+};
+
+module.exports = nextConfig;

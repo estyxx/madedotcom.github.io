@@ -1,0 +1,4 @@
+{
+  "makefile.extensionOutputFolder": "./.vscode",
+  "window.title": "${activeEditorShort}${separator}${rootName} ${separator} [Branch: blog-react]"
+}

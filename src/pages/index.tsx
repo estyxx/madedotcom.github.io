@@ -18,6 +18,7 @@ type HomeProps = {
 };
 
 const Home: NextPage<HomeProps> = ({ posts }) => {
+  console.log("home");
   return (
     <Container maxW="4xl">
       <Head>
@@ -31,7 +32,7 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
       <Heading as="h3" size="lg">
         <Link href="https://github.com/madedotcom">View GitHub Profile</Link>
       </Heading>
-      {posts.map((post) => {
+      {posts?.map((post) => {
         return (
           <div key={post.slug}>
             <Link href={`${post.slug}`} key={post.title}>
