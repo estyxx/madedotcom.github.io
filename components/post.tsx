@@ -21,7 +21,6 @@ const PostPage: NextPage<PostPageProps> = ({
   ...props
 }) => {
   const publishDate = new Date(date);
-  console.log("PostPage props:", props);
   return (
     <>
       <Head>
