@@ -10,6 +10,7 @@ exports.modules = {
 Object.defineProperty(exports, "__esModule", ({
     value: true
 }));
+exports.isEqualNode = isEqualNode;
 exports["default"] = initHeadManager;
 exports.DOMAttributeNames = void 0;
 const DOMAttributeNames = {
@@ -42,29 +43,46 @@ function reactElementToDOM({ type , props  }) {
     }
     return el;
 }
+function isEqualNode(oldTag, newTag) {
+    if (oldTag instanceof HTMLElement && newTag instanceof HTMLElement) {
+        const nonce = newTag.getAttribute('nonce');
+        // Only strip the nonce if `oldTag` has had it stripped. An element's nonce attribute will not
+        // be stripped if there is no content security policy response header that includes a nonce.
+        if (nonce && !oldTag.getAttribute('nonce')) {
+            const cloneTag = newTag.cloneNode(true);
+            cloneTag.setAttribute('nonce', '');
+            cloneTag.nonce = nonce;
+            return nonce === oldTag.nonce && oldTag.isEqualNode(cloneTag);
+        }
+    }
+    return oldTag.isEqualNode(newTag);
+}
 function updateElements(type, components) {
     const headEl = document.getElementsByTagName('head')[0];
     const headCountEl = headEl.querySelector('meta[name=next-head-count]');
     if (false) {}
     const headCount = Number(headCountEl.content);
     const oldTags = [];
-    for(let i = 0, j = headCountEl.previousElementSibling; i < headCount; i++, j = j.previousElementSibling){
-        if (j.tagName.toLowerCase() === type) {
+    for(let i = 0, j = headCountEl.previousElementSibling; i < headCount; i++, j = (j === null || j === void 0 ? void 0 : j.previousElementSibling) || null){
+        var ref;
+        if ((j === null || j === void 0 ? void 0 : (ref = j.tagName) === null || ref === void 0 ? void 0 : ref.toLowerCase()) === type) {
             oldTags.push(j);
         }
     }
     const newTags = components.map(reactElementToDOM).filter((newTag)=>{
         for(let k = 0, len = oldTags.length; k < len; k++){
             const oldTag = oldTags[k];
-            if (oldTag.isEqualNode(newTag)) {
+            if (isEqualNode(oldTag, newTag)) {
                 oldTags.splice(k, 1);
                 return false;
             }
         }
         return true;
     });
-    oldTags.forEach((t)=>t.parentNode.removeChild(t)
-    );
+    oldTags.forEach((t)=>{
+        var ref;
+        return (ref = t.parentNode) === null || ref === void 0 ? void 0 : ref.removeChild(t);
+    });
     newTags.forEach((t)=>headEl.insertBefore(t, headCountEl)
     );
     headCountEl.content = (headCount - oldTags.length + newTags.length).toString();
@@ -77,8 +95,7 @@ function initHeadManager() {
             const promise = updatePromise = Promise.resolve().then(()=>{
                 if (promise !== updatePromise) return;
                 updatePromise = null;
-                const tags = {
-                };
+                const tags = {};
                 head.forEach((h)=>{
                     if (// it won't be inlined. In this case revert to the original behavior
                     h.type === 'link' && h.props['data-optimized-fonts']) {
@@ -148,13 +165,11 @@ function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
         return obj;
     } else {
-        var newObj = {
-        };
+        var newObj = {};
         if (obj != null) {
             for(var key in obj){
                 if (Object.prototype.hasOwnProperty.call(obj, key)) {
-                    var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {
-                    };
+                    var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {};
                     if (desc.get || desc.set) {
                         Object.defineProperty(newObj, key, desc);
                     } else {
@@ -169,8 +184,7 @@ function _interopRequireWildcard(obj) {
 }
 function _objectSpread(target) {
     for(var i = 1; i < arguments.length; i++){
-        var source = arguments[i] != null ? arguments[i] : {
-        };
+        var source = arguments[i] != null ? arguments[i] : {};
         var ownKeys = Object.keys(source);
         if (typeof Object.getOwnPropertySymbols === "function") {
             ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
@@ -184,8 +198,7 @@ function _objectSpread(target) {
     return target;
 }
 function _objectWithoutProperties(source, excluded) {
-    if (source == null) return {
-    };
+    if (source == null) return {};
     var target = _objectWithoutPropertiesLoose(source, excluded);
     var key, i;
     if (Object.getOwnPropertySymbols) {
@@ -200,10 +213,8 @@ function _objectWithoutProperties(source, excluded) {
     return target;
 }
 function _objectWithoutPropertiesLoose(source, excluded) {
-    if (source == null) return {
-    };
-    var target = {
-    };
+    if (source == null) return {};
+    var target = {};
     var sourceKeys = Object.keys(source);
     var key, i;
     for(i = 0; i < sourceKeys.length; i++){
@@ -223,8 +234,7 @@ const ignoreProps = [
     'strategy', 
 ];
 const loadScript = (props)=>{
-    const { src , id , onLoad =()=>{
-    } , dangerouslySetInnerHTML , children ='' , strategy ='afterInteractive' , onError ,  } = props;
+    const { src , id , onLoad =()=>{} , dangerouslySetInnerHTML , children ='' , strategy ='afterInteractive' , onError ,  } = props;
     const cacheKey = id || src;
     // Script has already loaded
     if (cacheKey && LoadCache.has(cacheKey)) {
@@ -300,8 +310,7 @@ function initScriptLoader(scriptLoaderItems) {
     scriptLoaderItems.forEach(handleClientScriptLoad);
 }
 function Script(props) {
-    const { src ='' , onLoad =()=>{
-    } , dangerouslySetInnerHTML , strategy ='afterInteractive' , onError  } = props, restProps = _objectWithoutProperties(props, [
+    const { src ='' , onLoad =()=>{} , dangerouslySetInnerHTML , strategy ='afterInteractive' , onError  } = props, restProps = _objectWithoutProperties(props, [
         "src",
         "onLoad",
         "dangerouslySetInnerHTML",
@@ -392,13 +401,11 @@ function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
         return obj;
     } else {
-        var newObj = {
-        };
+        var newObj = {};
         if (obj != null) {
             for(var key in obj){
                 if (Object.prototype.hasOwnProperty.call(obj, key)) {
-                    var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {
-                    };
+                    var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {};
                     if (desc.get || desc.set) {
                         Object.defineProperty(newObj, key, desc);
                     } else {
@@ -428,34 +435,33 @@ function getDocumentFiles(buildManifest, pathname, inAmpMode) {
 function getPolyfillScripts(context, props) {
     // polyfills.js has to be rendered as nomodule without async
     // It also has to be the first script to load
-    const { assetPrefix , buildManifest , devOnlyCacheBusterQueryString , disableOptimizedLoading ,  } = context;
+    const { assetPrefix , buildManifest , devOnlyCacheBusterQueryString , disableOptimizedLoading , crossOrigin ,  } = context;
     return buildManifest.polyfillFiles.filter((polyfill)=>polyfill.endsWith('.js') && !polyfill.endsWith('.module.js')
     ).map((polyfill)=>/*#__PURE__*/ _react.default.createElement("script", {
             key: polyfill,
             defer: !disableOptimizedLoading,
             nonce: props.nonce,
-            crossOrigin: props.crossOrigin || undefined,
+            crossOrigin: props.crossOrigin || crossOrigin,
             noModule: true,
             src: `${assetPrefix}/_next/${polyfill}${devOnlyCacheBusterQueryString}`
         })
     );
 }
 function getPreNextScripts(context, props) {
-    const { scriptLoader , disableOptimizedLoading  } = context;
+    const { scriptLoader , disableOptimizedLoading , crossOrigin  } = context;
     return (scriptLoader.beforeInteractive || []).map((file, index)=>{
         const { strategy , ...scriptProps } = file;
-        return(/*#__PURE__*/ _react.default.createElement("script", Object.assign({
-        }, scriptProps, {
+        return(/*#__PURE__*/ _react.default.createElement("script", Object.assign({}, scriptProps, {
             key: scriptProps.src || index,
             defer: !disableOptimizedLoading,
             nonce: props.nonce,
             "data-nscript": "beforeInteractive",
-            crossOrigin: props.crossOrigin || undefined
+            crossOrigin: props.crossOrigin || crossOrigin
         })));
     });
 }
 function getDynamicChunks(context, props, files) {
-    const { dynamicImports , assetPrefix , isDevelopment , devOnlyCacheBusterQueryString , disableOptimizedLoading ,  } = context;
+    const { dynamicImports , assetPrefix , isDevelopment , devOnlyCacheBusterQueryString , disableOptimizedLoading , crossOrigin ,  } = context;
     return dynamicImports.map((file)=>{
         if (!file.endsWith('.js') || files.allFiles.includes(file)) return null;
         return(/*#__PURE__*/ _react.default.createElement("script", {
@@ -464,13 +470,13 @@ function getDynamicChunks(context, props, files) {
             key: file,
             src: `${assetPrefix}/_next/${encodeURI(file)}${devOnlyCacheBusterQueryString}`,
             nonce: props.nonce,
-            crossOrigin: props.crossOrigin || undefined
+            crossOrigin: props.crossOrigin || crossOrigin
         }));
     });
 }
 function getScripts(context, props, files) {
     var ref;
-    const { assetPrefix , buildManifest , isDevelopment , devOnlyCacheBusterQueryString , disableOptimizedLoading ,  } = context;
+    const { assetPrefix , buildManifest , isDevelopment , devOnlyCacheBusterQueryString , disableOptimizedLoading , crossOrigin ,  } = context;
     const normalScripts = files.allFiles.filter((file)=>file.endsWith('.js')
     );
     const lowPriorityScripts = (ref = buildManifest.lowPriorityFiles) === null || ref === void 0 ? void 0 : ref.filter((file)=>file.endsWith('.js')
@@ -485,7 +491,7 @@ function getScripts(context, props, files) {
             nonce: props.nonce,
             async: !isDevelopment && disableOptimizedLoading,
             defer: !disableOptimizedLoading,
-            crossOrigin: props.crossOrigin || undefined
+            crossOrigin: props.crossOrigin || crossOrigin
         }));
     });
 }
@@ -504,11 +510,10 @@ exports["default"] = Document;
 function Html(props) {
     const { inAmpMode , docComponentsRendered , locale  } = (0, _react).useContext(_utils.HtmlContext);
     docComponentsRendered.Html = true;
-    return(/*#__PURE__*/ _react.default.createElement("html", Object.assign({
-    }, props, {
+    return(/*#__PURE__*/ _react.default.createElement("html", Object.assign({}, props, {
         lang: props.lang || locale || undefined,
         amp: inAmpMode ? '' : undefined,
-        "data-ampdevmode": inAmpMode && 'production' !== 'production' ? 0 : undefined
+        "data-ampdevmode": inAmpMode && "production" !== 'production' ? 0 : undefined
     })));
 }
 function AmpStyles({ styles  }) {
@@ -539,11 +544,11 @@ function AmpStyles({ styles  }) {
     }));
 }
 class Head extends _react.Component {
-    getCssLinks(files6) {
-        const { assetPrefix , devOnlyCacheBusterQueryString , dynamicImports  } = this.context;
-        const cssFiles = files6.allFiles.filter((f)=>f.endsWith('.css')
+    getCssLinks(files) {
+        const { assetPrefix , devOnlyCacheBusterQueryString , dynamicImports , crossOrigin , optimizeCss , optimizeFonts ,  } = this.context;
+        const cssFiles = files.allFiles.filter((f)=>f.endsWith('.css')
         );
-        const sharedFiles = new Set(files6.sharedFiles);
+        const sharedFiles = new Set(files.sharedFiles);
         // Unmanaged files are CSS files that will be handled directly by the
         // webpack runtime (`mini-css-extract-plugin`).
         let unmangedFiles = new Set([]);
@@ -559,14 +564,14 @@ class Head extends _react.Component {
         let cssLinkElements = [];
         cssFiles.forEach((file)=>{
             const isSharedFile = sharedFiles.has(file);
-            if (true) {
+            if (!optimizeCss) {
                 cssLinkElements.push(/*#__PURE__*/ _react.default.createElement("link", {
                     key: `${file}-preload`,
                     nonce: this.props.nonce,
                     rel: "preload",
                     href: `${assetPrefix}/_next/${encodeURI(file)}${devOnlyCacheBusterQueryString}`,
                     as: "style",
-                    crossOrigin: this.props.crossOrigin || undefined
+                    crossOrigin: this.props.crossOrigin || crossOrigin
                 }));
             }
             const isUnmanagedFile = unmangedFiles.has(file);
@@ -575,18 +580,18 @@ class Head extends _react.Component {
                 nonce: this.props.nonce,
                 rel: "stylesheet",
                 href: `${assetPrefix}/_next/${encodeURI(file)}${devOnlyCacheBusterQueryString}`,
-                crossOrigin: this.props.crossOrigin || undefined,
+                crossOrigin: this.props.crossOrigin || crossOrigin,
                 "data-n-g": isUnmanagedFile ? undefined : isSharedFile ? '' : undefined,
                 "data-n-p": isUnmanagedFile ? undefined : isSharedFile ? undefined : ''
             }));
         });
-        if (true) {
+        if ( true && optimizeFonts) {
             cssLinkElements = this.makeStylesheetInert(cssLinkElements);
         }
         return cssLinkElements.length === 0 ? null : cssLinkElements;
     }
     getPreloadDynamicChunks() {
-        const { dynamicImports , assetPrefix , devOnlyCacheBusterQueryString  } = this.context;
+        const { dynamicImports , assetPrefix , devOnlyCacheBusterQueryString , crossOrigin ,  } = this.context;
         return dynamicImports.map((file)=>{
             if (!file.endsWith('.js')) {
                 return null;
@@ -597,14 +602,14 @@ class Head extends _react.Component {
                 href: `${assetPrefix}/_next/${encodeURI(file)}${devOnlyCacheBusterQueryString}`,
                 as: "script",
                 nonce: this.props.nonce,
-                crossOrigin: this.props.crossOrigin || undefined
+                crossOrigin: this.props.crossOrigin || crossOrigin
             }));
         }) // Filter out nulled scripts
         .filter(Boolean);
     }
-    getPreloadMainLinks(files1) {
-        const { assetPrefix , devOnlyCacheBusterQueryString , scriptLoader  } = this.context;
-        const preloadFiles = files1.allFiles.filter((file)=>{
+    getPreloadMainLinks(files) {
+        const { assetPrefix , devOnlyCacheBusterQueryString , scriptLoader , crossOrigin ,  } = this.context;
+        const preloadFiles = files.allFiles.filter((file)=>{
             return file.endsWith('.js');
         });
         return [
@@ -614,7 +619,7 @@ class Head extends _react.Component {
                     rel: "preload",
                     href: file.src,
                     as: "script",
-                    crossOrigin: this.props.crossOrigin || undefined
+                    crossOrigin: this.props.crossOrigin || crossOrigin
                 })
             ),
             ...preloadFiles.map((file)=>/*#__PURE__*/ _react.default.createElement("link", {
@@ -623,19 +628,19 @@ class Head extends _react.Component {
                     rel: "preload",
                     href: `${assetPrefix}/_next/${encodeURI(file)}${devOnlyCacheBusterQueryString}`,
                     as: "script",
-                    crossOrigin: this.props.crossOrigin || undefined
+                    crossOrigin: this.props.crossOrigin || crossOrigin
                 })
             ), 
         ];
     }
-    getDynamicChunks(files2) {
-        return getDynamicChunks(this.context, this.props, files2);
+    getDynamicChunks(files) {
+        return getDynamicChunks(this.context, this.props, files);
     }
     getPreNextScripts() {
         return getPreNextScripts(this.context, this.props);
     }
-    getScripts(files3) {
-        return getScripts(this.context, this.props, files3);
+    getScripts(files) {
+        return getScripts(this.context, this.props, files);
     }
     getPolyfillScripts() {
         return getPolyfillScripts(this.context, this.props);
@@ -668,23 +673,29 @@ class Head extends _react.Component {
     }
     makeStylesheetInert(node) {
         return _react.default.Children.map(node, (c)=>{
-            if (c.type === 'link' && c.props['href'] && _constants.OPTIMIZED_FONT_PROVIDERS.some(({ url  })=>c.props['href'].startsWith(url)
-            )) {
+            var ref12, ref6;
+            if ((c === null || c === void 0 ? void 0 : c.type) === 'link' && (c === null || c === void 0 ? void 0 : (ref12 = c.props) === null || ref12 === void 0 ? void 0 : ref12.href) && _constants.OPTIMIZED_FONT_PROVIDERS.some(({ url  })=>{
+                var ref, ref10;
+                return c === null || c === void 0 ? void 0 : (ref = c.props) === null || ref === void 0 ? void 0 : (ref10 = ref.href) === null || ref10 === void 0 ? void 0 : ref10.startsWith(url);
+            })) {
                 const newProps = {
-                    ...c.props || {
-                    }
+                    ...c.props || {},
+                    'data-href': c.props.href,
+                    href: undefined
                 };
-                newProps['data-href'] = newProps['href'];
-                newProps['href'] = undefined;
                 return(/*#__PURE__*/ _react.default.cloneElement(c, newProps));
-            } else if (c.props && c.props['children']) {
-                c.props['children'] = this.makeStylesheetInert(c.props['children']);
+            } else if (c === null || c === void 0 ? void 0 : (ref6 = c.props) === null || ref6 === void 0 ? void 0 : ref6.children) {
+                const newProps = {
+                    ...c.props || {},
+                    children: this.makeStylesheetInert(c.props.children)
+                };
+                return(/*#__PURE__*/ _react.default.cloneElement(c, newProps));
             }
             return c;
-        });
+        }).filter(Boolean);
     }
     render() {
-        const { styles , ampPath , inAmpMode , hybridAmp , canonicalBase , __NEXT_DATA__ , dangerousAsPath , headTags , unstable_runtimeJS , unstable_JsPreload , disableOptimizedLoading , useMaybeDeferContent ,  } = this.context;
+        const { styles , ampPath , inAmpMode , hybridAmp , canonicalBase , __NEXT_DATA__ , dangerousAsPath , headTags , unstable_runtimeJS , unstable_JsPreload , disableOptimizedLoading , useMaybeDeferContent , optimizeCss , optimizeFonts , optimizeImages , concurrentFeatures ,  } = this.context;
         const disableRuntimeJS = unstable_runtimeJS === false;
         const disableJsPreload = unstable_JsPreload === false || !disableOptimizedLoading;
         this.context.docComponentsRendered.Head = true;
@@ -704,7 +715,7 @@ class Head extends _react.Component {
         let children = _react.default.Children.toArray(this.props.children).filter(Boolean);
         // show a warning if Head contains <title> (only in development)
         if (false) {}
-        if ( true && !inAmpMode) {
+        if ( true && optimizeFonts && !inAmpMode) {
             children = this.makeStylesheetInert(children);
         }
         children = this.handleDocumentScriptLoaderItems(children);
@@ -764,8 +775,7 @@ class Head extends _react.Component {
                 return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, getDynamicHeadContent(), getDynamicScriptPreloads(), getDynamicScriptContent()));
             });
             var _nonce, _nonce1;
-            return(/*#__PURE__*/ _react.default.createElement("head", Object.assign({
-            }, this.props), this.context.isDevelopment && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("style", {
+            return(/*#__PURE__*/ _react.default.createElement("head", Object.assign({}, this.props), !concurrentFeatures && this.context.isDevelopment && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("style", {
                 "data-next-hide-fouc": true,
                 "data-ampdevmode": inAmpMode ? 'true' : undefined,
                 dangerouslySetInnerHTML: {
@@ -778,7 +788,7 @@ class Head extends _react.Component {
                 dangerouslySetInnerHTML: {
                     __html: `body{display:block}`
                 }
-            }))), children,  true && /*#__PURE__*/ _react.default.createElement("meta", {
+            }))), children, optimizeFonts && /*#__PURE__*/ _react.default.createElement("meta", {
                 name: "next-font-preconnect"
             }), !isDeferred && getDynamicHeadContent(), inAmpMode && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("meta", {
                 name: "viewport",
@@ -808,14 +818,17 @@ class Head extends _react.Component {
             })), !inAmpMode && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, !hasAmphtmlRel && hybridAmp && /*#__PURE__*/ _react.default.createElement("link", {
                 rel: "amphtml",
                 href: canonicalBase + getAmpPath(ampPath, dangerousAsPath)
-            }),  true && this.getCssLinks(files),  true && /*#__PURE__*/ _react.default.createElement("noscript", {
+            }), !optimizeCss && this.getCssLinks(files), !optimizeCss && /*#__PURE__*/ _react.default.createElement("noscript", {
                 "data-n-css": (_nonce = this.props.nonce) !== null && _nonce !== void 0 ? _nonce : ''
-            }),  false && /*#__PURE__*/ 0, !isDeferred && getDynamicScriptPreloads(), !disableOptimizedLoading && !disableRuntimeJS && this.getPolyfillScripts(), !isDeferred && getDynamicScriptContent(),  false && 0,  false && /*#__PURE__*/ 0, this.context.isDevelopment && // ordering matches production
+            }), optimizeImages && /*#__PURE__*/ _react.default.createElement("meta", {
+                name: "next-image-preload"
+            }), !isDeferred && getDynamicScriptPreloads(), !disableOptimizedLoading && !disableRuntimeJS && this.getPolyfillScripts(), !isDeferred && getDynamicScriptContent(), optimizeCss && this.getCssLinks(files), optimizeCss && /*#__PURE__*/ _react.default.createElement("noscript", {
+                "data-n-css": (_nonce1 = this.props.nonce) !== null && _nonce1 !== void 0 ? _nonce1 : ''
+            }), this.context.isDevelopment && // ordering matches production
             // (by default, style-loader injects at the bottom of <head />)
             /*#__PURE__*/ _react.default.createElement("noscript", {
                 id: "__next_css__DO_NOT_USE__"
-            }), styles || null), /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, {
-            }, ...headTags || [])));
+            }), styles || null), /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, {}, ...headTags || [])));
         };
         return(/*#__PURE__*/ _react.default.createElement(DeferrableHead, null));
     }
@@ -823,22 +836,20 @@ class Head extends _react.Component {
 exports.Head = Head;
 Head.contextType = _utils.HtmlContext;
 function Main() {
-    const { inAmpMode , docComponentsRendered  } = (0, _react).useContext(_utils.HtmlContext);
+    const { docComponentsRendered  } = (0, _react).useContext(_utils.HtmlContext);
     docComponentsRendered.Main = true;
-    if (inAmpMode) return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, _constants.BODY_RENDER_TARGET));
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        id: "__next"
-    }, _constants.BODY_RENDER_TARGET));
+    // @ts-ignore
+    return(/*#__PURE__*/ _react.default.createElement("next-js-internal-body-render-target", null));
 }
 class NextScript extends _react.Component {
-    getDynamicChunks(files4) {
-        return getDynamicChunks(this.context, this.props, files4);
+    getDynamicChunks(files) {
+        return getDynamicChunks(this.context, this.props, files);
     }
     getPreNextScripts() {
         return getPreNextScripts(this.context, this.props);
     }
-    getScripts(files5) {
-        return getScripts(this.context, this.props, files5);
+    getScripts(files) {
+        return getScripts(this.context, this.props, files);
     }
     getPolyfillScripts() {
         return getPolyfillScripts(this.context, this.props);
@@ -857,7 +868,7 @@ class NextScript extends _react.Component {
         }
     }
     render() {
-        const { assetPrefix , inAmpMode , buildManifest , unstable_runtimeJS , docComponentsRendered , devOnlyCacheBusterQueryString , disableOptimizedLoading , useMaybeDeferContent ,  } = this.context;
+        const { assetPrefix , inAmpMode , buildManifest , unstable_runtimeJS , docComponentsRendered , devOnlyCacheBusterQueryString , disableOptimizedLoading , useMaybeDeferContent , crossOrigin ,  } = this.context;
         const disableRuntimeJS = unstable_runtimeJS === false;
         docComponentsRendered.NextScript = true;
         // Must nest component to use custom hook
@@ -873,7 +884,7 @@ class NextScript extends _react.Component {
                         id: "__NEXT_DATA__",
                         type: "application/json",
                         nonce: this.props.nonce,
-                        crossOrigin: this.props.crossOrigin || undefined,
+                        crossOrigin: this.props.crossOrigin || crossOrigin,
                         dangerouslySetInnerHTML: {
                             __html: NextScript.getInlineScriptSource(this.context)
                         },
@@ -882,7 +893,7 @@ class NextScript extends _react.Component {
                             key: file,
                             src: `${assetPrefix}/_next/${file}${devOnlyCacheBusterQueryString}`,
                             nonce: this.props.nonce,
-                            crossOrigin: this.props.crossOrigin || undefined,
+                            crossOrigin: this.props.crossOrigin || crossOrigin,
                             "data-ampdevmode": true
                         })
                     )));
@@ -893,19 +904,19 @@ class NextScript extends _react.Component {
                         key: file,
                         src: `${assetPrefix}/_next/${encodeURI(file)}${devOnlyCacheBusterQueryString}`,
                         nonce: this.props.nonce,
-                        crossOrigin: this.props.crossOrigin || undefined
+                        crossOrigin: this.props.crossOrigin || crossOrigin
                     })
                 ) : null, disableRuntimeJS ? null : /*#__PURE__*/ _react.default.createElement("script", {
                     id: "__NEXT_DATA__",
                     type: "application/json",
                     nonce: this.props.nonce,
-                    crossOrigin: this.props.crossOrigin || undefined,
+                    crossOrigin: this.props.crossOrigin || crossOrigin,
                     dangerouslySetInnerHTML: {
                         __html: NextScript.getInlineScriptSource(this.context)
                     }
                 }), disableOptimizedLoading && !disableRuntimeJS && this.getPolyfillScripts(), disableOptimizedLoading && !disableRuntimeJS && this.getPreNextScripts(), disableOptimizedLoading && !disableRuntimeJS && this.getDynamicChunks(files), disableOptimizedLoading && !disableRuntimeJS && this.getScripts(files)));
             });
-            if (inAmpMode && 'production' === 'production') {
+            if (inAmpMode && "production" === 'production') {
                 return null;
             }
             return content;

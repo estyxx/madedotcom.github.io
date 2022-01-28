@@ -5,7 +5,7 @@ exports.id = 660;
 exports.ids = [660];
 exports.modules = {
 
-/***/ 208:
+/***/ 641:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -17,7 +17,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _chakra_ui_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(930);
 /* harmony import */ var _chakra_ui_react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_chakra_ui_react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var next_document__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(859);
-/* harmony import */ var theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(706);
+/* harmony import */ var theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(850);
 
 
 
@@ -51,10 +51,8 @@ class MyDocument extends next_document__WEBPACK_IMPORTED_MODULE_2__["default"] {
                         /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_chakra_ui_react__WEBPACK_IMPORTED_MODULE_1__.ColorModeScript, {
                             initialColorMode: theme__WEBPACK_IMPORTED_MODULE_3__/* ["default"].config.initialColorMode */ .ZP.config.initialColorMode
                         }),
-                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(next_document__WEBPACK_IMPORTED_MODULE_2__.Main, {
-                        }),
-                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(next_document__WEBPACK_IMPORTED_MODULE_2__.NextScript, {
-                        })
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(next_document__WEBPACK_IMPORTED_MODULE_2__.Main, {}),
+                        /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(next_document__WEBPACK_IMPORTED_MODULE_2__.NextScript, {})
                     ]
                 })
             ]
@@ -136,7 +134,7 @@ module.exports = require("react/jsx-runtime");
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [730,859,706], () => (__webpack_exec__(208)));
+var __webpack_exports__ = __webpack_require__.X(0, [730,859,850], () => (__webpack_exec__(641)));
 module.exports = __webpack_exports__;
 
 })();

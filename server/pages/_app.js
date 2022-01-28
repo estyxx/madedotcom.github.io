@@ -5,7 +5,7 @@ exports.id = 888;
 exports.ids = [888];
 exports.modules = {
 
-/***/ 496:
+/***/ 587:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 // ESM COMPAT FLAG
@@ -20,13 +20,13 @@ __webpack_require__.d(__webpack_exports__, {
 var jsx_runtime_ = __webpack_require__(997);
 // EXTERNAL MODULE: external "@chakra-ui/react"
 var react_ = __webpack_require__(930);
-// EXTERNAL MODULE: ./theme.ts
-var theme = __webpack_require__(706);
+// EXTERNAL MODULE: ./src/theme/index.ts
+var theme = __webpack_require__(850);
 // EXTERNAL MODULE: external "react"
 var external_react_ = __webpack_require__(689);
 // EXTERNAL MODULE: ./node_modules/next/link.js
 var next_link = __webpack_require__(664);
-;// CONCATENATED MODULE: ./components/logo.tsx
+;// CONCATENATED MODULE: ./src/components/logo.tsx
 
 
 
@@ -49,7 +49,7 @@ const Logo = ()=>{
 
 ;// CONCATENATED MODULE: external "react-icons/fi"
 const fi_namespaceObject = require("react-icons/fi");
-;// CONCATENATED MODULE: ./components/menu-toggle.tsx
+;// CONCATENATED MODULE: ./src/components/menu-toggle.tsx
 
 
 
@@ -61,13 +61,11 @@ const MenuToggle = ({ toggle , isOpen  })=>{
             md: "none"
         },
         onClick: toggle,
-        children: isOpen ? /*#__PURE__*/ jsx_runtime_.jsx(fi_namespaceObject.FiX, {
-        }) : /*#__PURE__*/ jsx_runtime_.jsx(fi_namespaceObject.FiMenu, {
-        })
+        children: isOpen ? /*#__PURE__*/ jsx_runtime_.jsx(fi_namespaceObject.FiX, {}) : /*#__PURE__*/ jsx_runtime_.jsx(fi_namespaceObject.FiMenu, {})
     }));
 };
 
-;// CONCATENATED MODULE: ./components/menu-item.tsx
+;// CONCATENATED MODULE: ./src/components/menu-item.tsx
 
 
 const MenuItem = ({ children , to ="/" , target ="" , icon , ...props })=>{
@@ -87,7 +85,7 @@ const MenuItem = ({ children , to ="/" , target ="" , icon , ...props })=>{
     }));
 };
 
-;// CONCATENATED MODULE: ./components/menu-links.tsx
+;// CONCATENATED MODULE: ./src/components/menu-links.tsx
 
 
 
@@ -132,8 +130,7 @@ const MenuLinks = ({ isOpen  })=>{
                 /*#__PURE__*/ jsx_runtime_.jsx(MenuItem, {
                     to: "https://www.made.com/careers",
                     target: "_blank",
-                    icon: /*#__PURE__*/ jsx_runtime_.jsx(fi_namespaceObject.FiExternalLink, {
-                    }),
+                    icon: /*#__PURE__*/ jsx_runtime_.jsx(fi_namespaceObject.FiExternalLink, {}),
                     children: "Careers"
                 })
             ]
@@ -141,7 +138,7 @@ const MenuLinks = ({ isOpen  })=>{
     }));
 };
 
-;// CONCATENATED MODULE: ./components/header.tsx
+;// CONCATENATED MODULE: ./src/components/header.tsx
 
 
 
@@ -172,8 +169,7 @@ const Header = ()=>{
     ;
     return(/*#__PURE__*/ (0,jsx_runtime_.jsxs)(HeaderContainer, {
         children: [
-            /*#__PURE__*/ jsx_runtime_.jsx(logo, {
-            }),
+            /*#__PURE__*/ jsx_runtime_.jsx(logo, {}),
             /*#__PURE__*/ jsx_runtime_.jsx(MenuToggle, {
                 toggle: toggle,
                 isOpen: isOpen
@@ -185,7 +181,7 @@ const Header = ()=>{
     }));
 };
 
-;// CONCATENATED MODULE: ./components/footer.tsx
+;// CONCATENATED MODULE: ./src/components/footer.tsx
 
 
 const Footer = ({ children  })=>{
@@ -208,26 +204,22 @@ const Footer = ({ children  })=>{
 };
 /* harmony default export */ const footer = (Footer);
 
-;// CONCATENATED MODULE: ./pages/_app.tsx
+;// CONCATENATED MODULE: ./src/pages/_app.tsx
 
 
 
 
 
 function MyApp({ Component , pageProps  }) {
-    return(/*#__PURE__*/ jsx_runtime_.jsx(jsx_runtime_.Fragment, {
-        children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)(react_.ChakraProvider, {
-            theme: theme/* default */.ZP,
-            children: [
-                /*#__PURE__*/ jsx_runtime_.jsx(Header, {
-                }),
-                /*#__PURE__*/ jsx_runtime_.jsx(Component, {
-                    ...pageProps
-                }),
-                /*#__PURE__*/ jsx_runtime_.jsx(footer, {
-                })
-            ]
-        })
+    return(/*#__PURE__*/ (0,jsx_runtime_.jsxs)(react_.ChakraProvider, {
+        theme: theme/* default */.ZP,
+        children: [
+            /*#__PURE__*/ jsx_runtime_.jsx(Header, {}),
+            /*#__PURE__*/ jsx_runtime_.jsx(Component, {
+                ...pageProps
+            }),
+            /*#__PURE__*/ jsx_runtime_.jsx(footer, {})
+        ]
     }));
 }
 /* harmony default export */ const _app = (MyApp);
@@ -354,7 +346,7 @@ module.exports = require("react/jsx-runtime");
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [730,664,706], () => (__webpack_exec__(496)));
+var __webpack_exports__ = __webpack_require__.X(0, [730,664,850], () => (__webpack_exec__(587)));
 module.exports = __webpack_exports__;
 
 })();

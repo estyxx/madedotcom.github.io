@@ -1,37 +1,37 @@
 {
   "polyfillFiles": [
-    "static/chunks/polyfills-a40ef1678bae11e696dba45124eadd70.js"
+    "static/chunks/polyfills-5cd94c89d3acac5f.js"
   ],
   "devFiles": [],
   "ampDevFiles": [],
   "lowPriorityFiles": [
-    "static/-5jGsRkTSIkFvcDUe2vI2/_buildManifest.js",
-    "static/-5jGsRkTSIkFvcDUe2vI2/_ssgManifest.js",
-    "static/-5jGsRkTSIkFvcDUe2vI2/_middlewareManifest.js"
+    "static/2tqJmo_fRbAw6t4J6GFXG/_buildManifest.js",
+    "static/2tqJmo_fRbAw6t4J6GFXG/_ssgManifest.js",
+    "static/2tqJmo_fRbAw6t4J6GFXG/_middlewareManifest.js"
   ],
   "pages": {
     "/": [
-      "static/chunks/webpack-f8fe1f0eb2299c5d.js",
+      "static/chunks/webpack-24780b5468e42e63.js",
       "static/chunks/framework-91d7f78b5b4003c8.js",
-      "static/chunks/main-208998328ec77b24.js",
-      "static/chunks/pages/index-3ba8cbacba071a0b.js"
+      "static/chunks/main-a56127814584ab09.js",
+      "static/chunks/pages/index-45eea4373d2262fa.js"
     ],
     "/[slug]": [
-      "static/chunks/webpack-f8fe1f0eb2299c5d.js",
+      "static/chunks/webpack-24780b5468e42e63.js",
       "static/chunks/framework-91d7f78b5b4003c8.js",
-      "static/chunks/main-208998328ec77b24.js",
-      "static/chunks/pages/[slug]-88a3b625b084834b.js"
+      "static/chunks/main-a56127814584ab09.js",
+      "static/chunks/pages/[slug]-88f3a092f15cc647.js"
     ],
     "/_app": [
-      "static/chunks/webpack-f8fe1f0eb2299c5d.js",
+      "static/chunks/webpack-24780b5468e42e63.js",
       "static/chunks/framework-91d7f78b5b4003c8.js",
-      "static/chunks/main-208998328ec77b24.js",
-      "static/chunks/pages/_app-36029a09de44329b.js"
+      "static/chunks/main-a56127814584ab09.js",
+      "static/chunks/pages/_app-063d0cdbbc8e6a9c.js"
     ],
     "/_error": [
-      "static/chunks/webpack-f8fe1f0eb2299c5d.js",
+      "static/chunks/webpack-24780b5468e42e63.js",
       "static/chunks/framework-91d7f78b5b4003c8.js",
-      "static/chunks/main-208998328ec77b24.js",
+      "static/chunks/main-a56127814584ab09.js",
       "static/chunks/pages/_error-2280fa386d040b66.js"
     ]
   },

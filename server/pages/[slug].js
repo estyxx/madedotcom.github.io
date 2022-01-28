@@ -5,7 +5,7 @@ exports.id = 219;
 exports.ids = [219];
 exports.modules = {
 
-/***/ 992:
+/***/ 921:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 // ESM COMPAT FLAG
@@ -18,8 +18,8 @@ __webpack_require__.d(__webpack_exports__, {
   "getStaticProps": () => (/* binding */ getStaticProps)
 });
 
-// EXTERNAL MODULE: ./lib/api.ts
-var api = __webpack_require__(390);
+// EXTERNAL MODULE: ./src/lib/api.ts
+var api = __webpack_require__(903);
 // EXTERNAL MODULE: external "react/jsx-runtime"
 var jsx_runtime_ = __webpack_require__(997);
 ;// CONCATENATED MODULE: external "next-mdx-remote"
@@ -31,7 +31,7 @@ var head_default = /*#__PURE__*/__webpack_require__.n(head_);
 var react_ = __webpack_require__(930);
 // EXTERNAL MODULE: external "react"
 var external_react_ = __webpack_require__(689);
-;// CONCATENATED MODULE: ./components/mdx/inline-code.tsx
+;// CONCATENATED MODULE: ./src/components/mdx/inline-code.tsx
 
 
 
@@ -46,12 +46,12 @@ const InlineCode = ({ ...props })=>/*#__PURE__*/ jsx_runtime_.jsx(react_.chakra.
     })
 ;
 
-;// CONCATENATED MODULE: ./components/mdx/codeblock/index.tsx
+;// CONCATENATED MODULE: ./src/components/mdx/codeblock/index.tsx
 
 
 
 const CodeBlock = ({ children , className  })=>{
-    const language = className === null || className === void 0 ? void 0 : className.replace(/language-/, "");
+    const language = className?.replace(/language-/, "");
     if (!language) {
         return(/*#__PURE__*/ jsx_runtime_.jsx(InlineCode, {
             children: children
@@ -76,7 +76,7 @@ const CodeBlock = ({ children , className  })=>{
 };
 /* harmony default export */ const codeblock = (CodeBlock);
 
-;// CONCATENATED MODULE: ./components/mdx/index.tsx
+;// CONCATENATED MODULE: ./src/components/mdx/index.tsx
 
 
 
@@ -147,7 +147,7 @@ const theme = {
 };
 /* harmony default export */ const mdx = (theme);
 
-;// CONCATENATED MODULE: ./components/post.tsx
+;// CONCATENATED MODULE: ./src/components/post.tsx
 
 
 
@@ -202,7 +202,7 @@ var external_gray_matter_default = /*#__PURE__*/__webpack_require__.n(external_g
 const serialize_namespaceObject = require("next-mdx-remote/serialize");
 ;// CONCATENATED MODULE: external "remark-mdx-code-meta"
 const external_remark_mdx_code_meta_namespaceObject = require("remark-mdx-code-meta");
-;// CONCATENATED MODULE: ./lib/mdx.ts
+;// CONCATENATED MODULE: ./src/lib/mdx.ts
 
 
 
@@ -222,7 +222,7 @@ const serializePage = async ({ page  })=>{
     };
 };
 
-;// CONCATENATED MODULE: ./pages/[slug].tsx
+;// CONCATENATED MODULE: ./src/pages/[slug].tsx
 
 
 
@@ -315,7 +315,7 @@ module.exports = require("path");
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [390], () => (__webpack_exec__(992)));
+var __webpack_exports__ = __webpack_require__.X(0, [903], () => (__webpack_exec__(921)));
 module.exports = __webpack_exports__;
 
 })();
