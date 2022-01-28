@@ -5,7 +5,7 @@ exports.id = 219;
 exports.ids = [219];
 exports.modules = {
 
-/***/ 460:
+/***/ 992:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 // ESM COMPAT FLAG
@@ -29,22 +29,57 @@ var head_ = __webpack_require__(968);
 var head_default = /*#__PURE__*/__webpack_require__.n(head_);
 // EXTERNAL MODULE: external "@chakra-ui/react"
 var react_ = __webpack_require__(930);
-;// CONCATENATED MODULE: ./components/mdx.tsx
+// EXTERNAL MODULE: external "react"
+var external_react_ = __webpack_require__(689);
+;// CONCATENATED MODULE: ./components/mdx/inline-code.tsx
 
 
-const Code = ({ children  })=>{
-    return(/*#__PURE__*/ jsx_runtime_.jsx(react_.Wrap, {
-        bg: "orange.50",
-        borderRadius: 10,
-        mb: 10,
-        fontSize: "sm",
-        boxShadow: "lg",
+
+const InlineCode = ({ ...props })=>/*#__PURE__*/ jsx_runtime_.jsx(react_.chakra.code, {
+        apply: "mdx.code",
+        color: (0,react_.useColorModeValue)("purple.500", "purple.300"),
+        bg: "#011627",
+        rounded: "3px",
+        paddingLeft: "2",
+        paddingRight: "2",
+        ...props
+    })
+;
+
+;// CONCATENATED MODULE: ./components/mdx/codeblock/index.tsx
+
+
+
+const CodeBlock = ({ children , className  })=>{
+    const language = className === null || className === void 0 ? void 0 : className.replace(/language-/, "");
+    if (!language) {
+        return(/*#__PURE__*/ jsx_runtime_.jsx(InlineCode, {
+            children: children
+        }));
+    }
+    return(/*#__PURE__*/ jsx_runtime_.jsx(react_.Box, {
+        position: "relative",
+        zIndex: "0",
         children: /*#__PURE__*/ jsx_runtime_.jsx(react_.Box, {
             p: 5,
-            children: children
+            overflow: "hidden",
+            bg: "orange.50",
+            borderRadius: 10,
+            mb: 10,
+            fontSize: "sm",
+            boxShadow: "lg",
+            children: /*#__PURE__*/ jsx_runtime_.jsx(react_.Box, {
+                children: children
+            })
         })
     }));
 };
+/* harmony default export */ const codeblock = (CodeBlock);
+
+;// CONCATENATED MODULE: ./components/mdx/index.tsx
+
+
+
 const PostLink = ({ children , href  })=>{
     return(/*#__PURE__*/ jsx_runtime_.jsx(react_.Link, {
         color: "made.blue",
@@ -82,7 +117,6 @@ const heading = (level)=>{
     return wrapper;
 };
 const BlockQuote = ({ children  })=>{
-    console.log(children);
     return(/*#__PURE__*/ jsx_runtime_.jsx(react_.Box, {
         as: "blockquote",
         borderLeft: "2px",
@@ -109,7 +143,7 @@ const theme = {
     a: PostLink,
     p: Paragraph,
     inlineCode: CodeInline,
-    code: Code
+    code: codeblock
 };
 /* harmony default export */ const mdx = (theme);
 
@@ -167,12 +201,22 @@ var external_gray_matter_ = __webpack_require__(76);
 var external_gray_matter_default = /*#__PURE__*/__webpack_require__.n(external_gray_matter_);
 ;// CONCATENATED MODULE: external "next-mdx-remote/serialize"
 const serialize_namespaceObject = require("next-mdx-remote/serialize");
+;// CONCATENATED MODULE: external "remark-mdx-code-meta"
+const external_remark_mdx_code_meta_namespaceObject = require("remark-mdx-code-meta");
 ;// CONCATENATED MODULE: ./lib/mdx.ts
+
 
 
 const serializePage = async ({ page  })=>{
     const { data , content  } = external_gray_matter_default()(page);
-    const source = await (0,serialize_namespaceObject.serialize)(content);
+    const source = await (0,serialize_namespaceObject.serialize)(content, {
+        mdxOptions: {
+            remarkPlugins: [
+                __webpack_require__(423),
+                external_remark_mdx_code_meta_namespaceObject.remarkMdxCodeMeta
+            ]
+        }
+    });
     return {
         source,
         data
@@ -230,10 +274,24 @@ module.exports = require("next/head");
 
 /***/ }),
 
+/***/ 689:
+/***/ ((module) => {
+
+module.exports = require("react");
+
+/***/ }),
+
 /***/ 997:
 /***/ ((module) => {
 
 module.exports = require("react/jsx-runtime");
+
+/***/ }),
+
+/***/ 423:
+/***/ ((module) => {
+
+module.exports = require("remark-prism");
 
 /***/ }),
 
@@ -258,7 +316,7 @@ module.exports = require("path");
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [390], () => (__webpack_exec__(460)));
+var __webpack_exports__ = __webpack_require__.X(0, [390], () => (__webpack_exec__(992)));
 module.exports = __webpack_exports__;
 
 })();

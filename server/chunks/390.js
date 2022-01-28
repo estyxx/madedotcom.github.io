@@ -11,25 +11,34 @@ exports.modules = {
 /* harmony export */   "Qk": () => (/* binding */ getPostsMetaData),
 /* harmony export */   "AU": () => (/* binding */ getPostData)
 /* harmony export */ });
-const fs = __webpack_require__(147);
-const path = __webpack_require__(17);
-const matter = __webpack_require__(76);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(147);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var gray_matter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(76);
+/* harmony import */ var gray_matter__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(gray_matter__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
 // current 'posts' directory
-const postsDirectory = path.join(process.cwd(), "posts");
-const fileExtension = ".md";
-const getAllFilesInDirectory = ()=>{
-    const fileNames = fs.readdirSync(postsDirectory);
+const postsDirectory = path__WEBPACK_IMPORTED_MODULE_0___default().join(process.cwd(), "posts");
+const FILE_EXTENSION = ".md";
+const DATE_REGEX = /([0-9]{4})-([0-9]{2})-([0-9]{2})/;
+const getPostFiles = ()=>{
+    const fileNames = fs__WEBPACK_IMPORTED_MODULE_1___default().readdirSync(postsDirectory);
     return fileNames.map((fileName)=>{
-        return path.parse(fileName);
-    });
-};
-const getFiles = ()=>{
-    const allFiles = getAllFilesInDirectory();
-    return allFiles.filter((file)=>file.ext == fileExtension
+        const match = DATE_REGEX.exec(fileName);
+        const date = match ? match[0] : "";
+        const filePath = {
+            ...path__WEBPACK_IMPORTED_MODULE_0___default().parse(fileName),
+            date: date
+        };
+        return filePath;
+    }).filter((file)=>file.date && file.ext == FILE_EXTENSION
     );
 };
 const getAllPostsPath = ()=>{
-    const files = getFiles();
+    const files = getPostFiles();
     return files.map((file)=>{
         return {
             params: {
@@ -39,34 +48,33 @@ const getAllPostsPath = ()=>{
     });
 };
 const getPostsMetaData = ()=>{
-    const files = getFiles();
+    const files = getPostFiles();
     const postsMetaData = files.map(getPostMetaData);
-    return postsMetaData.sort((post)=>post.date
+    return postsMetaData.sort((a, b)=>+new Date(a.date) - +new Date(b.date)
     ).reverse();
 };
-const getPostMetaData = (file)=>{
-    const fullPath = path.join(postsDirectory, file.base);
+const getPostMetaData = ({ base , name  })=>{
+    const fullPath = path__WEBPACK_IMPORTED_MODULE_0___default().join(postsDirectory, base);
     // get MDX metadata and content
-    const fileContents = fs.readFileSync(fullPath, "utf8");
+    const fileContents = fs__WEBPACK_IMPORTED_MODULE_1___default().readFileSync(fullPath, "utf8");
     // get metadata, content
-    const { data  } = matter(fileContents);
-    const match = /([0-9]{4})-([0-9]{2})-([0-9]{2})/.exec(file.name);
+    const { data  } = gray_matter__WEBPACK_IMPORTED_MODULE_2___default()(fileContents);
+    const match = DATE_REGEX.exec(name);
     return {
-        slug: file.name,
-        date: match && match[0],
+        slug: name,
+        date: match ? match[0] : "",
         ...data
     };
 };
 const getPostData = (slug)=>{
-    const fullPath = path.join(postsDirectory, slug + fileExtension);
+    const fullPath = path__WEBPACK_IMPORTED_MODULE_0___default().join(postsDirectory, slug + FILE_EXTENSION);
     const meta = getPostMetaData({
-        base: slug + fileExtension,
+        base: slug + FILE_EXTENSION,
         name: slug
     });
     // get MDX metadata and content
-    const page = fs.readFileSync(fullPath, "utf8");
+    const page = fs__WEBPACK_IMPORTED_MODULE_1___default().readFileSync(fullPath, "utf8");
     return {
-        slug: slug,
         page,
         ...meta
     };
