@@ -27,15 +27,7 @@ const CodeBlock = ({ children, className }: CodeBlockProps) => {
         boxShadow="lg"
       >
         <Box>{children}</Box>
-        {/* <Highlight
-          codeString={children}
-          language={language}
-          theme={theme}
-          metastring={ln}
-          showLines={viewlines}
-        /> */}
       </Box>
-      {/* <CopyButton top="4" code={children} /> */}
     </Box>
   );
 };

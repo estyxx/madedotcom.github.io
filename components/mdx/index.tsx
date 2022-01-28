@@ -39,7 +39,6 @@ const heading = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
 };
 
 const BlockQuote = ({ children }: { children: ReactNode }) => {
-  console.log(children);
   return (
     <Box
       as="blockquote"

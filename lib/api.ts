@@ -1,33 +1,31 @@
-import path from "path";
+import path, { ParsedPath } from "path";
 import fs from "fs";
 import matter from "gray-matter";
 
 // current 'posts' directory
 const postsDirectory = path.join(process.cwd(), "posts");
-const fileExtension = ".md";
+const FILE_EXTENSION = ".md";
+const DATE_REGEX = /([0-9]{4})-([0-9]{2})-([0-9]{2})/;
 
-type Path = {
-  root?: string;
-  dir?: string;
-  base: string;
-  ext?: string;
-  name: string;
+type Path = ParsedPath & {
+  date: string;
 };
 
-const getAllFilesInDirectory = (): Path[] => {
+const getPostFiles = (): Path[] => {
   const fileNames = fs.readdirSync(postsDirectory);
-  return fileNames.map((fileName: string) => {
-    return path.parse(fileName);
-  });
-};
+  return fileNames
+    .map((fileName: string) => {
+      const match = DATE_REGEX.exec(fileName);
+      const date = match ? match[0] : "";
+      const filePath: Path = { ...path.parse(fileName), date: date };
 
-const getFiles = (): Path[] => {
-  const allFiles = getAllFilesInDirectory();
-  return allFiles.filter((file) => file.ext == fileExtension);
+      return filePath;
+    })
+    .filter((file) => file.date && file.ext == FILE_EXTENSION);
 };
 
 export const getAllPostsPath = () => {
-  const files = getFiles();
+  const files = getPostFiles();
   return files.map((file: Path) => {
     return {
       params: {
@@ -38,32 +36,31 @@ export const getAllPostsPath = () => {
 };
 
 export const getPostsMetaData = () => {
-  const files = getFiles();
+  const files = getPostFiles();
 
   const postsMetaData = files.map(getPostMetaData);
 
-  return postsMetaData.sort((post) => post.date).reverse();
+  return postsMetaData.sort((a, b) => +new Date(a.date) - +new Date(b.date)).reverse();
 };
 
-const getPostMetaData = (file: Path) => {
-  const fullPath = path.join(postsDirectory, file.base);
+const getPostMetaData = ({ base, name }: { base: string; name: string }) => {
+  const fullPath = path.join(postsDirectory, base);
 
   // get MDX metadata and content
   const fileContents = fs.readFileSync(fullPath, "utf8");
 
   // get metadata, content
   const { data } = matter(fileContents);
+  const match = DATE_REGEX.exec(name);
 
-  const match = /([0-9]{4})-([0-9]{2})-([0-9]{2})/.exec(file.name);
-
-  return { slug: file.name, date: match && match[0], ...data };
+  return { slug: name, date: match ? match[0] : "", ...data };
 };
 
 export const getPostData = (slug: string) => {
-  const fullPath = path.join(postsDirectory, slug + fileExtension);
-  const meta = getPostMetaData({ base: slug + fileExtension, name: slug });
+  const fullPath = path.join(postsDirectory, slug + FILE_EXTENSION);
+  const meta = getPostMetaData({ base: slug + FILE_EXTENSION, name: slug });
   // get MDX metadata and content
   const page = fs.readFileSync(fullPath, "utf8");
 
-  return { slug: slug, page, ...meta };
+  return { page, ...meta };
 };
