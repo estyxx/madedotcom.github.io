@@ -1,8 +1,5 @@
 import { ReactNode } from "react";
-import { Heading, Text, Wrap, Box, Link } from "@chakra-ui/react";
-import Highlight from "components/mdx/codeblock/highlight";
-import theme from "prism-react-renderer/themes/nightOwl";
-import CopyButton from "components/mdx/codeblock/copy-button";
+import { Box } from "@chakra-ui/react";
 import { InlineCode } from "components/mdx/inline-code";
 
 type CodeBlockProps = {
@@ -21,7 +18,15 @@ const CodeBlock = ({ children, className, viewlines, ln }: CodeBlockProps) => {
   }
   return (
     <Box position="relative" zIndex="0">
-      <Box px="0" overflow="hidden" rounded="8px" my="8" bg="#011627">
+      <Box
+        p={5}
+        overflow="hidden"
+        bg="orange.50"
+        borderRadius={10}
+        mb={10}
+        fontSize="sm"
+        boxShadow="lg"
+      >
         <Box>{children}</Box>
         {/* <Highlight
           codeString={children}
@@ -31,7 +36,7 @@ const CodeBlock = ({ children, className, viewlines, ln }: CodeBlockProps) => {
           showLines={viewlines}
         /> */}
       </Box>
-      <CopyButton top="4" code={children} />
+      {/* <CopyButton top="4" code={children} /> */}
     </Box>
   );
 };
