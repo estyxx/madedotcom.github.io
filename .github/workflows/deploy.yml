@@ -17,6 +17,10 @@ jobs:
           path: ${{ github.workspace }}/.next/cache
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}
 
+      - name: Generate slug
+        id: generate_slug
+        run: echo "##[set-output name=slug;]$(echo ${GITHUB_HEAD_REF#refs/heads/} | sed -r 's/[~\^]+//g' | sed -r 's/[^a-zA-Z0-9]
+
       - name: Install and Build 🔧
         run: |
           yarn install
@@ -27,3 +31,12 @@ jobs:
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: .next # The folder the action should deploy.
+          target-folder: ${{ steps.generate_slug.outputs.slug }}
+
+      - name: Publish env
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: Preview environment
+          message: |
+            ## Preview environment
+            https://io.made.com/madedotcom/${{ steps.generate_slug.outputs.slug }}/
