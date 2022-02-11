@@ -40,7 +40,7 @@ pipeline {
 
         stage ('Build') {
             steps {
-                sh 'yarn build'
+                sh 'npm run build'
             }
         }
 
@@ -54,8 +54,6 @@ pipeline {
     post {
         always {
             echo 'Cleanup...'
-            sh 'docker-compose -f docker-compose.yml logs'
-            sh "make clean BUILD_VERSION=${env.BUILD_VERSION}"
         }
 
         failure {
