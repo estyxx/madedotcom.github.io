@@ -15,6 +15,7 @@ jobs:
         id: cache
         with:
           path: ./node_modules
+          key: node_modules-${{ hashFiles('yarn.lock') }}-v3
       - name: Install dependencies
         run: yarn install
       - name: Lint
