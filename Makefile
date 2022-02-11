@@ -25,3 +25,6 @@ get-desc:
 
 infrastructure-provision:
 	$(call docker-terraform)
+
+deploy:
+  aws s3 sync  build s3://blog.made-test.com/
