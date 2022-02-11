@@ -1,3 +1,23 @@
+#!groovy
+import hudson.AbortException
+
+def prepareRepo() {
+    deleteDir()
+
+    checkout scm
+
+    initEnvironment()
+}
+
+def initEnvironment() {
+    env.BRANCH_NAME = sh(script: "make -s get-branch BRANCH_NAME=${env.BRANCH_NAME}", returnStdout: true).toLowerCase().trim()
+    env.BUILD_VERSION = sh(script: "make -s get-version BRANCH_NAME=${env.BRANCH_NAME}", returnStdout: true).toLowerCase().trim().replace('\n', '')
+    env.DESCRIPTION = sh(script: "make -s get-desc BRANCH_NAME=${env.BRANCH_NAME}", returnStdout: true)
+
+    currentBuild.displayName = env.BUILD_VERSION
+    currentBuild.description = env.DESCRIPTION
+}
+
 
 pipeline {
     agent {
