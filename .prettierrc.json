@@ -4,6 +4,6 @@
   "trailingComma": "es5",
   "proseWrap": "always",
   "printWidth": 88,
-  "importOrder": ["^next", "^~", "^[./]"],
+  "importOrder": ["^next", "^[./]"],
   "importOrderSeparation": true
 }
