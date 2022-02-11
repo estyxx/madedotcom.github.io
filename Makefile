@@ -17,6 +17,9 @@ BUILD_NUMBER ?= 0
 export BUILD_VERSION ?= $(BRANCH_NAME).$(BUILD_NUMBER).$(HASH)
 export TERRAFORM_VERSION=0.14.5-master.27.b84cf5d
 
+get-branch:
+	echo $(BRANCH_NAME)
+
 get-version:
 	echo $(BUILD_VERSION)
 
