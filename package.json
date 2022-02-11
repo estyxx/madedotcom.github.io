@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint . --ext .jsx,.js,.tsx,.ts",
     "lint:ts": "tsc --noemit",
+    "lint:pretti": "prettier --check .",
     "prepare": "husky install"
   },
   "lint-staged": {

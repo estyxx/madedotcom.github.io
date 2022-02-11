@@ -1,0 +1,25 @@
+name: Javascript Linters
+
+on: [push]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        id: cache
+        with:
+          path: ./node_modules
+      - name: Install dependencies
+        run: yarn install
+      - name: Lint
+        run: yarn run lint
+      - name: TS Lint
+        run: yarn run lint:ts
+      - name: Prettier
+        run: yarn run lint:prettier
