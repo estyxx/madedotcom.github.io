@@ -1,5 +1,5 @@
-import React from "react";
 import { Box } from "@chakra-ui/react";
+import React from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 
 type MenuProps = {

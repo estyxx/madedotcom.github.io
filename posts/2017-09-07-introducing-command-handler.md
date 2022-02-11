@@ -3,10 +3,10 @@ title: Introducing the command handler
 layout: post
 author: Bob
 categories:
-  - ports & adapters
+    - ports & adapters
 tags:
-  - python
-  - architecture
+    - python
+    - architecture
 ---
 
 The term DDD comes from the book by Eric Evans:
@@ -16,14 +16,14 @@ rich, software systems that solve customer's problems. The book is 560 pages of 
 insight, so you'll pardon me if my summary elides some details, but in brief he
 suggests:
 
-- Listen very carefully to your domain experts - the people whose job you're automating
-  or assisting in software.
-- Learn the jargon that they use, and help them to come up with new jargon, so that
-  every concept in their mental model is named by a single precise term.
-- Use those terms to model your software; the nouns and verbs of the domain expert are
-  the classes and methods you should use in modelling.
-- Whenever there is a discrepancy between your shared understanding of the domain, go
-  and talk to the domain experts again, and then refactor aggressively.
+-   Listen very carefully to your domain experts - the people whose job you're
+    automating or assisting in software.
+-   Learn the jargon that they use, and help them to come up with new jargon, so that
+    every concept in their mental model is named by a single precise term.
+-   Use those terms to model your software; the nouns and verbs of the domain expert are
+    the classes and methods you should use in modelling.
+-   Whenever there is a discrepancy between your shared understanding of the domain, go
+    and talk to the domain experts again, and then refactor aggressively.
 
 This sounds great in theory, but in practice we often find that our business logic
 escapes from our model objects; we end up with logic bleeding into controllers, or into
@@ -132,13 +132,13 @@ a bag of data, but a NamedTuple is a nice compromise between simplicity and conv
 Commands are instructions from an external agent (a user, a cron job, another service
 etc.) and have names in the imperative tense, for example:
 
-- ReportIssue
-- PrepareUploadUri
-- CancelOutstandingOrders
-- RemoveItemFromCart
-- OpenLoginSession
-- PlaceCustomerOrder
-- BeginPaymentProcess
+-   ReportIssue
+-   PrepareUploadUri
+-   CancelOutstandingOrders
+-   RemoveItemFromCart
+-   OpenLoginSession
+-   PlaceCustomerOrder
+-   BeginPaymentProcess
 
 We should try to avoid the verbs Create, Update, or Delete (and their synonyms) because
 those are technical implementations. When we listen to our domain experts, we often find

@@ -3,9 +3,9 @@ title: Monitoring with Riemann and rsyslog part 2
 layout: post
 author: Bob
 tags:
-  - riemann
-  - monitoring
-  - elk
+    - riemann
+    - monitoring
+    - elk
 ---
 
 It's been a little longer than I expected, but I'm finally back and working on Rsyslog.
@@ -125,10 +125,10 @@ The docker-compose project includes an nginx container that is configured to sen
 to rsyslog. I've added some dummy endpoints to the configuration so that we can use curl
 to generate some web logs:
 
-- /200 returns a 200 OK
-- /300 returns a 301 Moved Permanently to /200
-- /400 returns a 404 Not Found
-- /500 returns a 500 Internal Server Error.
+-   /200 returns a 200 OK
+-   /300 returns a 301 Moved Permanently to /200
+-   /400 returns a 404 Not Found
+-   /500 returns a 500 Internal Server Error.
 
 Curling these endpoints and waiting a few seconds, we should see some new metrics arrive
 in Riemann:

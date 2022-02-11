@@ -1,8 +1,9 @@
+import { Container, Heading, Text } from "@chakra-ui/react";
+import components from "components/mdx";
+
 import { NextPage } from "next";
 import { MDXRemote } from "next-mdx-remote";
 import Head from "next/head";
-import components from "components/mdx";
-import { Container, Heading, Text } from "@chakra-ui/react";
 
 export type PostPageProps = {
   slug: string;

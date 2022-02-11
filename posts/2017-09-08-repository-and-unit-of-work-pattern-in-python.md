@@ -3,10 +3,10 @@ title: Repositoriy and unit of work pattern in python
 layout: post
 author: Bob
 categories:
-  - ports & adapters
+    - ports & adapters
 tags:
-  - python
-  - architecture
+    - python
+    - architecture
 ---
 
 In the

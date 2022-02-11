@@ -1,8 +1,9 @@
-import { GetStaticPaths, GetStaticProps } from "next";
-import { getAllPostsPath, getPostData } from "lib/api";
 import PostPage from "components/post";
+import { getAllPostsPath, getPostData } from "lib/api";
 import { serializePage } from "lib/mdx";
 import { ParsedUrlQuery } from "querystring";
+
+import { GetStaticPaths, GetStaticProps } from "next";
 
 interface IParams extends ParsedUrlQuery {
   slug: string;

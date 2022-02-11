@@ -3,8 +3,8 @@ title: Eventsourcing 101
 layout: post
 author: Bob
 tags:
-  - architecture
-  - talks
+    - architecture
+    - talks
 ---
 
 Last month I travelled to Romania to give a talk about

@@ -3,9 +3,9 @@ title: Monitoring with Riemann and rsyslog part 1
 layout: post
 author: Bob
 tags:
-  - riemann
-  - monitoring
-  - elk
+    - riemann
+    - monitoring
+    - elk
 ---
 
 In a previous post [https://io.made.com/blog/rek-it/] I said I was interested in
@@ -80,10 +80,10 @@ To raise an alert based on these metrics we're going to set some arbitrary thres
 but we could do more sophisticated analysis to do anomaly detection. We'll set up the
 following rules:
 
-- If we receive fewer than 10 messages in 5 minutes, we should send an email.
-- If we receive more than 100 messages in 5 minutes, we should send an email.
-- Once the log rate settles down to between 10 and 100 messages per 5 mins, we should
-  send an email to say that everything has returned to normal.
+-   If we receive fewer than 10 messages in 5 minutes, we should send an email.
+-   If we receive more than 100 messages in 5 minutes, we should send an email.
+-   Once the log rate settles down to between 10 and 100 messages per 5 mins, we should
+    send an email to say that everything has returned to normal.
 
 We'll update our riemann config to look like this
 

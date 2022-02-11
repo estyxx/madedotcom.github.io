@@ -3,8 +3,8 @@ title: Riemann workshop materials
 layout: post
 author: Bob
 tags:
-  - riemann
-  - talks
+    - riemann
+    - talks
 ---
 
 Last year we held a Riemann workshop for our developers. The materials for the workshop

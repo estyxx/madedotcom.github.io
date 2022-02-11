@@ -1,6 +1,7 @@
 import matter from "gray-matter";
-import { serialize } from "next-mdx-remote/serialize";
 import { remarkMdxCodeMeta } from "remark-mdx-code-meta";
+
+import { serialize } from "next-mdx-remote/serialize";
 
 export const serializePage = async ({ page }: { page: string }) => {
   const { data, content } = matter(page);

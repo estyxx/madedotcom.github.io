@@ -3,10 +3,10 @@ title: Commands and queries handlers and views
 layout: post
 author: Bob
 categories:
-  - ports & adapters
+    - ports & adapters
 tags:
-  - python
-  - architecture
+    - python
+    - architecture
 ---
 
 In the first and second parts of this series I introduced the

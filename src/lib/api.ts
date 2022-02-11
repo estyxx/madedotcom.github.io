@@ -1,6 +1,6 @@
-import path, { ParsedPath } from "path";
 import fs from "fs";
 import matter from "gray-matter";
+import path, { ParsedPath } from "path";
 
 // current 'posts' directory
 const postsDirectory = path.join(process.cwd(), "posts");

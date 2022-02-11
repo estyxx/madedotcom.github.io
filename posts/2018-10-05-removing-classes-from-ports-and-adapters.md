@@ -3,10 +3,10 @@ layout: post
 title: Removing classes from Ports and Adapters
 author: Harry
 categories:
-  - ports & adapters
+    - ports & adapters
 tags:
-  - python
-  - architecture
+    - python
+    - architecture
 ---
 
 Hi, I'm Harry, Bob's coauthor for this series on architecture. Now I don't pretend to be
@@ -209,13 +209,13 @@ class SqlAlchemyUnitOfWorkManager(UnitOfWorkManager):
 
 Each class does have a purpose of course:
 
-- SqlAlchemy captures config info about SqlAlchemy and our database engine, it has
-  methods like create_schema that can re-create the database for us if we need.
-- SqlAlchemyUnitOfWorkManager is meant to hold logic about when to create new database
-  sessions and when to re-use existing ones, and it ties the message bus to each unit of
-  work.
-- SqlAlchemyUnitOfWork is the actual context manager that holds the logic for commits,
-  rollbacks, and publishing events atomically.
+-   SqlAlchemy captures config info about SqlAlchemy and our database engine, it has
+    methods like create_schema that can re-create the database for us if we need.
+-   SqlAlchemyUnitOfWorkManager is meant to hold logic about when to create new database
+    sessions and when to re-use existing ones, and it ties the message bus to each unit
+    of work.
+-   SqlAlchemyUnitOfWork is the actual context manager that holds the logic for commits,
+    rollbacks, and publishing events atomically.
 
 But can we make things a little simpler? SqlAlchemy (the library) already knows how
 manage sessions for us. Perhaps we could just have one model for the database, and
@@ -268,9 +268,9 @@ class SqlAlchemy:
 the singleton pattern in Python We still have one final class, SqlAlchemy, which exists
 to
 
-- know how to talk to our database
-- give us units of work
-- tie the message bus to it.
+-   know how to talk to our database
+-   give us units of work
+-   tie the message bus to it.
 
 It's essentially a singleton, in that our application is only ever meant to have one
 instance of it. There are lots of ways to implement the singleton pattern in Python

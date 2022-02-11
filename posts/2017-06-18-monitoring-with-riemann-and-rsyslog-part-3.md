@@ -3,9 +3,9 @@ title: Monitoring with Riemann and rsyslog part 3
 layout: post
 author: Bob
 tags:
-  - riemann
-  - monitoring
-  - elk
+    - riemann
+    - monitoring
+    - elk
 ---
 
 Back in December I said I was interested in replacing Logstash with Rsyslog
@@ -74,11 +74,11 @@ otherwise ERROR. For plain text and json logs, we'll convert the log4j log-level
 into a syslog-severity
 [http://www.kiwisyslog.com/help/syslog/index.html?protocol_levels.htm].
 
-- INFO -> info (6)
-- WARN -> warn (4)
-- ERROR -> error (3)
-- CRITICAL -> critical (2)
-- FATAL -> emergency (0)
+-   INFO -> info (6)
+-   WARN -> warn (4)
+-   ERROR -> error (3)
+-   CRITICAL -> critical (2)
+-   FATAL -> emergency (0)
 
 (action type="mmnormalize" rulebase="/etc/rsyslog/rules.rb")
 

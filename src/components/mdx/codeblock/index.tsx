@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
 import { Box } from "@chakra-ui/react";
 import { InlineCode } from "components/mdx/inline-code";
+import { ReactNode } from "react";
 
 type CodeBlockProps = {
   children: ReactNode;

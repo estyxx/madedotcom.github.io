@@ -3,7 +3,7 @@ title: Microservice boundaries are logical not physical
 layout: post
 author: Bob
 tags:
-  - architecture
+    - architecture
 redirect_from: "/micro-service-boundaries-are-logical-not-physical/"
 ---
 
@@ -70,9 +70,9 @@ Our plucky redditor therefore sets forth to build the Widget Profit Reporting Se
 
 What does this service do? What is the contract?
 
-- Given data on the spot price of electricity through the day
-- Given data on widget production through the day
-- I will give you the total cost of electricity in widget production.
+-   Given data on the spot price of electricity through the day
+-   Given data on widget production through the day
+-   I will give you the total cost of electricity in widget production.
 
 This is very clearly a contract that is expressed in business requirements, not
 technical requirements: it doesn't matter how many processes you run, so long as your

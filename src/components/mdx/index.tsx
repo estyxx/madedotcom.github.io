@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
 import { Heading, Text, Box, Link } from "@chakra-ui/react";
 import CodeBlock from "components/mdx/codeblock";
+import { ReactNode } from "react";
 
 const PostLink = ({ children, href }: { href?: string; children: ReactNode }) => {
   return (

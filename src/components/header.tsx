@@ -1,8 +1,8 @@
 import { Flex } from "@chakra-ui/react";
-import { FC, useState } from "react";
 import Logo from "components/logo";
-import { MenuToggle } from "components/menu-toggle";
 import { MenuLinks } from "components/menu-links";
+import { MenuToggle } from "components/menu-toggle";
+import { FC, useState } from "react";
 
 const HeaderContainer: FC = ({ children }) => {
   return (

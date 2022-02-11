@@ -3,10 +3,10 @@ title: Dependency Injection with type signatures in python
 layout: post
 author: Bob
 categories:
-  - ports & adapters
+    - ports & adapters
 tags:
-  - python
-  - architecture
+    - python
+    - architecture
 ---
 
 Dependency injection is not crazy, not un-pythonic, and not enterprisey. Here's
