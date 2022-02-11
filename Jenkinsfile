@@ -19,14 +19,17 @@ def initEnvironment() {
 }
 
 
+
 pipeline {
     agent {
         label 'aws-ecr'
     }
 
     options {
-        ansiColor('xterm')ƒ
+        timestamps()
+        ansiColor('xterm')
     }
+
 
     stages {
         stage('Checkout') {
