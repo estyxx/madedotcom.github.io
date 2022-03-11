@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint . --ext .jsx,.js,.tsx,.ts",
     "lint:ts": "tsc --noemit",
-    "lint:prettier": "prettier --check --debug-check src/ posts/ terraform/",
+    "lint:prettier": "prettier --check --debug-check src/ posts/ terraform/ --ignore-unknown",
     "prepare": "husky install"
   },
   "lint-staged": {
