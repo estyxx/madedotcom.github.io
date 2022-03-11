@@ -4,7 +4,7 @@ module "global-vars" {
 
 locals {
   s3_prefix   = module.global-vars.envs[var.env].s3_prefix
-  s3_bucket_name = var.blog_fqdn
+  bucket_name = var.blog_fqdn # must be the same as the fqdn
 }
 
 data "aws_iam_policy_document" "bucket" {
@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "bucket" {
     ]
 
     resources = [
-      "arn:aws:s3:::${local.s3_bucket_name}/*"
+      "arn:aws:s3:::${local.bucket_name}/*"
     ]
 
     condition {
@@ -35,14 +35,29 @@ data "aws_iam_policy_document" "bucket" {
 }
 
 resource "aws_s3_bucket" "www" {
-  bucket = local.s3_bucket_name
-  acl    = "public-read"
-  policy = data.aws_iam_policy_document.bucket.json
-
-  website {
-    index_document = "server/pages/index.html"
-    error_document = "server/pages/404.html"
-  }
+  bucket = local.bucket_name
 
   force_destroy = "true"
+}
+
+resource "aws_s3_bucket_acl" "www" {
+  bucket = aws_s3_bucket.www.id
+  acl    = "public-read"
+}
+
+resource "aws_s3_bucket_website_configuration" "www" {
+  bucket = aws_s3_bucket.www.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "404.html"
+  }
+}
+
+resource "aws_s3_bucket_policy" "www" {
+  bucket = aws_s3_bucket.www.id
+  policy = data.aws_iam_policy_document.bucket.json
 }
