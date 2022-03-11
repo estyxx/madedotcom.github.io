@@ -31,4 +31,4 @@ infrastructure-provision:
 
 deploy:
 	ls
-	aws s3 cp build/ s3://blog.made-test.com/
+	aws s3 sync build s3://blog.made-test.com/
