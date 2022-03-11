@@ -30,5 +30,5 @@ infrastructure-provision:
 	$(call docker-terraform)
 
 deploy:
-	ls $(PWD)
-	aws s3 cp $(PWD)/build/ s3://blog.made-test.com/
+	ls
+	aws s3 cp build/ s3://blog.made-test.com/
