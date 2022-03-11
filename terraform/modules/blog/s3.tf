@@ -34,19 +34,19 @@ data "aws_iam_policy_document" "bucket" {
   }
 }
 
-resource "aws_s3_bucket" "www" {
+resource "aws_s3_bucket" "blog" {
   bucket = local.bucket_name
 
   force_destroy = "true"
 }
 
-resource "aws_s3_bucket_acl" "www" {
-  bucket = aws_s3_bucket.www.id
+resource "aws_s3_bucket_acl" "blog" {
+  bucket = aws_s3_bucket.blog.id
   acl    = "public-read"
 }
 
-resource "aws_s3_bucket_website_configuration" "www" {
-  bucket = aws_s3_bucket.www.id
+resource "aws_s3_bucket_website_configuration" "blog" {
+  bucket = aws_s3_bucket.blog.id
 
   index_document {
     suffix = "index.html"
@@ -57,7 +57,7 @@ resource "aws_s3_bucket_website_configuration" "www" {
   }
 }
 
-resource "aws_s3_bucket_policy" "www" {
-  bucket = aws_s3_bucket.www.id
+resource "aws_s3_bucket_policy" "blog" {
+  bucket = aws_s3_bucket.blog.id
   policy = data.aws_iam_policy_document.bucket.json
 }
