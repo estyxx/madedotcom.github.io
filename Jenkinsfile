@@ -49,11 +49,10 @@ pipeline {
 
         stage ('Deploy') {
             steps {
-                script {
-                    withAWS(role: 'test-jenkins-developer', roleAccount: '093850270985') {
-                        sh(script: 'make deploy')
-                    }
+                withAWS(role: 'test-jenkins-deployer', roleAccount: '093850270985', region: 'eu-west-1'){
+                    sh 'make depoly'
                 }
+                echo "Done deploying"
             }
         }
     }
