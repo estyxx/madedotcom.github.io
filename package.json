@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint . --ext .jsx,.js,.tsx,.ts",
     "lint:ts": "tsc --noemit",
-    "lint:prettier": "prettier --check --debug-check '{src,terraform}/**/*.{js,jsx,ts,tsx,md,mdx,tf,json,yaml,yml,md}'",
+    "lint:prettier": "prettier --check --debug-check '*/**/*.{js,jsx,ts,tsx,md,mdx,json,yaml,yml,md}'",
     "prepare": "husky install"
   },
   "lint-staged": {
