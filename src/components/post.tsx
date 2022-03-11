@@ -14,13 +14,7 @@ export type PostPageProps = {
   source?: any;
 };
 
-const PostPage: NextPage<PostPageProps> = ({
-  title,
-  author,
-  date,
-  source,
-  ...props
-}) => {
+const PostPage: NextPage<PostPageProps> = ({ title, author, date, source }) => {
   const publishDate = new Date(date);
   return (
     <>
