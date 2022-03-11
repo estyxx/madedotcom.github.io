@@ -18,8 +18,6 @@ def initEnvironment() {
     currentBuild.description = env.DESCRIPTION
 }
 
-
-
 pipeline {
     agent {
         label 'aws-ecr'
@@ -29,7 +27,6 @@ pipeline {
         timestamps()
         ansiColor('xterm')
     }
-
 
     stages {
         stage('Checkout') {
