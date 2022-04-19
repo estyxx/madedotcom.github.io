@@ -44,8 +44,7 @@ Event( stream="adventure", type="player_created", data=json.dumps({"name": "Gil"
 So how would we add this event into Event Store using Photon-pump in a single python
 script?
 
-```python filename="writer.py"
-#
+```python filename=writer.py
 
 import asyncio
 

@@ -3,7 +3,7 @@ const withMDX = require("@next/mdx")({
   extension: /\.mdx?$/,
   options: {
     remarkPlugins: [],
-    rehypePlugins: [],
+    rehypePlugins: [require("remark-mdx-code-meta")],
   },
 });
 const nextConfig = {

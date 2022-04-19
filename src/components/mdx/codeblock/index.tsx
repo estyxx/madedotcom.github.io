@@ -1,15 +1,16 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { InlineCode } from "components/mdx/inline-code";
 import { ReactNode } from "react";
 
 type CodeBlockProps = {
   children: ReactNode;
   className: string;
+  filename?: string;
   viewlines: boolean;
   ln: string;
 };
 
-const CodeBlock = ({ children, className }: CodeBlockProps) => {
+const CodeBlock = ({ children, className, filename }: CodeBlockProps) => {
   const language = className?.replace(/language-/, "");
 
   if (!language) {
@@ -27,6 +28,7 @@ const CodeBlock = ({ children, className }: CodeBlockProps) => {
         fontSize="sm"
         boxShadow="lg"
       >
+        {filename && <Text color="#768390"># {filename} </Text>}
         <Box>{children}</Box>
       </Box>
     </Box>
