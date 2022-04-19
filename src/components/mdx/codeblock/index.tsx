@@ -5,12 +5,12 @@ import { ReactNode } from "react";
 type CodeBlockProps = {
   children: ReactNode;
   className: string;
-  filename?: string;
+  title?: string;
   viewlines: boolean;
   ln: string;
 };
 
-const CodeBlock = ({ children, className, filename }: CodeBlockProps) => {
+const CodeBlock = ({ children, className, title }: CodeBlockProps) => {
   const language = className?.replace(/language-/, "");
 
   if (!language) {
@@ -19,7 +19,6 @@ const CodeBlock = ({ children, className, filename }: CodeBlockProps) => {
   return (
     <Box position="relative" zIndex="0">
       <Box
-        p={5}
         overflow="hidden"
         bg="#22272e"
         color="#adbac7"
@@ -28,8 +27,15 @@ const CodeBlock = ({ children, className, filename }: CodeBlockProps) => {
         fontSize="sm"
         boxShadow="lg"
       >
-        {filename && <Text color="#768390"># {filename} </Text>}
-        <Box>{children}</Box>
+        {title && (
+          <Box borderBottom="1px" px={5} py={3}>
+            <Text color="#768390">{title}</Text>
+          </Box>
+        )}
+
+        <Box px={5} py={5}>
+          {children}
+        </Box>
       </Box>
     </Box>
   );

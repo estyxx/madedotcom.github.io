@@ -283,9 +283,7 @@ above. If you do want a code-based solution, or if you want to continue experime
 with non-class-based solutions to these problems, why not use the "just use a module"
 solution - modules are essentially already singletons, in Python:
 
-```python
-# adapters/sqlalchemy.py
-
+```python title=adapters/sqlalchemy.py
 BUS = None
 SESSION_MAKER = None
 
