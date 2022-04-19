@@ -1,3 +1,0 @@
-[submodule "terraform/terraform-common"]
-	path = terraform/terraform-common
-	url = git@github.com:madedotcom/terraform-common.git
