@@ -1,5 +1,5 @@
 import matter from "gray-matter";
-import { remarkMdxCodeMeta } from "remark-mdx-code-meta";
+import rehypeHighlight from "rehype-highlight";
 
 import { serialize } from "next-mdx-remote/serialize";
 
@@ -8,7 +8,9 @@ export const serializePage = async ({ page }: { page: string }) => {
 
   const source = await serialize(content, {
     mdxOptions: {
-      remarkPlugins: [require("remark-prism"), remarkMdxCodeMeta],
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      rehypePlugins: [rehypeHighlight],
     },
   });
 

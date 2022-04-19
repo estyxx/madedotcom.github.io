@@ -1,5 +1,6 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import Footer from "components/footer";
+import "highlight.js/styles/github-dark-dimmed.css";
 
 import { AppProps } from "next/app";
 

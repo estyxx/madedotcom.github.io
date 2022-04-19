@@ -20,7 +20,8 @@ const CodeBlock = ({ children, className }: CodeBlockProps) => {
       <Box
         p={5}
         overflow="hidden"
-        bg="orange.50"
+        bg="#22272e"
+        color="#adbac7"
         borderRadius={10}
         mb={10}
         fontSize="sm"

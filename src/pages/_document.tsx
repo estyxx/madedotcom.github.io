@@ -18,6 +18,10 @@ class MyDocument extends Document {
             href="https://media.made.com/mws-assets/images/favicon.1.ico"
           />
           <link
+            rel="stylesheet"
+            href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/styles/default.min.css"
+          />
+          <link
             media="screen,handheld"
             type="text/css"
             key="https://media.made.com/mws-assets/fontBase_b900f8d534cc10f95604.css"
