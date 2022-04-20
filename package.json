@@ -1,0 +1,45 @@
+{
+  "name": "madedotcom-blog",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "build:next": "next build && next export -o build/",
+    "start": "next start",
+    "lint": "eslint . --ext .jsx,.js,.tsx,.ts",
+    "lint:ts": "tsc --noemit",
+    "lint:prettier": "prettier --check --debug-check '*/**/*.{js,jsx,ts,tsx,md,mdx,json,yaml,yml,md}'",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^1.8.1",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "@next/mdx": "^12.0.9",
+    "framer-motion": "^5",
+    "gray-matter": "^4.0.3",
+    "next": "12.1.5",
+    "next-mdx-remote": "^3.0.8",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-icons": "^4.3.1",
+    "rehype-highlight": "^5.0.2",
+    "remark-mdx-code-meta": "^1.0.0"
+  },
+  "devDependencies": {
+    "@python-italia/eslint-config": "^1.0.13",
+    "@trivago/prettier-plugin-sort-imports": "^3.2.0",
+    "@types/node": "17.0.13",
+    "@types/react": "17.0.38",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "eslint": "8.7.0",
+    "eslint-config-next": "12.0.9",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.2",
+    "prettier": "^2.5.1",
+    "typescript": "4.5.5"
+  }
+}

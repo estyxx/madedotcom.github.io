@@ -1,0 +1,11 @@
+.next
+.now
+.vercel
+.env
+package.json
+package-lock.json
+coverage
+.github
+.vscode/*
+build/*
+terraform/terraform-common/*
