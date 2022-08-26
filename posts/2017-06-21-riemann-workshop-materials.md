@@ -5,6 +5,7 @@ author: Bob
 tags:
     - riemann
     - talks
+    - archive
 ---
 
 Last year we held a Riemann workshop for our developers. The materials for the workshop

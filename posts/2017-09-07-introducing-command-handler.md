@@ -7,6 +7,7 @@ categories:
 tags:
     - python
     - architecture
+    - archive
 ---
 
 The term DDD comes from the book by Eric Evans:

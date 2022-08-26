@@ -6,6 +6,7 @@ tags:
     - python
     - open-source
     - photonpump
+    - archive
 ---
 
 Hello, in this article, I'll try to explain what Photon-pump is, and write an easy

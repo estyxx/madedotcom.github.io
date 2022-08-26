@@ -7,6 +7,7 @@ categories:
 tags:
     - python
     - architecture
+    - archive
 ---
 
 Dependency injection is not crazy, not un-pythonic, and not enterprisey. Here's

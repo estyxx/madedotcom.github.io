@@ -7,6 +7,7 @@ categories:
 tags:
     - python
     - architecture
+    - archive
 ---
 
 Nota bene: this instalment in the Ports and Adapters with Command Handlers series is

@@ -5,6 +5,7 @@ author: Bob
 tags:
     - architecture
     - talks
+    - archive
 ---
 
 Last month I travelled to Romania to give a talk about

@@ -6,6 +6,7 @@ tags:
     - python
     - testing
     - open-source
+    - archive
 ---
 
 The problem: customisable fixtures in pytest Let's say you're running along merrily with

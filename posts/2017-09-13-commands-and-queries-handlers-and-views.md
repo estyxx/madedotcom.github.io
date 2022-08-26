@@ -7,6 +7,7 @@ categories:
 tags:
     - python
     - architecture
+    - archive
 ---
 
 In the first and second parts of this series I introduced the

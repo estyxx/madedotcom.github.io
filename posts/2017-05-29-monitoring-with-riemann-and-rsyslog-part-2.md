@@ -6,6 +6,7 @@ tags:
     - riemann
     - monitoring
     - elk
+    - archive
 ---
 
 It's been a little longer than I expected, but I'm finally back and working on Rsyslog.
