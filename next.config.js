@@ -12,3 +12,15 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
+
+module.exports = {
+  async redirects() {
+    return [
+      {
+        source: "/blog/:slug*",
+        destination: "/:slug*",
+        permanent: true,
+      },
+    ];
+  },
+};
