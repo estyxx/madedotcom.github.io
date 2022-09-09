@@ -7,6 +7,7 @@ categories:
 tags:
     - python
     - architecture
+    - archive
 ---
 
 Hi, I'm Harry, Bob's coauthor for this series on architecture. Now I don't pretend to be

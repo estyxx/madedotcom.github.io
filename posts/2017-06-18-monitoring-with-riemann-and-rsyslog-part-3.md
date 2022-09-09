@@ -6,6 +6,7 @@ tags:
     - riemann
     - monitoring
     - elk
+    - archive
 ---
 
 Back in December I said I was interested in replacing Logstash with Rsyslog

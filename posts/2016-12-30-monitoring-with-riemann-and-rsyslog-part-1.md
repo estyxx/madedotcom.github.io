@@ -6,6 +6,7 @@ tags:
     - riemann
     - monitoring
     - elk
+    - archive
 ---
 
 In a previous post [https://io.made.com/blog/rek-it/] I said I was interested in

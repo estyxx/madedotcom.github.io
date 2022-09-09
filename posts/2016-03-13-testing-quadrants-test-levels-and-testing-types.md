@@ -4,6 +4,7 @@ layout: post
 author: Guru
 tags:
     - testing
+    - archive
 redirect_from: "/testing-quadrants-test-levels-and-testing-types/"
 ---
 

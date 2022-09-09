@@ -4,6 +4,7 @@ layout: post
 author: Bob
 tags:
     - architecture
+    - archive
 redirect_from: "/micro-service-boundaries-are-logical-not-physical/"
 ---
 
