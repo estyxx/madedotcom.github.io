@@ -14,6 +14,7 @@ const nextConfig = {
 module.exports = nextConfig;
 
 module.exports = {
+  trailingSlash: true,
   async redirects() {
     return [
       {
