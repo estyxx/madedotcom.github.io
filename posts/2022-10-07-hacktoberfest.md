@@ -10,10 +10,11 @@ will give you a hint: it's about _Open Source_, _learning_, _code_ and **you don
 to be a developer to start hacking**! Anyone is welcome!
 
 So Hacktoberfest is the [DigitalOcean](https://www.digitalocean.com/)'s annual event to
-bring people together and contribute to open source projects; the prize to win is a nice t-shirt or plant a
-tree in [DigitalOcean forest](https://tree-nation.com/profile/digitalocean). It was
-launched 9 years ago, in 2013 and had only 700 participants. Last year had more than
-141,000 participants!
+bring people together and contribute to open source projects; the prize to win is a nice
+t-shirt or plant a tree in
+[DigitalOcean forest](https://tree-nation.com/profile/digitalocean). It was launched 9
+years ago, in 2013 and had only 700 participants. Last year had more than 141,000
+participants!
 
 The rules are simple:
 
@@ -33,8 +34,7 @@ The rules are simple:
     Hacktoberfest can elect to receive one of two prizes: a tree planted in their name
     or the Hacktoberfest 2022 t-shirt.
 
-Did I intrigue you already? No? Then here there are some excellent reasons you should
-consider participating:
+### Did I intrigue you already? No? Then here there are some excellent reasons you should consider participating:
 
 -   Help the open-source community!
 
@@ -45,11 +45,11 @@ consider participating:
 
 -   You can learn so much
 
-    Digging into a library's code is one of my favourite hobbies. You can learn so
-    much about the language and the patterns because they use advanced techniques you
-    don't usually think about. If you use these tools every day, you are already
-    familiar with them, so they are not strangers, so don't be afraid to check what is
-    happening under the hood!
+    Digging into a library's code is one of my favourite hobbies. You can learn so much
+    about the language and the patterns because they use advanced techniques you don't
+    usually think about. If you use these tools every day, you are already familiar with
+    them, so they are not strangers, so don't be afraid to check what is happening under
+    the hood!
 
     Sooner you will realise your code style changed, for the better (hopefully) 😅
 
