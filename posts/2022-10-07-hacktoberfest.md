@@ -51,7 +51,7 @@ The rules are simple:
     them, so they are not strangers, so don't be afraid to check what is happening under
     the hood!
 
-    Sooner you will realise your code style changed, for the better (hopefully) 😅
+    Soon you will realise that your code style changes, for the better (hopefully) 😅
 
 -   Open source can help you advance in your career
 
@@ -61,12 +61,12 @@ The rules are simple:
 -   But I'm not a developer... I have no idea how to code...
 
     Hacktoberfest is for anyone! There is a lot of documentation and materials that need
-    a hand. What that documentation took you ages to understand? Could it be written
+    a hand. What about that documentation took you ages to understand? Could it be written
     better?
 
 -   It's Friday Time
 
-    We are lucky enough to work in a completely that gives us time to learn and improve
+    We are lucky enough to work in a company that gives us time to learn and improve
     our skills. We have no more excuses...
 
 Not sure where to start? Here are some suggestions for you; I'm sure you have already
