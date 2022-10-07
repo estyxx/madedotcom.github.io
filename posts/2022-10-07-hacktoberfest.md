@@ -13,7 +13,7 @@ So Hacktoberfest is the [DigitalOcean](https://www.digitalocean.com/)'s annual e
 bring people together and contribute to open source projects; the prize to win is a nice t-shirt or plant a
 tree in [DigitalOcean forest](https://tree-nation.com/profile/digitalocean). It was
 launched 9 years ago, in 2013 and had only 700 participants. Last year had more than
-141.000 participants!
+141,000 participants!
 
 The rules are simple:
 
