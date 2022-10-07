@@ -75,7 +75,7 @@ The rules are simple:
 -   [pytest](https://github.com/pytest-dev/pytest)
 -   [pylint](https://github.com/PyCQA/pylint)
 -   [Stoybook](https://github.com/storybookjs/storybook)
--   [Grafana](https://github.com/storybookjs/storybook)
+-   [Grafana](https://github.com/grafana/grafana)
 -   [LocalStack](https://github.com/localstack/localstack)
 -   [Ansible](https://github.com/ansible/ansible)
 -   [git](https://github.com/git/git) itself!
