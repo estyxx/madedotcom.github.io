@@ -5,7 +5,7 @@ tags:
     - open-source
 ---
 
-Ever heard about Hacktoberfest? No, it's not about beer, and no is not in Germany. I
+Ever heard about Hacktoberfest? No, it's not about beer, and no it's not in Germany. I
 will give you a hint: it's about _Open Source_, _learning_, _code_ and **you don't need
 to be a developer to start hacking**! Anyone is welcome!
 
