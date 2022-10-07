@@ -1,5 +1,5 @@
 ---
-title: Hacktoberfest 2022 is here and it's waiting for you to join!
+title: Haacktoberfest 2022 is here and it's waiting for you to join!
 author: Ester Beltrami
 tags:
     - open-source
@@ -64,18 +64,18 @@ The rules are simple:
     a hand. What about that documentation took you ages to understand? Could it be
     written better?
 
--   It's Friday Time
+-   It's Friday Time\*
 
     We are lucky enough to work in a company that gives us time to learn and improve our
     skills. We have no more excuses...
 
-#### Not sure where to start? Here are some suggestions for you; I'm sure you have already
+Not sure where to start? Here are some suggestions for you; I'm sure you have already
 heard of some of these tools!
 
 -   [strawberry-graphql](github.com/strawberry-graphql/strawberry)
 -   [pytest](https://github.com/pytest-dev/pytest)
 -   [pylint](https://github.com/PyCQA/pylint)
--   [Storybook](https://github.com/storybookjs/storybook)
+-   [Stoybook](https://github.com/storybookjs/storybook)
 -   [Grafana](https://github.com/storybookjs/storybook)
 -   [LocalStack](https://github.com/localstack/localstack)
 -   [Ansible](https://github.com/ansible/ansible)
@@ -91,11 +91,18 @@ heard of some of these tools!
     [TheAlgorithms/Python](https://github.com/TheAlgorithms/Python) repo!
 
 The list is very long and can't fit in an article; check
-[awsome-for-beginners](https://github.com/mungell/awesome-for-beginners) repo for a more
-complete list or go to the official
+[awesome-for-beginners](https://github.com/mungell/awesome-for-beginners) repo for a
+more complete list or go to the official
 [GitHub topic page](https://github.com/topics/hacktoberfest)!
 
 > Pro tip: you can filter by language and filter the results in the upper left search
 > bar!
 
 Happy Hacking! 👋
+
+---
+
+<br / >
+
+(\*) At Made.com, every two weeks on Friday, we can work on what we like, a project or
+improve our skillset, anything that benefits Made.com or the development community.
