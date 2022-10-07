@@ -43,7 +43,7 @@ const colors: Colors = {
 };
 
 const fonts = {
-  heading: neruda,
+  heading: meridianRegular,
   body: meridianRegular,
   mono: hackFont,
 };

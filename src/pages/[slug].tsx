@@ -1,5 +1,5 @@
 import PostPage from "components/post";
-import { getAllPostsPath, getPostData } from "lib/api";
+import { getPostFiles, getPostData, Path } from "lib/api";
 import { serializePage } from "lib/mdx";
 import { ParsedUrlQuery } from "querystring";
 
@@ -27,7 +27,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = getAllPostsPath();
+  const paths = getPostFiles().map((path) => {
+    return { params: { slug: path.name } };
+  });
 
   return {
     paths,

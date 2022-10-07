@@ -8,12 +8,13 @@ console.log(postsDirectory);
 const FILE_EXTENSION = ".md";
 const DATE_REGEX = /([0-9]{4})-([0-9]{2})-([0-9]{2})/;
 
-type Path = ParsedPath & {
+export type Path = ParsedPath & {
   date: string;
 };
 
-const getPostFiles = (): Path[] => {
+export const getPostFiles = (): Path[] => {
   const fileNames = fs.readdirSync(postsDirectory);
+
   return fileNames
     .map((fileName: string) => {
       const match = DATE_REGEX.exec(fileName);
@@ -23,17 +24,6 @@ const getPostFiles = (): Path[] => {
       return filePath;
     })
     .filter((file) => file.date && file.ext == FILE_EXTENSION);
-};
-
-export const getAllPostsPath = () => {
-  const files = getPostFiles();
-  return files.map((file: Path) => {
-    return {
-      params: {
-        slug: file.name,
-      },
-    };
-  });
 };
 
 export const getPostsMetaData = () => {
