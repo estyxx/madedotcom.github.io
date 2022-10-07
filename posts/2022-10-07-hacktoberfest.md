@@ -45,7 +45,7 @@ consider participating:
 
 -   You can learn so much
 
-    Digging into the library's code, it's one of my favourite hobbies. You can learn so
+    Digging into a library's code is one of my favourite hobbies. You can learn so
     much about the language and the patterns because they use advanced techniques you
     don't usually think about. If you use these tools every day, you are already
     familiar with them, so they are not strangers, so don't be afraid to check what is
