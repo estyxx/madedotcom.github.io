@@ -71,7 +71,7 @@ The rules are simple:
 
 #### Not sure where to start? Here are some suggestions for you; I'm sure you have already heard of some of these tools!
 
--   [strawberry-graphql](github.com/strawberry-graphql/strawberry)](https://github.com/strawberry-graphql/strawberry)
+-   [strawberry-graphql](https://github.com/strawberry-graphql/strawberry)
 -   [pytest](https://github.com/pytest-dev/pytest)
 -   [pylint](https://github.com/PyCQA/pylint)
 -   [Stoybook](https://github.com/storybookjs/storybook)
