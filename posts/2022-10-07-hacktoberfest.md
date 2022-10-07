@@ -34,7 +34,7 @@ The rules are simple:
     Hacktoberfest can elect to receive one of two prizes: a tree planted in their name
     or the Hacktoberfest 2022 t-shirt.
 
-### Did I intrigue you already? No? Then here there are some excellent reasons you should consider participating:
+#### Did I intrigue you already? No? Then here there are some excellent reasons you should consider participating:
 
 -   Help the open-source community!
 
@@ -61,13 +61,13 @@ The rules are simple:
 -   But I'm not a developer... I have no idea how to code...
 
     Hacktoberfest is for anyone! There is a lot of documentation and materials that need
-    a hand. What about that documentation took you ages to understand? Could it be written
-    better?
+    a hand. What about that documentation took you ages to understand? Could it be
+    written better?
 
 -   It's Friday Time
 
-    We are lucky enough to work in a company that gives us time to learn and improve
-    our skills. We have no more excuses...
+    We are lucky enough to work in a company that gives us time to learn and improve our
+    skills. We have no more excuses...
 
 Not sure where to start? Here are some suggestions for you; I'm sure you have already
 heard of some of these tools!
