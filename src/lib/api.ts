@@ -30,7 +30,7 @@ export const getAllPostsPath = () => {
   return files.map((file: Path) => {
     return {
       params: {
-        slug: file.name,
+        slug: [file.name],
       },
     };
   });
