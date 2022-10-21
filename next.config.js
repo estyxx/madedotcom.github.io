@@ -6,14 +6,10 @@ const withMDX = require("@next/mdx")({
     rehypePlugins: [require("remark-mdx-code-meta")],
   },
 });
-const nextConfig = {
-  pageExtensions: ["mdx", "md", "jsx", "js", "tsx", "ts"],
-  reactStrictMode: true,
-};
-
-module.exports = nextConfig;
 
 module.exports = {
+  pageExtensions: ["mdx", "md", "jsx", "js", "tsx", "ts"],
+  reactStrictMode: true,
   trailingSlash: true,
   async redirects() {
     return [
