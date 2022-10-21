@@ -10,7 +10,7 @@ const withMDX = require("@next/mdx")({
 module.exports = {
   pageExtensions: ["mdx", "md", "jsx", "js", "tsx", "ts"],
   reactStrictMode: true,
-  trailingSlash: true,
+  trailingSlash: false,
   async redirects() {
     return [
       {
