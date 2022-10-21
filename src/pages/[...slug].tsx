@@ -20,8 +20,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
   }
   const hasBlogPrefix = slug.length > 1;
   if (hasBlogPrefix) {
-    if (oldHtmlBlogUrls.includes(slug[1])) {
-      file = slug[1].substring(0, slug[1].length - ".html".length);
+    const oldHtmlFile = slug[1];
+    if (oldHtmlBlogUrls.includes(oldHtmlFile)) {
+      file = oldHtmlFile.substring(0, oldHtmlFile.length - ".html".length);
     }
   }
 
