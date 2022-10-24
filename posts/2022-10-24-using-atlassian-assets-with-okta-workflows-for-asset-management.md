@@ -14,27 +14,27 @@ Note that **Atlassian Insight** is being **renamed** to **Atlassian Assets**.
 
 <br></br> At made.com we use Atlassian Assets for asset management. This wasn't always
 the case. We used to use Google Sheets as a source of truth for all of our asset
-management. This did not work. We had many problems with it and overtime we tried
-different solutions. Eventually our security team found Atlassian Insight and started
+management. This did not work. We had many problems with it, and over time we tried
+different solutions. Eventually, our security team found Atlassian Insight and started
 using it for their assets. Their experience turned out so great that we decided to trial
-Atlassian Insight for our IT asset management. It brought us great benefit such as
+Atlassian Insight for our IT asset management. It brought us great benefit, such as
 splitting the assets down into different objects, an object for hardware and an object
-for the owners 'People'. This helps to solve a problem such as tracking down what
+for the owners 'People'. This helps to solve a problem, such as tracking down what
 devices someone owns and having an easy history overview.
 
-<br></br> In this blog I'll showcase how we use Okta workflows to generate a 'People'
+<br></br> In this blog I'll showcase how we use Okta Workflows to generate a 'People'
 asset. In Atlassian Assets you can link objects with other objects, so in our case we
-can link a People object with an object defined for a laptop, the possibilites are
+can link a People object with an object defined for a laptop. The possibilities are
 endless. At MADE we also consider contracts and risk owners as assets as well.
 
 For example here is the graph of my 'People Object':
 
 > ![image](/images/2022/Atlassian-Assets/Tree-graph.png)
 
-Here you can see my 'People' object linked to 2 Work Laptops, my access card, and my
-organisation. You can also see my status. The possibilites here are endless.
+Here you can see my 'People' object linked to 2 work laptops, my access card, and my
+organisation. You can also see my status. The possibilities here are endless.
 
-By the end of this guide you'll have Okta Workflows setup to create 'People' objects for
+By the end of this guide, you'll have Okta Workflows setup to create 'People' objects for
 new Okta users. Update 'People' objects when an Okta profile (eg name change) is updated
 as well as disabling Okta users results in the 'People' object being marked as inactive.
 
@@ -70,7 +70,7 @@ no experience with the Atlassian Assets API.
 
 <br></br>
 
-> [An object schema is a collection of information in Insight used to track assets, configuration items, and resources, and to understand and visualise the critical relationships between them. Each object schema holds unique information in the form of object types, objects, attributes, icons, references, and statuses. Each object schema is distinct, and limited information can be shared between two different object schemas. Each object schema also has its own set of permissions, which allows you to hide or show different information for different users or groups.](https://support.atlassian.com/jira-service-management-cloud/docs/what-are-object-schemas/)
+> [An object schema is a collection of information in Insight used to track assets, configuration items, and resources, and to understand and visualise the critical relationships between them. Each object schema holds unique information in the form of object types, objects, attributes, icons, references, and statuses. Each object schema is distinct, and limited information can be shared between two different object schemas. Each object schema also has it's own set of permissions, which allows you to hide or show different information for different users or groups.](https://support.atlassian.com/jira-service-management-cloud/docs/what-are-object-schemas/)
 
 #### Global Reference Configuration
 
@@ -93,13 +93,13 @@ later on.
 
 <br></br>
 
-1. In Atlassian Jira Service Managament navigate to Atlassian Assets and click 'Create
+1. In Atlassian Jira Service Management navigate to Atlassian Assets and click 'Create
    object schema'.
 
     > ![image](/images/2022/Atlassian-Assets/Figure-1.png)
 
 2. Enter the details for your object schema, you should call it 'People Demonstration'
-   as thats what I'll reference in Postman.
+   as that is what I'll reference in Postman.
 
     > ![image](/images/2022/Atlassian-Assets/Figure-3.png)
 
@@ -120,7 +120,7 @@ later on.
     > ![image](/images/2022/Atlassian-Assets/Figure-7.png)
 
 7. Click on 'People' and 'attributes'. As you can see we don't have many attributes
-   defined so lets add some.
+   defined so let's add some.
 
     > ![image](/images/2022/Atlassian-Assets/Figure-8.png)
 
@@ -215,7 +215,7 @@ Lets go over the Postman Collection: <br></br>
 8. Next up run the request 'Get Object Schema Attributes', this request will pull all
    the attributes for the Object Schema you created. So in the response body you will
    see 'First Name', 'Last Name' & etc. We are interested in the 'Status' attribute
-   since it dosn't use free flow text and we will need to use a certain value to mark an
+   since it doesn't use free flow text and we will need to use a certain value to mark an
    object as 'Active Object' or 'Inactive Object'. In the response body search for
    'status' and then look for the array values of 'typeValueMulti'. In this case '15' is
    equal to active, so '17' must be equal to inactive. Note this will be different for
@@ -234,7 +234,7 @@ Lets go over the Postman Collection: <br></br>
 
 We now have everything we need from the Atlassian Assets API. So now we can move onto
 Okta. You're going to need to have admin permission to create attributes in the Okta
-directory profile
+directory profile.
 
 1. In Okta Browse to Directory -> Profile Editor -> Okta.
 
@@ -385,7 +385,7 @@ In the first cards of the flow we unpack both objects 'oktaUserInfo' &
 Then we take 'objectKey' from the input and remove the prefix, eg PD-12345
 beccomes 12345.
 
-Then we use a concatenate card to make a URL for the object we are modiying. If the flow
+Then we use a concatenate card to make a URL for the object we are modifying. If the flow
 input variable 'mode' is 'ACTIVE' then we set the object status attribute as 'ACTIVE'
 using the value of 15 for our attribute. Note: You will need to modify the 'API
 Connector Put' card to use your Atlassian Assets connector you setup earlier in the
@@ -453,7 +453,7 @@ an object. We then update the object status and we use the mode 'inactive'.
 
     > ![image](/images/2022/Atlassian-Assets/Figure-46.png)
 
-    As mentioned previously its a good idea to have a single workflow for Okta Event
+    As mentioned previously it's a good idea to have a single workflow for Okta Event
     actions, so in this case you'll need a workflow with the Okta user profile updated
     event and then a 'Call Flow async' card to call this flow. The reason for including
     an update user flow is that when someone has a name change we would like to update
@@ -505,7 +505,7 @@ expect to see a People Object created in our 'People Demonstration Schema'. The
 
     > ![image](/images/2022/Atlassian-Assets/Figure-51.png)
 
-4. Lets have a look at what went on
+4. Let's have a look at what went on
 
     > ![image](/images/2022/Atlassian-Assets/Figure-53.png)
 
@@ -521,7 +521,7 @@ Now we can look at our paths in our If / Elseif statement. Because 'result' had 
 value of 'false' we called 2 flows. Firstly calling 'Child - Create Object' and
 supplying the 2 previous objects as inputs. This flow then returns the objectKey.
 
-Lets look at the execution of that flow
+Let's look at the execution of that flow
 
 > ![image](/images/2022/Atlassian-Assets/Figure-60.png)
 
@@ -534,12 +534,12 @@ our POST request to the URL we previously constructed and attach our request bod
 then grab the objectKey from the response body of the API call. This objectKey is then
 returned.
 
-Lets have a look at what went on in flow for updating the Okta User Profile objectKey
+Let's have a look at what went on in flow for updating the Okta User Profile objectKey
 attribute.
 
 > ![image](/images/2022/Atlassian-Assets/Figure-62.png)
 
-Its pretty simple, input the Okta User ID and the value of the attribute you want to
+It's pretty simple, input the Okta User ID and the value of the attribute you want to
 update.
 
 ##### The end result
@@ -571,7 +571,7 @@ currently in the Okta User Profile will be updated with these new details as wel
 
     > ![image](/images/2022/Atlassian-Assets/Figure-57.png)
 
-3. Lets go over what happened in this flow.
+3. Let's go over what happened in this flow.
 
     > ![image](/images/2022/Atlassian-Assets/Figure-58.png)
 
@@ -597,7 +597,7 @@ deactivated, we should expect the object attribute status to change to inactive.
    the Joe Bloggs user and then use it to test the 'Parent - Okta User Deactivated'
    workflow
     > ![image](/images/2022/Atlassian-Assets/Figure-63.png)
-2. Lets have a look at what went on, we continue to create the same 2 objects
+2. Let's have a look at what went on, we continue to create the same 2 objects
    'atlassianAssetsApiInfo' and 'oktaUserInfo'. Then we search the Atlassian Assets
    schema to check if an object for the Okta User exists. Since we do have an existing
    object we get 'True' returned from our helper flow. Then we call a flow to update the
@@ -605,7 +605,7 @@ deactivated, we should expect the object attribute status to change to inactive.
 
     > ![image](/images/2022/Atlassian-Assets/Figure-64.png)
 
-    Lets look at what happened specifically in the key helper flow.
+    Let's look at what happened specifically in the key helper flow.
 
     > ![image](/images/2022/Atlassian-Assets/update-object-status-FIgure-65.png)
 
@@ -633,18 +633,18 @@ As you can see John Bloggs is now inactive.
 
 <br></br>
 
-Its been a long one, thanks for reading up to here. You may have already thought of how
+It's been a long one, thanks for reading up to here. You may have already thought of how
 you can use and improve these flows e.g adding default values to use when an Okta User
 Profile Attribute such as Display Name has no value. Or by using the objectStatus
 attribute as input with an If / ElseIf branch in the 'Child - Create Object' flow.
 Please also think about how you can manage all your other assets in Atlassian Assets,
-its so customisable and you can all have your relational objects tied together.
+it's so customisable and you can all have your relational objects tied together.
 
 I would also ask you to think of how you can integrate your physical device assets with
 these workflows, do you want some automation to generate those objects in Atlassian
-Assets and then have some scripts on the devices to send information to a lamba function
+Assets and then have some scripts on the devices to send information to a lambda function
 or a workflow and then associate the object with the 'People' object. I had a tiny stab
 at this but it needs some more thinking.
 
-For support or questions please reach out to me on MacAdmins Slack in the
+For support or questions please reach out to me on [MacAdmins Slack](https://www.macadmins.org/) in the
 #okta-workflows channel, happy to chat!
