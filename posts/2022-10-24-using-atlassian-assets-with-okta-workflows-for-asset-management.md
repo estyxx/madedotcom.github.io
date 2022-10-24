@@ -34,9 +34,10 @@ For example here is the graph of my 'People Object':
 Here you can see my 'People' object linked to 2 work laptops, my access card, and my
 organisation. You can also see my status. The possibilities here are endless.
 
-By the end of this guide, you'll have Okta Workflows setup to create 'People' objects for
-new Okta users. Update 'People' objects when an Okta profile (eg name change) is updated
-as well as disabling Okta users results in the 'People' object being marked as inactive.
+By the end of this guide, you'll have Okta Workflows setup to create 'People' objects
+for new Okta users. Update 'People' objects when an Okta profile (eg name change) is
+updated as well as disabling Okta users results in the 'People' object being marked as
+inactive.
 
 To set this up you will need the following:
 
@@ -215,8 +216,8 @@ Lets go over the Postman Collection: <br></br>
 8. Next up run the request 'Get Object Schema Attributes', this request will pull all
    the attributes for the Object Schema you created. So in the response body you will
    see 'First Name', 'Last Name' & etc. We are interested in the 'Status' attribute
-   since it doesn't use free flow text and we will need to use a certain value to mark an
-   object as 'Active Object' or 'Inactive Object'. In the response body search for
+   since it doesn't use free flow text and we will need to use a certain value to mark
+   an object as 'Active Object' or 'Inactive Object'. In the response body search for
    'status' and then look for the array values of 'typeValueMulti'. In this case '15' is
    equal to active, so '17' must be equal to inactive. Note this will be different for
    you.
@@ -385,9 +386,9 @@ In the first cards of the flow we unpack both objects 'oktaUserInfo' &
 Then we take 'objectKey' from the input and remove the prefix, eg PD-12345
 beccomes 12345.
 
-Then we use a concatenate card to make a URL for the object we are modifying. If the flow
-input variable 'mode' is 'ACTIVE' then we set the object status attribute as 'ACTIVE'
-using the value of 15 for our attribute. Note: You will need to modify the 'API
+Then we use a concatenate card to make a URL for the object we are modifying. If the
+flow input variable 'mode' is 'ACTIVE' then we set the object status attribute as
+'ACTIVE' using the value of 15 for our attribute. Note: You will need to modify the 'API
 Connector Put' card to use your Atlassian Assets connector you setup earlier in the
 Atlassian Assets Connector Setup section.
 
@@ -642,9 +643,10 @@ it's so customisable and you can all have your relational objects tied together.
 
 I would also ask you to think of how you can integrate your physical device assets with
 these workflows, do you want some automation to generate those objects in Atlassian
-Assets and then have some scripts on the devices to send information to a lambda function
-or a workflow and then associate the object with the 'People' object. I had a tiny stab
-at this but it needs some more thinking.
+Assets and then have some scripts on the devices to send information to a lambda
+function or a workflow and then associate the object with the 'People' object. I had a
+tiny stab at this but it needs some more thinking.
 
-For support or questions please reach out to me on [MacAdmins Slack](https://www.macadmins.org/) in the
-#okta-workflows channel, happy to chat!
+For support or questions please reach out to me on
+[MacAdmins Slack](https://www.macadmins.org/) in the #okta-workflows channel, happy to
+chat!
