@@ -1,4 +1,4 @@
-import { Heading, Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import Container from "components/container";
 
 const LandingPage = (): JSX.Element => {

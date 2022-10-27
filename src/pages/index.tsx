@@ -5,11 +5,9 @@ import { TagLine } from "components/tag-line";
 
 import type { NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 
 import { getPostsMetaData } from "../lib/api";
 import { Post } from "lib/types";
-import { PostCard } from "components/post-card";
 import { Posts } from "components/posts";
 import { SecondaryButton } from "components/button";
 

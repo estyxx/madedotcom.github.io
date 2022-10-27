@@ -1,4 +1,4 @@
-import { Heading, Text, Box, Link } from "@chakra-ui/react";
+import { Box, Heading, Link, Text } from "@chakra-ui/react";
 import CodeBlock from "components/mdx/codeblock";
 import { ReactNode } from "react";
 

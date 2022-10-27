@@ -27,6 +27,6 @@ describe("api", () => {
   });
 
   describe("getPostsMetaData", () => {
-    it("should order posts by reverse date", () => {});
+    it("should order posts by reverse date");
   });
 });

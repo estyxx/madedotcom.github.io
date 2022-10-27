@@ -1,7 +1,5 @@
 import { Post } from "lib/types";
-import Link from "next/link";
 import { Box, Grid, GridItem } from "@chakra-ui/react";
-import Container from "components/container";
 import { PostCard } from "components/post-card";
 
 type Props = {

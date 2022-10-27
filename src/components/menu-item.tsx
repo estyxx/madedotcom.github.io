@@ -1,4 +1,4 @@
-import { Link, Text, HStack } from "@chakra-ui/react";
+import { HStack, Link, Text } from "@chakra-ui/react";
 import { FC, ReactNode } from "react";
 
 type MenuItemProps = {

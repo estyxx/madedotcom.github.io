@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Box, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import { TagLine } from "./tag-line";
+
 type Props = {
   post: Post;
 };

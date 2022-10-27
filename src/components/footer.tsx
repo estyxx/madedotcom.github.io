@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Center, HStack } from "@chakra-ui/react";
+import { Box, Center, Flex, HStack, Text } from "@chakra-ui/react";
 import Container from "components/container";
 
 const Footer = (): JSX.Element => {

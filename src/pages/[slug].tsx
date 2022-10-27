@@ -1,5 +1,5 @@
 import PostPage from "components/post";
-import { getPostFiles, getPostData, Path } from "lib/api";
+import { getPostData, getPostFiles } from "lib/api";
 import { serializePage } from "lib/mdx";
 import { ParsedUrlQuery } from "querystring";
 

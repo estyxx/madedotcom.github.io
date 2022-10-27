@@ -2,10 +2,8 @@ import { Flex } from "@chakra-ui/react";
 import Container from "components/container";
 import Logo from "components/logo";
 import { MenuLinks } from "components/menu-links";
-import { MenuToggle } from "components/menu-toggle";
-import { FC, useState } from "react";
 
-const HeaderContainer: FC = ({ children }) => {
+const HeaderContainer = ({ children }: { children: React.ReactNode }): JSX.Element => {
   return (
     <Flex
       as="nav"
@@ -26,15 +24,15 @@ const HeaderContainer: FC = ({ children }) => {
 };
 
 export const Header = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
 
-  const toggle = () => setIsOpen(!isOpen);
+  // const toggle = () => setIsOpen(!isOpen);
 
   return (
     <HeaderContainer>
       <Logo />
       {/* <MenuToggle toggle={toggle} isOpen={isOpen} /> */}
-      <MenuLinks isOpen={isOpen} />
+      <MenuLinks />
     </HeaderContainer>
   );
 };
