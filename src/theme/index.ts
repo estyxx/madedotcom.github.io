@@ -6,7 +6,7 @@ const config: ThemeConfig = {
 };
 
 export const meridianRegular = "FS Meridian Regular, sans-serif";
-export const meridianMedium = "FS Meridian Regular";
+export const meridianMedium = "FS Meridian Medium";
 export const neruda = "FS Neruda";
 export const hackFont = "FS Hack";
 
@@ -43,14 +43,24 @@ const colors: Colors = {
 };
 
 const fonts = {
-  heading: meridianRegular,
+  heading: meridianMedium,
   body: meridianRegular,
   mono: hackFont,
 };
+
+const breakpoints = {
+  sm: "23em",
+  md: "37em",
+  lg: "90em",
+};
+
 const theme = extendTheme({
   config,
   colors,
   fonts,
+  breakpoints,
+  initialColorMode: "light",
+  useSystemColorMode: false,
 });
-
+console.log(theme);
 export default theme;

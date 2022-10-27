@@ -1,4 +1,4 @@
-import { Heading } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import Container from "components/container";
 import LandingPage from "components/landing-page";
 import { TagLine } from "components/tag-line";
@@ -8,6 +8,10 @@ import Head from "next/head";
 import Link from "next/link";
 
 import { getPostsMetaData } from "../lib/api";
+import { Post } from "lib/types";
+import { PostCard } from "components/post-card";
+import { Posts } from "components/posts";
+import { SecondaryButton } from "components/button";
 
 export async function getStaticProps() {
   const posts = getPostsMetaData();
@@ -19,10 +23,10 @@ export async function getStaticProps() {
 }
 
 type HomeProps = {
-  posts: any[];
+  posts: Post[];
 };
 
-const Home: NextPage<HomeProps> = ({ posts }) => {
+const Home: NextPage<HomeProps> = ({ posts }): JSX.Element => {
   return (
     <>
       <Head>
@@ -30,18 +34,13 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
       </Head>
 
       <LandingPage />
-      <TagLine tags={[]} />
       <Container>
-        {posts?.map((post) => {
-          return (
-            <div key={post.slug}>
-              <Link href={`${post.slug}`} key={post.title}>
-                {post.title}
-              </Link>
-              <p className="post-description">{post.description}</p>
-            </div>
-          );
-        })}
+        <Box mt="80px" mb="64px">
+          {" "}
+          <TagLine tags={["All", "Infrastructure", "Process", "Frontend", "Backend"]} />
+        </Box>
+        <Posts posts={posts} />
+        <SecondaryButton>LoadMore</SecondaryButton>
       </Container>
     </>
   );

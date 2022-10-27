@@ -33,7 +33,7 @@ export const Header = () => {
   return (
     <HeaderContainer>
       <Logo />
-      <MenuToggle toggle={toggle} isOpen={isOpen} />
+      {/* <MenuToggle toggle={toggle} isOpen={isOpen} /> */}
       <MenuLinks isOpen={isOpen} />
     </HeaderContainer>
   );
