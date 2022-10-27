@@ -1,5 +1,4 @@
 ---
-layout: post
 title: Removing classes from Ports and Adapters
 author: Harry
 categories:
@@ -12,7 +11,7 @@ tags:
 
 Hi, I'm Harry, Bob's coauthor for this series on architecture. Now I don't pretend to be
 an architect\*, but I do know a bit about Python. You know the apocryphal tale about
-[bikeshedding](https://en.wikipedia.org/wiki/Law_of_triviality)? Everyone wants to be
+[bikeshedding] (https://en.wikipedia.org/wiki/Law_of_triviality)? Everyone wants to be
 able to express an opinion, even if it's only about the colour of the bikesheds? Well
 this will be me essentially doing that about Bob's code. Not questioning the
 architecture. Just the cosmetics. But, readability counts, so here we go!
@@ -23,9 +22,9 @@ world take over, and he sees classes everywhere, including plenty of places wher
 don't really help. OK OK, arguably don't help.
 
 Like the man said, [Stop Writing Classes](https://www.youtube.com/watch?v=o9pEzgHorH0),
-or escape from the
-[Kingdom of Nouns!](https://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html),
-or perhaps simply:
+or escape from the Kingdom of Nouns!
+[https://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html], or
+perhaps simply:
 
 It is not enough to simply stop writing Java. You must also stop yourself from writing
 Java using Another Language.
@@ -33,17 +32,17 @@ Java using Another Language.
 Let's see if we can't replace a few classes with some more Pythonic patterns, and see if
 it makes some of those architectural patterns easier to read, implement and understand.
 
-> Command handlers as functions If a class only has one method other than its
-> constructor, it should probably be a function
->
-> _Jack Diederich_
+Command handlers as functions If a class only has one method other than its constructor,
+it should probably be a function
+
+-   Jack Diederich
 
 or
 
-> look for classes with names like "Handler", "Maker", "Builder", "Factory", and you'll
-> probably find some good candidates for converting to functions
->
-> _Me. but hardly a novel thought._
+look for classes with names like "Handler", "Maker", "Builder", "Factory", and you'll
+probably find some good candidates for converting to functions
+
+-   Me. but hardly a novel thought.
 
 If you're implementing the Command Handler pattern, you're going to need to represent
 commands and handlers.
@@ -62,27 +61,16 @@ class ReportIssueCommand(NamedTuple):
 Unless you're actually using mypy, those types aren't adding much value however. The
 alternative would be the more "classic" namedtuple syntax:
 
-```python
-ReportIssueCommand = NamedTuple(
-    "ReportIssueCommand",
-    ["issue_id", "reporter_name", "reporter_email", "problem_description"],
-)
+```
+ReportIssueCommand = namedtuple("ReportIssueCommand", ["issue_id", "reporter_name", "reporter_email", "problem_description"])
+# or the shorter syntax if it doesn't make you nervous:
+ReportIssueCommand = namedtuple("ReportIssueCommand", "issue_id reporter_name reporter_email problem_description")
+# come on, have you seen the implementation? nameduples are magic anyway.  get with it!
 ```
 
-### or the shorter syntax if it doesn't make you nervous:
-
-```python
-ReportIssueCommand = namedtuple(
-    "ReportIssueCommand", "issue_id reporter_name reporter_email problem_description"
-)
-```
-
-### come on, have you seen the implementation? nameduples are magic anyway. get with it!
-
-This wasn't available at the time of writing, but
-[Python 3.7 dataclasses](https://docs.python.org/3/library/dataclasses.html) might be
-worth a look too. You'd probably want to use frozen=True to replicate the immutabilty of
-namedtuples...
+This wasn't available at the time of writing, but Python 3.7 dataclasses
+[https://docs.python.org/3/library/dataclasses.html] might be worth a look too. You'd
+probably want to use frozen=True to replicate the immutabilty of namedtuples...
 
 But for handlers, use of a class is definitely more up for debate:
 
@@ -141,7 +129,7 @@ def report_issue(start_uow, cmd):
     ...
 ```
 
-managing units of work without a `UnitOfWorkManager` The Unit of Work pattern is one of
+managing units of work without a UnitOfWorkManager The Unit of Work pattern is one of
 the more straightforward ones; it's easy to understand why you might want to manage
 blocks of code that need to be executed "together" and atomically.
 
@@ -149,15 +137,15 @@ In a simple project that might just mean wrapping everything in a single databas
 transaction, but you might also want to manage some other types of permanent storage
 (filesystem, cloud storage...).
 
-If you're using [domain events](https://io.made.com/why-use-domain-events/), you might
+If you're using domain events [https://io.made.com/why-use-domain-events/], you might
 also want to apply the unit-of-work concept to them as well: for a given block of code,
 perhaps a command handler, either raise all the events in the happy case, or raise none
 at all (analogous to a rollback) if an error occurs at any point. This gives you the
 option to replay the command handler later without worrying about duplicate events.
 
 In that case your unit of work manager needs to grow some logic for tracking a stack of
-events raised by a block of code, as suggested in the
-[domain events post](https://io.made.com/why-use-domain-events/).
+events raised by a block of code, as suggested in the domain events post
+[https://io.made.com/why-use-domain-events/].
 
 a unit of work should probably be a context manager Either way, Bob nailed it, a Python
 context manager is the right pattern here. Here's the outline of his class-based one:
@@ -197,6 +185,7 @@ class SqlAlchemy:
     @property
     def unit_of_work_manager(self):
         return SqlAlchemyUnitOfWorkManager(self._session_maker, self.bus)
+
 
 class SqlAlchemyUnitOfWorkManager(UnitOfWorkManager):
 
@@ -241,9 +230,9 @@ whether you really need a class for your unit of work context manager. If your c
 code doesn't need to call a commit method explicitly, then you might be able to get away
 with a single method, using contextlib.contextmanager and the yield keyword:
 
+```python
 from contextlib import contextmanager
 
-```python
 class SqlAlchemy:
     ...
 
@@ -284,16 +273,19 @@ above. If you do want a code-based solution, or if you want to continue experime
 with non-class-based solutions to these problems, why not use the "just use a module"
 solution - modules are essentially already singletons, in Python:
 
-```python title=adapters/sqlalchemy.py
+```
+# adapters/sqlalchemy.py
+
 BUS = None
 SESSION_MAKER = None
 
-# to be called in our bootstrap/config script
 
+# to be called in our bootstrap/config script
 def setup(uri, bus):
   global BUS, SESSION_MAKER
   BUS = bus
   SESSION_MAKER = sessionmaker(create_engine(uri))
+
 
 @contextmanager
 def start_unit_of_work():
@@ -310,7 +302,8 @@ def start_unit_of_work():
 def _publish_events(session):
     flushed_objects = [e for e in session.new] + [e for e in session.dirty]
     for o in flushed_objects:
-      for e in o.events BUS.handle(e)
+        for e in o.events
+            BUS.handle(e)
 ```
 
 We may be drifting a little too far into "removing classes for its own sake" territory

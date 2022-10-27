@@ -14,9 +14,10 @@ export const PostCard = ({ post }: Props): JSX.Element => {
         {" "}
         <Link href={`${post.slug}`}>
           <Image
+            alt="Sofa image"
             src={`/landscapes/sofa${Math.floor(Math.random() * 10)}.jpg`}
-            width="432px"
-            height="227px"
+            width={432}
+            height={227}
           />
         </Link>{" "}
       </Box>

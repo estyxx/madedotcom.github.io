@@ -62,5 +62,5 @@ const theme = extendTheme({
   initialColorMode: "light",
   useSystemColorMode: false,
 });
-console.log(theme);
+
 export default theme;

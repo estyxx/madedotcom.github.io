@@ -1,19 +1,23 @@
 /** @type {import('next').NextConfig} */
-// const withMDX = require("@next/mdx")({
-//   extension: /\.mdx?$/,
-//   options: {
-//     remarkPlugins: [],
-//     rehypePlugins: [require("remark-mdx-code-meta")],
-//   },
-// });
-const nextConfig = {
-  pageExtensions: ["mdx", "md", "jsx", "js", "tsx", "ts"],
-  reactStrictMode: true,
-};
+const withMDX = require("@next/mdx")({
+  extension: /\.mdx?$/,
+  options: {
+    // If you use remark-gfm, you'll need to use next.config.mjs
+    // as the package is ESM only
+    // https://github.com/remarkjs/remark-gfm#install
+    remarkPlugins: [],
+    rehypePlugins: [],
+    // If you use `MDXProvider`, uncomment the following line.
+    // providerImportSource: "@mdx-js/react",
+  },
+});
 
-module.exports = nextConfig;
-
-module.exports = {
+module.exports = withMDX({
+  // Append the default value with md extensions
+  images: {
+    unoptimized: true,
+  },
+  pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
   trailingSlash: true,
   async redirects() {
     return [
@@ -24,4 +28,4 @@ module.exports = {
       },
     ];
   },
-};
+});

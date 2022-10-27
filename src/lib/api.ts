@@ -1,7 +1,9 @@
 import fs from "fs";
-import matter from "gray-matter";
+import matter, { GrayMatterFile } from "gray-matter";
 import path, { ParsedPath } from "path";
-import { Post } from "lib/types";
+// import { Post } from "lib/types";
+import Post from "lib/post";
+import { MetaJSON } from "lib/meta";
 
 // current 'posts' directory
 const postsDirectory = path.join(process.cwd(), "posts");
@@ -27,7 +29,7 @@ export const getPostFiles = (): Path[] => {
     .filter((file) => file.date && file.ext == FILE_EXTENSION);
 };
 
-export const getPostsMetaData = (): Post[] => {
+export const getPostsMetaData = (): MetaJSON[] => {
   const files = getPostFiles();
 
   const postsMetaData = files.map(getPostMetaData);
@@ -35,17 +37,20 @@ export const getPostsMetaData = (): Post[] => {
   return postsMetaData.sort((a, b) => +new Date(a.date) - +new Date(b.date)).reverse();
 };
 
-const getPostMetaData = ({ base, name }: { base: string; name: string }) => {
+const getPostMetaData = ({ base, name }: { base: string; name: string }): MetaJSON => {
   const fullPath = path.join(postsDirectory, base);
 
   // get MDX metadata and content
-  const fileContents = fs.readFileSync(fullPath, "utf8");
+  const rawContents = fs.readFileSync(fullPath, "utf8");
 
   // get metadata, content
-  const { data } = matter(fileContents);
-  const match = DATE_REGEX.exec(name);
+  const grayMatterFile: GrayMatterFile<string> = matter(rawContents);
 
-  return { slug: name, date: match ? match[0] : "", ...data };
+  const post = Post.fromGrayMatterFile(grayMatterFile);
+  const match = DATE_REGEX.exec(name);
+  post.meta.date = match ? new Date(match[0]) : undefined;
+
+  return post.meta.toJSON();
 };
 
 export const getPostData = (slug: string) => {

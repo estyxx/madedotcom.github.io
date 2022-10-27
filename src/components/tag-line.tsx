@@ -36,7 +36,7 @@ export const TagLine = ({ tags = [], variant = "lg" }: Props): JSX.Element => {
       <Flex {...styles["flex"][variant]}>
         {tags.map((tag) => (
           <Tag key={tag} {...styles["tag"][variant]}>
-            <Text as={variant === "sm" && "b"}>{tag}</Text>
+            {variant === "sm" ? <Text as="b">{tag}</Text> : <Text>{tag}</Text>}
           </Tag>
         ))}
       </Flex>
