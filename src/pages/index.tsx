@@ -6,13 +6,16 @@ import { TagLine } from "components/tag-line";
 import type { NextPage } from "next";
 import Head from "next/head";
 
-import { getPostsMetaData } from "../lib/api";
-import { Post } from "lib/types";
+import { Meta } from "lib/types";
+import Post from "lib/post";
 import { Posts } from "components/posts";
 import { SecondaryButton } from "components/button";
+import PostService from "lib/post-service";
 
 export async function getStaticProps() {
-  const posts = getPostsMetaData();
+  const service = new PostService();
+  const posts = (await service.find()).map((post: Post) => post.meta.toJSON());
+
   return {
     props: {
       posts: posts,
@@ -21,7 +24,7 @@ export async function getStaticProps() {
 }
 
 type HomeProps = {
-  posts: Post[];
+  posts: Meta[];
 };
 
 const Home: NextPage<HomeProps> = ({ posts }): JSX.Element => {
@@ -34,7 +37,6 @@ const Home: NextPage<HomeProps> = ({ posts }): JSX.Element => {
       <LandingPage />
       <Container>
         <Box mt="80px" mb="64px">
-          {" "}
           <TagLine tags={["All", "Infrastructure", "Process", "Frontend", "Backend"]} />
         </Box>
         <Posts posts={posts} />

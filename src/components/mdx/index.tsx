@@ -2,7 +2,7 @@ import { Box, Heading, Link, Text } from "@chakra-ui/react";
 import CodeBlock from "components/mdx/codeblock";
 import { ReactNode } from "react";
 
-const PostLink = ({ children, href }: { href?: string; children: ReactNode }) => {
+const PostLink = ({ children, href }: { href?: string; children?: ReactNode }) => {
   return (
     <Link color="made.blue" href={href} target="_blank">
       {children}
@@ -10,16 +10,16 @@ const PostLink = ({ children, href }: { href?: string; children: ReactNode }) =>
   );
 };
 
-const CodeInline = ({ children }: { children: ReactNode }) => {
+const CodeInline = ({ children }: { children?: ReactNode }) => {
   return <code>{children}</code>;
 };
 
-const Paragraph = ({ children }: { children: ReactNode }) => (
+const Paragraph = ({ children }: { children?: ReactNode }) => (
   <Text mb={4}>{children}</Text>
 );
 
 const heading = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
-  const wrapper = ({ children }: { children: ReactNode }) => {
+  const wrapper = ({ children }: { children?: ReactNode }) => {
     const sizes = {
       1: "4xl",
       2: "3xl",
@@ -38,7 +38,7 @@ const heading = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
   return wrapper;
 };
 
-const BlockQuote = ({ children }: { children: ReactNode }) => {
+const BlockQuote = ({ children }: { children?: ReactNode }) => {
   return (
     <Box
       as="blockquote"

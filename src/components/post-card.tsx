@@ -1,17 +1,16 @@
-import { Post } from "lib/types";
+import { Meta } from "lib/types";
 import Link from "next/link";
 import { Box, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import { TagLine } from "./tag-line";
 
 type Props = {
-  post: Post;
+  post: Meta;
 };
 export const PostCard = ({ post }: Props): JSX.Element => {
   return (
     <Box>
       <Box mb="32px">
-        {" "}
         <Link href={`${post.slug}`}>
           <Image
             alt="Sofa image"
@@ -19,7 +18,7 @@ export const PostCard = ({ post }: Props): JSX.Element => {
             width={432}
             height={227}
           />
-        </Link>{" "}
+        </Link>
       </Box>
 
       <TagLine tags={post.tags} variant="sm" />

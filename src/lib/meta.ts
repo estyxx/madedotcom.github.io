@@ -1,54 +1,47 @@
 // import { formatISO, parseISO } from "date-fns";
 // import removeMarkdown from "markdown-to-text";
+import { Meta as MetaJSON, Path } from "lib/types";
 
 const averageWpm = 255;
 
-export interface MetaJSON {
-  title: string;
-  slug: string;
-  tags: string[];
-  readLengthMin: number;
-  date: string;
-  // description: string;
-}
-
 export default class Meta {
   title: string;
+  author: string;
   tags: string[];
   readLengthMin: number;
-  date?: Date;
+  date: Date;
+  slug: string;
   // description: string;
 
   constructor(
     title: string,
+    author: string,
     tags: string[],
     readLengthMin: number,
     // description: string,
-    date?: Date
+    date: Date,
+    slug: string
   ) {
     this.title = title;
+    this.author = author;
     this.tags = tags;
     this.readLengthMin = readLengthMin;
     this.date = date;
+    this.slug = slug;
     // this.description = description;
   }
 
-  public get slug(): string {
-    return this.title
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9]+/g, "-");
-  }
-
-  static fromGrayMatterFile(grayMatterFile: {
-    content: string;
-    data: {
-      title?: string;
-      categories?: string[];
-      description?: string;
-      date?: string;
-    };
-  }) {
+  static fromGrayMatterFile(
+    grayMatterFile: {
+      content: string;
+      data: {
+        title?: string;
+        author?: string;
+        tags?: string[];
+      };
+    },
+    path: Path
+  ) {
     const wordCount = grayMatterFile.content.trim().split(/\s+/).length;
     const readingTime = Math.ceil(wordCount / averageWpm);
 
@@ -59,16 +52,19 @@ export default class Meta {
 
     return new Meta(
       grayMatterFile.data.title || "",
-      grayMatterFile.data.categories || [],
+      grayMatterFile.data.author || "",
+      grayMatterFile.data.tags || [],
       readingTime,
       // grayMatterFile.data.description || summary,
-      grayMatterFile.data.date ? new Date(grayMatterFile.data.date) : undefined
+      new Date(path.date),
+      path.name
     );
   }
 
   toJSON(): MetaJSON {
     return {
       title: this.title,
+      author: this.author,
       slug: this.slug,
       date: this.date ? this.date.toISOString() : "",
       tags: this.tags,

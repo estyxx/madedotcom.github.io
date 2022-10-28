@@ -1,9 +1,9 @@
-import { Post } from "lib/types";
+import { Meta } from "lib/types";
 import { Box, Grid, GridItem } from "@chakra-ui/react";
 import { PostCard } from "components/post-card";
 
 type Props = {
-  posts: Post[];
+  posts: Meta[];
 };
 
 export const Posts = ({ posts }: Props): JSX.Element => {
@@ -14,11 +14,14 @@ export const Posts = ({ posts }: Props): JSX.Element => {
         columnGap="32px"
         rowGap="54px"
       >
-        {posts?.map((post: Post) => (
-          <GridItem w="100%" key={post.slug}>
-            <PostCard post={post} />
-          </GridItem>
-        ))}
+        {posts?.map((post: Meta) => {
+          console.log("post", post);
+          return (
+            <GridItem w="100%" key={post.slug}>
+              <PostCard post={post} />
+            </GridItem>
+          );
+        })}
       </Grid>
     </Box>
   );

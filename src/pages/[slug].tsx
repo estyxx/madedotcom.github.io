@@ -1,9 +1,8 @@
 import PostPage from "components/post";
-import { getPostData, getPostFiles } from "lib/api";
-import { serializePage } from "lib/mdx";
 import { ParsedUrlQuery } from "querystring";
 
 import { GetStaticPaths, GetStaticProps } from "next";
+import PostService from "lib/post-service";
 
 interface IParams extends ParsedUrlQuery {
   slug: string;
@@ -11,28 +10,29 @@ interface IParams extends ParsedUrlQuery {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { slug } = context.params as IParams;
-  const doc = getPostData(slug);
 
-  const { source, data } = await serializePage({
-    page: doc.page,
-  });
+  const service = new PostService();
+  const posts = await service.find({ slug });
+  const post = posts[0];
 
   return {
     props: {
-      source: source,
-      date: doc.date,
-      ...data,
+      post: post.toJSON(),
+      contents: await post.serialize(),
     },
   };
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = getPostFiles().map((path) => {
-    return { params: { slug: path.name } };
-  });
+  const service = new PostService();
+  const posts = await service.findPaths();
 
   return {
-    paths,
+    paths: posts.map((path) => ({
+      params: {
+        slug: path.name,
+      },
+    })),
     fallback: false,
   };
 };

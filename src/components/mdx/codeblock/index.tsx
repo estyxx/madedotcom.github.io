@@ -3,14 +3,14 @@ import { InlineCode } from "components/mdx/inline-code";
 import { ReactNode } from "react";
 
 type CodeBlockProps = {
-  children: ReactNode;
-  className: string;
+  children?: ReactNode;
+  className?: string;
   title?: string;
-  viewlines: boolean;
-  ln: string;
+  // viewlines: boolean;
+  // ln: string;
 };
 
-const CodeBlock = ({ children, className, title }: CodeBlockProps) => {
+const CodeBlock = ({ children, className, title }: CodeBlockProps): JSX.Element => {
   const language = className?.replace(/language-/, "");
 
   if (!language) {

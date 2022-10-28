@@ -1,10 +1,12 @@
 import { GrayMatterFile } from "gray-matter";
-import Meta, { MetaJSON } from "lib/meta";
+import Meta from "lib/meta";
+import { Path, Post as PostJSON } from "lib/types";
 
-export interface PostJSON {
-  meta: MetaJSON;
-  contents: string;
-}
+import rehypeHighlight from "rehype-highlight";
+import remarkMdxCodeMeta from "remark-mdx-code-meta";
+
+import { serialize } from "next-mdx-remote/serialize";
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
 
 export default class Post {
   meta: Meta;
@@ -15,8 +17,11 @@ export default class Post {
     this.contents = contents;
   }
 
-  static fromGrayMatterFile(grayMatterFile: GrayMatterFile<string>) {
-    return new Post(Meta.fromGrayMatterFile(grayMatterFile), grayMatterFile.content);
+  static fromGrayMatterFile(grayMatterFile: GrayMatterFile<Buffer>, path: Path) {
+    return new Post(
+      Meta.fromGrayMatterFile(grayMatterFile, path),
+      grayMatterFile.content
+    );
   }
 
   toJSON(): PostJSON {
@@ -50,4 +55,13 @@ export default class Post {
       this.meta.date.getFullYear() == date.getFullYear()
     );
   }
+
+  serialize = async (): Promise<MDXRemoteSerializeResult> => {
+    return await serialize(this.contents, {
+      mdxOptions: {
+        rehypePlugins: [rehypeHighlight],
+        remarkPlugins: [remarkMdxCodeMeta],
+      },
+    });
+  };
 }
