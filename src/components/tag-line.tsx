@@ -30,9 +30,13 @@ const styles = {
   },
 };
 
-export const TagLine = ({ tags = [], variant = "lg" }: Props): JSX.Element => {
+export const TagLine = ({
+  tags = [],
+  variant = "lg",
+  ...props
+}: Props): JSX.Element => {
   return (
-    <Box>
+    <Box {...props}>
       <Flex {...styles["flex"][variant]}>
         {tags.map((tag) => (
           <Tag key={tag} {...styles["tag"][variant]}>
