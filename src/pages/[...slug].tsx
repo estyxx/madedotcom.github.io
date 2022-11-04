@@ -1,11 +1,10 @@
 import PostPage from "components/post";
 import { getAllPostsPath, getPostData } from "lib/api";
 import { serializePage } from "lib/mdx";
+import { OLD_BLOG_URLS_MAPPING, OLD_HTML_BLOG_URLS } from "lib/old-blog-mapping";
 import { ParsedUrlQuery } from "querystring";
 
 import { GetStaticPaths, GetStaticProps } from "next";
-
-import { oldBlogUrls, oldHtmlBlogUrls } from "../lib/old-blog-mapping";
 
 interface IParams extends ParsedUrlQuery {
   slug: string[];
@@ -14,14 +13,13 @@ interface IParams extends ParsedUrlQuery {
 export const getStaticProps: GetStaticProps = async (context) => {
   const { slug } = context.params as IParams;
 
-  let file = slug[0];
-  if (file in oldBlogUrls) {
-    file = oldBlogUrls[file];
-  }
+  let file =
+    slug[0] in OLD_BLOG_URLS_MAPPING ? OLD_BLOG_URLS_MAPPING[slug[0]] : slug[0];
+
   const hasBlogPrefix = slug.length > 1;
   if (hasBlogPrefix) {
     const oldHtmlFile = slug[1];
-    if (oldHtmlBlogUrls.includes(oldHtmlFile)) {
+    if (OLD_HTML_BLOG_URLS.includes(oldHtmlFile)) {
       file = oldHtmlFile.substring(0, oldHtmlFile.length - ".html".length);
     }
   }
@@ -44,8 +42,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
 export const getStaticPaths: GetStaticPaths = async () => {
   // New blog posts
   let paths = getAllPostsPath();
+
   // Blog posts without .html or date
-  const oldPaths = Object.keys(oldBlogUrls).map((key: string) => {
+  const oldPaths = Object.keys(OLD_BLOG_URLS_MAPPING).map((key: string) => {
     return {
       params: {
         slug: [key],
@@ -54,7 +53,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   });
 
   // Blogposts with /blog/something.html
-  const htmlPaths = oldHtmlBlogUrls.map((key: string) => {
+  const htmlPaths = OLD_HTML_BLOG_URLS.map((key: string) => {
     return {
       params: {
         slug: ["blog", key],
