@@ -384,3 +384,6 @@ terraform.rc
 # End of https://www.toptal.com/developers/gitignore/api/terraform,yarn,nextjs,node,visualstudiocode,jetbrains,emacs
 
 build/**
+
+# OSX
+.DS_Store
