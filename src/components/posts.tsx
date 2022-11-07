@@ -15,7 +15,6 @@ export const Posts = ({ posts }: Props): JSX.Element => {
         rowGap="54px"
       >
         {posts?.map((post: Meta) => {
-          console.log("post", post);
           return (
             <GridItem w="100%" key={post.slug}>
               <PostCard post={post} />

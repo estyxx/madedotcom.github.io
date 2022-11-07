@@ -1,5 +1,5 @@
 ---
-title: Haacktoberfest 2022 is here and it's waiting for you to join!
+title: Hacktoberfest 2022 is here and it's waiting for you to join!
 author: Ester Beltrami
 tags:
     - open-source
