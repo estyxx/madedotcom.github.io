@@ -1,11 +1,11 @@
-import { Box, Flex, Tag, Text } from "@chakra-ui/react";
+import { Box, Flex, FlexProps, Tag, TagProps, Text } from "@chakra-ui/react";
 
-type Props = {
+type Props = TagProps & {
   tags?: string[];
   variant?: "sm" | "lg";
 };
 
-const styles = {
+const styles: Record<"flex" | "tag", Record<"sm" | "lg", TagProps | FlexProps>> = {
   flex: {
     sm: { gap: "10px" },
     lg: { gap: "16px" },
@@ -37,8 +37,12 @@ export const TagLine = ({
 }: Props): JSX.Element => {
   return (
     <Box {...props}>
+      {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+      {/*  @ts-ignore */}
       <Flex {...styles["flex"][variant]}>
         {tags.map((tag) => (
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           <Tag key={tag} {...styles["tag"][variant]}>
             {variant === "sm" ? <Text as="b">{tag}</Text> : <Text>{tag}</Text>}
           </Tag>
