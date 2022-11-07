@@ -1,13 +1,21 @@
-import { Container, Heading } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
+import Container from "components/container";
+import LandingPage from "components/landing-page";
+import { TagLine } from "components/tag-line";
 
 import type { NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 
-import { getPostsMetaData } from "../lib/api";
+import { Meta } from "lib/types";
+import Post from "lib/post";
+import { Posts } from "components/posts";
+import { SecondaryButton } from "components/button";
+import PostService from "lib/post-service";
 
 export async function getStaticProps() {
-  const posts = getPostsMetaData();
+  const service = new PostService();
+  const posts = (await service.find()).map((post: Post) => post.meta.toJSON());
+
   return {
     props: {
       posts: posts,
@@ -16,35 +24,25 @@ export async function getStaticProps() {
 }
 
 type HomeProps = {
-  posts: any[];
+  posts: Meta[];
 };
 
-const Home: NextPage<HomeProps> = ({ posts }) => {
-  console.log("home");
+const Home: NextPage<HomeProps> = ({ posts }): JSX.Element => {
   return (
-    <Container maxW="4xl">
+    <>
       <Head>
-        <title>Made.com Tech Team</title>
+        <title>Made.com Tech Blog</title>
       </Head>
 
-      <Heading as="h1" size="4xl">
-        Made.com Tech Team
-      </Heading>
-
-      <Heading as="h3" size="lg">
-        <Link href="https://github.com/madedotcom">View GitHub Profile</Link>
-      </Heading>
-      {posts?.map((post) => {
-        return (
-          <div key={post.slug}>
-            <Link href={`${post.slug}`} key={post.title}>
-              {post.title}
-            </Link>
-            <p className="post-description">{post.description}</p>
-          </div>
-        );
-      })}
-    </Container>
+      <LandingPage />
+      <Container>
+        <Box mt="80px" mb="64px">
+          <TagLine tags={["All", "Infrastructure", "Process", "Frontend", "Backend"]} />
+        </Box>
+        <Posts posts={posts} />
+        <SecondaryButton>LoadMore</SecondaryButton>
+      </Container>
+    </>
   );
 };
 

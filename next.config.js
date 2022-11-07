@@ -1,13 +1,14 @@
 /** @type {import('next').NextConfig} */
+
 const withMDX = require("@next/mdx")({
   extension: /\.mdx?$/,
-  options: {
-    remarkPlugins: [],
-    rehypePlugins: [require("remark-mdx-code-meta")],
-  },
 });
 
-module.exports = {
+module.exports = withMDX({
+  // Append the default value with md extensions
+  images: {
+    unoptimized: true,
+  },
   pageExtensions: ["mdx", "md", "jsx", "js", "tsx", "ts"],
   reactStrictMode: true,
   trailingSlash: false,
@@ -71,4 +72,4 @@ module.exports = {
       },
     ];
   },
-};
+});

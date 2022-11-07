@@ -1,4 +1,4 @@
-import { Colors, extendTheme, ThemeConfig } from "@chakra-ui/react";
+import { Colors, ThemeConfig, extendTheme } from "@chakra-ui/react";
 
 const config: ThemeConfig = {
   initialColorMode: "light",
@@ -6,7 +6,7 @@ const config: ThemeConfig = {
 };
 
 export const meridianRegular = "FS Meridian Regular, sans-serif";
-export const meridianMedium = "FS Meridian Regular";
+export const meridianMedium = "FS Meridian Medium";
 export const neruda = "FS Neruda";
 export const hackFont = "FS Hack";
 
@@ -43,14 +43,24 @@ const colors: Colors = {
 };
 
 const fonts = {
-  heading: neruda,
+  heading: meridianMedium,
   body: meridianRegular,
   mono: hackFont,
 };
+
+const breakpoints = {
+  sm: "23em",
+  md: "37em",
+  lg: "90em",
+};
+
 const theme = extendTheme({
   config,
   colors,
   fonts,
+  breakpoints,
+  initialColorMode: "light",
+  useSystemColorMode: false,
 });
 
 export default theme;

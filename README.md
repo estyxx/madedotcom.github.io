@@ -6,12 +6,18 @@ Use [MDX](https://github.com/mdx-js/mdx) with [Next.js](https://github.com/zeit/
 
 ## Getting Started
 
+We use [`pnpm`](https://pnpm.io/) package manager. You can install it by running
+
+```bash
+npm install -g pnpm
+```
+
 First, run the development server:
 
 ```bash
-yarn install
+pnpm install
 
-yarn dev
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

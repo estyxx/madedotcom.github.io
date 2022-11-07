@@ -1,37 +1,61 @@
-import { Container, Heading, Text } from "@chakra-ui/react";
+import { Box, Container, Heading, Text } from "@chakra-ui/react";
 import components from "components/mdx";
 
 import { NextPage } from "next";
-import { MDXRemote } from "next-mdx-remote";
+import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import Head from "next/head";
+import { Post } from "lib/types";
+import DefaultErrorPage from "next/error";
+import { TagLine } from "./tag-line";
 
-export type PostPageProps = {
-  slug: string;
-  title: string;
-  author?: string;
-  date: string;
-  content: string;
-  source?: any;
-};
+interface Props {
+  post?: Post;
+  contents?: MDXRemoteSerializeResult<Record<string, unknown>>;
+}
 
-const PostPage: NextPage<PostPageProps> = ({ title, author, date, source }) => {
-  const publishDate = new Date(date);
+const PostPage: NextPage<Props> = ({ post, contents }) => {
+  if (!post || !contents) {
+    return (
+      <>
+        <DefaultErrorPage statusCode={404} />
+      </>
+    );
+  }
+
+  const postDate = new Date(post.meta.date);
+
   return (
     <>
       <Head>
-        <title>{title}</title>
+        <title>{post.meta.title}</title>
       </Head>
       <Container maxW="4xl">
-        <Heading as="h1" size="3xl" mb={6}>
-          {title}
-        </Heading>
-        <Text mb={2} fontWeight="bold">
-          by {author}
-        </Text>
-        <Text mb={4} color="made.50">
-          {publishDate.toDateString()}
-        </Text>
-        <MDXRemote {...source} components={components} />
+        <Box mt="120px">
+          <Box mb="24px">
+            <TagLine tags={post.meta.tags} mb="24px" />
+          </Box>
+
+          <Heading
+            as="h1"
+            size="3xl"
+            mb={6}
+            fontFamily="heading"
+            lineHeight="60px"
+            fontWeight="500"
+            fontSize="48px"
+          >
+            {post.meta.title}
+          </Heading>
+
+          <Text mb={2} fontWeight="bold">
+            by {post.meta.author}
+          </Text>
+
+          <Text mb={4} color="made.50">
+            {postDate.toDateString()}
+          </Text>
+        </Box>
+        <MDXRemote {...contents} components={components} />
       </Container>
     </>
   );

@@ -1,5 +1,4 @@
 ---
-layout: post
 title: Using Photon-pump
 author: Gil
 tags:
@@ -12,11 +11,11 @@ tags:
 Hello, in this article, I'll try to explain what Photon-pump is, and write an easy
 example so you can start using it for your own projects.
 
-[Photon-pump](https://github.com/madedotcom/photon-pump) is a client for
-[Event Store](https://eventstore.org/) we developed at [made.com](https://made.com),
-it's the little brother to [atomic puppy](https://github.com/madedotcom/atomicpuppy)
-(which is another eventstore client), it's async first, works using TCP so it's also
-faster (atomicpuppy uses HTTP).
+Photon-pump [https://github.com/madedotcom/photon-pump] is a client for Event Store
+[https://eventstore.org/] we developed at made.com [https://made.com], it's the little
+brother to atomic puppy [https://github.com/madedotcom/atomicpuppy] (which is another
+eventstore client), it's async first, works using TCP so it's also faster (atomicpuppy
+uses HTTP).
 
 I won't talk about eventsourcing since it's been talked about on previous posts, so this
 will be just a very simple and silly example of event sourcing.
@@ -39,16 +38,23 @@ An event will also have a type, which is like a sub category inside the stream. 
 how the event is looking like:
 
 ```python
-Event( stream="adventure", type="player_created", data=json.dumps({"name": "Gil"}) )
+Event(
+    stream="adventure",
+    type="player_created",
+    data=json.dumps({"name": "Gil"})
+)
 ```
 
 So how would we add this event into Event Store using Photon-pump in a single python
 script?
 
-```python title=writer.py
+```python
+writer.py
+
 import asyncio
 
 import photonpump
+
 
 async def write_event(conn):
     await conn.publish_event(
@@ -73,7 +79,7 @@ argument.
 Next, we have the run function which will simply create the connection and pass it to
 write_event.
 
-finally, the ugly if `__name__ ...` to both create the `event_loop`, and run it
+finally, the ugly if \_\_name... to both create the event_loop, and run it
 synchronously.
 
 Now if you have your Event Store running locally (if you don't change it in the script),
@@ -89,9 +95,13 @@ stream in a separate script.
 
 Here is all the code we need:
 
-```python title=reader.py
+```python
+reader.py
+
 import asyncio
+
 import photonpump
+
 
 async def read_an_event(conn):
     for event_record in await conn.get('adventure'):
@@ -106,7 +116,7 @@ if __name__ == '__main__':
     event_loop.run_until_complete(run())
 ```
 
-Ignoring run and if `__name__...` the `read_an_event` function uses the method get from
+Ignoring run and if \_\_name... the read_an_event function uses the method get from
 Photon-pump to collect all the events using it like an iterator and printing each of the
 events. We get event_records, and each contains the event, so we can print out the type
 and the data.

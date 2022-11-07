@@ -9,8 +9,8 @@ tags:
     - archive
 ---
 
-Back in December I said I was interested in replacing Logstash with Rsyslog
-[https://io.made.com/blog/rek-it/], but that we needed a Riemann module to cover some of
+Back in December I said I was interested in replacing Logstash with
+[Rsyslog](./2016-11-24-rek-it.md), but that we needed a Riemann module to cover some of
 our existing functionality. Specifically we send metrics to Riemann from Logstash for
 three reasons:
 
@@ -36,9 +36,15 @@ into our logs, which makes it simpler to aggregate and search in Kibana.
 
 A typical structured log might look like this:
 
-{ "@timestamp": "2017-06-02T13:17:29.594Z", "@version": "1", "@message": "Incoming
-request: GET /groups/GB/cat-16631", "@fields": { "request_path": "/groups/GB/cat-16631",
-"request_method": "GET", "requestid": "da11e322-fbba-4f7a-a638-621da3888017",
+```
+{
+    "@timestamp": "2017-06-02T13:17:29.594Z",
+    "@version": "1",
+    "@message": "Incoming request: GET /groups/GB/cat-16631",
+    "@fields": {
+      "request_path": "/groups/GB/cat-16631",
+      "request_method": "GET",
+      "requestid": "da11e322-fbba-4f7a-a638-621da3888017",
 
       "levelno": 20,
       "levelname": "INFO",
@@ -51,8 +57,8 @@ request: GET /groups/GB/cat-16631", "@fields": { "request_path": "/groups/GB/cat
       "name": "availability-api",
       "country": "GB"
     }
-
-}
+  }
+```
 
 As well as the obvious timestamp and textual message fields, we also include some
 information about the request we're handling, including a correlation id, some debugging
@@ -61,8 +67,8 @@ application.
 
 We also get logs from the Systemd Journal, and from third party and legacy applications,
 so firstly we want to normalise the logs into a common format. As before, we're going to
-use mmnormalize for this task. Our mmnormalize rulebase
-[https://github.com/bobthemighty/rek-stack-demos/blob/master/rek/custom-json-metrics/rsyslog/rsyslog-http.rb]
+use mmnormalize for this task. Our
+[mmnormalize rulebase](https://github.com/bobthemighty/rek-stack-demos/blob/master/rek/custom-json-metrics/rsyslog/rsyslog-http.rb)
 handles 3 kinds of logs: http access logs from nginx, structured json logs from our
 Python API, and log4j style logs from our processing app.
 
@@ -81,34 +87,41 @@ into a syslog-severity
 -   CRITICAL -> critical (2)
 -   FATAL -> emergency (0)
 
+```
 (action type="mmnormalize" rulebase="/etc/rsyslog/rules.rb")
 
 # If this is an http log, use the status code
-
-if
-($!event.tags contains "http" and $!status >= 400) then { set $!severity = 3; set
-$!body!@fields!levelname
-= "error";
-
+if ($!event.tags contains "http" and $!status >= 400) then {
+    set $!severity = 3;
+    set $!body!@fields!levelname = "error";
 #
-
 # If we have a json log with a level name, map it back to a severity
+} else if ($!body!@fields!levelname != "") then {
+    set $!severity = cnum(lookup("log4j_level_to_severity", $!body!@fields!levelname));
+}
 
-} else if ($!body!@fields!levelname != "") then { set $!severity =
-cnum(lookup("log4j_level_to_severity", $!body!@fields!levelname)); }
+```
 
 Now that we've got a normalised log level, we can use it to forward errors to Riemann:
 
+```
 if ($syslogseverity <= 3) then {
 
-(action type="omriemann" server="riemann" prefix="errors" description="!msg") }
+   (action type="omriemann"
+        server="riemann"
+        prefix="errors"
+        description="!msg")
+}
+```
 
 By default omriemann uses the $programname as the "service" key in the Riemann message.
 The prefix configuration setting prepends a fixed value to the service. When we send
 errors through this configuration, we should see new metrics arriving in Riemann that
 look like this:
 
+```
 {:service "errors/my-application" :metric 1 :description "a terrible thing occurred" }
+```
 
 With a sprinkling of Riemann magic, we can set up Slack and Email notifications with an
 hourly summary of errors across our applications.
@@ -121,9 +134,13 @@ QA to verify, since it works by writing json to stdout.
 
 A typical metric log might look like this:
 
-{ "@message": "Request completed: 200 - 0.003793478012084961ms.", "@timestamp":
-"2017-06-02T06:24:46.517Z", "@fields": { "requestid":
-"bfc153b2-a014-4a52-9090-46a1e3bf80da", "levelname": "INFO",
+```
+{
+    "@message": "Request completed: 200 - 0.003793478012084961ms.",
+    "@timestamp": "2017-06-02T06:24:46.517Z",
+    "@fields": {
+      "requestid": "bfc153b2-a014-4a52-9090-46a1e3bf80da",
+      "levelname": "INFO",
 
       "_riemann_metric": {
         "metric": 0.003793478012084961,
@@ -137,18 +154,20 @@ A typical metric log might look like this:
 
     },
     "@version": "1",
-
 }
+```
 
 Here we have the same basic structure as our previous structured log, but with the
 inclusion of a new field \_riemann_metric. This metric represents the response time for
 a single invocation of an API end point, and it includes the status code. We want to
 pass this structure to Riemann.
 
-if($!\_riemann_metric != "") then {
+```
+if($!_riemann_metric != "") then {
 
-action(type="omriemann" server="riemann" subtree="!body!@fields!\_riemann_metric"
-mode="single") }
+   action(type="omriemann" server="riemann" subtree="!body!@fields!_riemann_metric" mode="single")
+}
+```
 
 As in previous articles, we're calling omriemann with a subtree that contains our metric
 data. This time, however, we're using mode=single. This tells omriemann that every

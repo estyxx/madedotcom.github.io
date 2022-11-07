@@ -2,7 +2,7 @@ import { Box, Stack } from "@chakra-ui/react";
 import { MenuItem } from "components/menu-item";
 import { FiExternalLink } from "react-icons/fi";
 
-export const MenuLinks = ({ isOpen }: { isOpen: boolean }) => {
+export const MenuLinks = ({ isOpen = false }: { isOpen?: boolean }) => {
   return (
     <Box
       display={{ base: isOpen ? "block" : "none", md: "block" }}

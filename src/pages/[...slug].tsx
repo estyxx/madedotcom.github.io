@@ -1,10 +1,9 @@
 import PostPage from "components/post";
-import { getAllPostsPath, getPostData } from "lib/api";
-import { serializePage } from "lib/mdx";
 import { OLD_BLOG_URLS_MAPPING, OLD_HTML_BLOG_URLS } from "lib/old-blog-mapping";
 import { ParsedUrlQuery } from "querystring";
 
 import { GetStaticPaths, GetStaticProps } from "next";
+import PostService from "lib/post-service";
 
 interface IParams extends ParsedUrlQuery {
   slug: string[];
@@ -12,6 +11,8 @@ interface IParams extends ParsedUrlQuery {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { slug } = context.params as IParams;
+
+  const service = new PostService();
 
   let file =
     slug[0] in OLD_BLOG_URLS_MAPPING ? OLD_BLOG_URLS_MAPPING[slug[0]] : slug[0];
@@ -24,47 +25,50 @@ export const getStaticProps: GetStaticProps = async (context) => {
     }
   }
 
-  const doc = getPostData(file);
-
-  const { source, data } = await serializePage({
-    page: doc.page,
-  });
+  const posts = await service.find({ slug: file });
+  const post = posts[0];
 
   return {
     props: {
-      source: source,
-      date: doc.date,
-      ...data,
+      post: post.toJSON(),
+      contents: await post.serialize(),
     },
   };
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
   // New blog posts
-  let paths = getAllPostsPath();
+  const service = new PostService();
+  const posts = await service.findPaths();
 
   // Blog posts without .html or date
   const oldPaths = Object.keys(OLD_BLOG_URLS_MAPPING).map((key: string) => {
     return {
-      params: {
-        slug: [key],
-      },
+      name: [key],
     };
   });
 
   // Blogposts with /blog/something.html
   const htmlPaths = OLD_HTML_BLOG_URLS.map((key: string) => {
     return {
-      params: {
-        slug: ["blog", key],
-      },
+      name: ["blog", key],
     };
   });
 
-  paths = [...paths, ...oldPaths, ...htmlPaths];
+  const paths = [
+    ...posts.map((item) => {
+      return { ...item, name: [item.name] };
+    }),
+    ...oldPaths,
+    ...htmlPaths,
+  ];
 
   return {
-    paths,
+    paths: paths.map((path) => ({
+      params: {
+        slug: path.name,
+      },
+    })),
     fallback: false,
   };
 };

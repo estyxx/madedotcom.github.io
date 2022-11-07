@@ -1,8 +1,11 @@
 import Home from ".";
-import { getPostsMetaData } from "../lib/api";
+import PostService from "lib/post-service";
+import Post from "lib/post";
 
 export async function getStaticProps() {
-  const posts = getPostsMetaData();
+  const service = new PostService();
+  const posts = (await service.find()).map((post: Post) => post.meta.toJSON());
+
   return {
     props: {
       posts: posts,
